@@ -1,13 +1,75 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://rsms.me/inter/inter.css');
+
+html { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+    html { font-family: 'Inter var', sans-serif; }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+    @apply mb-2 font-semibold;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 4px;
+}
+
+.ql-bubble .ql-editor h1 {
+    font-size: 2em;
+}
+
+.ql-bubble .ql-editor h2 {
+    font-size: 1.7em;
+}
+
+.ql-bubble .ql-editor h3 {
+    font-size: 1.5em;
+}
+
+.ql-bubble .ql-editor code, .ql-bubble .ql-editor pre {
+    border-radius: 3px !important;
+    @apply text-base;
+}
+
+.ql-bubble .ql-editor p,
+.ql-bubble .ql-editor ul,
+.ql-bubble .ql-editor ol {
+    /*line-height: 1.6em;*/
+    font-size: 1rem;
+}
+
+.ql-bubble .ql-editor p,
+.ql-bubble .ql-editor pre,
+.ql-bubble .ql-editor code,
+.ql-bubble .ql-editor blockquote {
+    @apply mb-3
+}
+
+.ql-editor a {
+    color: var(--editor-url-color) !important;
+    text-decoration: none !important;
+}
+
+.ql-editor ul, .ql-editor ol {
+    @apply mb-2
+}
+
+.ql-editor {
+    overflow-x: hidden;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 16px !important;
+    @apply text-gray-800 dark:text-gray-200
+}
+
+/* Placeholder */
+.quill > .ql-container > .ql-editor.ql-blank::before {
+    opacity: 0.5;
+    font-size: 16px;
+    @apply dark:text-gray-200 text-gray-600
 }
