@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-const initialState = {}
+const initialState = null
 
 export const currentNoteSlice = createSlice({
     name: 'currentNote',

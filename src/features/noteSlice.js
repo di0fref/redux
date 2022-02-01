@@ -31,6 +31,7 @@ export const addNote = createAsyncThunk(
 export const updateNoteBody = createAsyncThunk(
     'notes/updateNoteBody',
     async (note, thunkAPI) => {
+        console.log(note)
         const response = await fetch("http://localhost:8000/api/notes/" + note.id, {
             method: "PUT",
             headers: {
@@ -40,7 +41,6 @@ export const updateNoteBody = createAsyncThunk(
                 text: note.text,
             })
         }).then(response => response.json())
-        console.log(response)
         return response;
     }
 )
@@ -54,6 +54,39 @@ export const updateNoteTitle = createAsyncThunk(
             },
             body: JSON.stringify({
                 name: note.name,
+            })
+        }).then(response => response.json())
+        return response;
+    }
+)
+
+export const updateBookMark = createAsyncThunk(
+    'notes/updateBookMark',
+    async (note, thunkAPI) => {
+        console.log(note)
+        const response = await fetch("http://localhost:8000/api/notes/" + note.id, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                bookmark: note.bookmark
+            })
+        }).then(response => response.json())
+        return response;
+    }
+)
+export const updateLock = createAsyncThunk(
+    'notes/updateLock',
+    async (note, thunkAPI) => {
+        console.log(note)
+        const response = await fetch("http://localhost:8000/api/notes/" + note.id, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                locked: note.locked
             })
         }).then(response => response.json())
         return response;
@@ -77,6 +110,7 @@ export const noteSlice = createSlice({
             })
             .addCase(addNote.fulfilled, (state, action) => {
                 state.unshift(action.payload)
+                // return action.payload.id
             })
             .addCase(updateNoteBody.fulfilled, (state, action) => {
                 const {id, text, updated_at} = action.payload
@@ -85,10 +119,24 @@ export const noteSlice = createSlice({
                 existingNote.updated_at = updated_at;
             })
             .addCase(updateNoteTitle.fulfilled, (state, action) => {
-                const {id, name} = action.payload
+                const {id, name, updated_at} = action.payload
                 const existingNote = state.find(note => note.id === id)
                 existingNote.name = name;
+                existingNote.updated_at = updated_at;
             })
+            .addCase(updateBookMark.fulfilled, (state, action) => {
+                const {id, bookmark, updated_at} = action.payload
+                const existingNote = state.find(note => note.id === id)
+                existingNote.bookmark = bookmark;
+                existingNote.updated_at = updated_at;
+            })
+            .addCase(updateLock.fulfilled, (state, action) => {
+                const {id, locked, updated_at} = action.payload
+                const existingNote = state.find(note => note.id === id)
+                existingNote.locked = locked;
+                existingNote.updated_at = updated_at;
+            })
+
     },
 })
 export const {sortNotes} = noteSlice.actions

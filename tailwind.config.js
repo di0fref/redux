@@ -14,9 +14,12 @@ module.exports = {
                 'md': ['.9rem', "1.25rem"],
             },
             width: {
-                "160": "40rem"
+                "160": "40rem",
+                "144": "36rem"
             },
-
+            margin:{
+                "144": "36rem"
+            }
         },
     },
     plugins: [],
