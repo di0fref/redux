@@ -31,9 +31,9 @@ function NoteMenu(props) {
             title: "Move to trash",
             icon: <BiTrash/>,
             action: () => {
-                // dispatch(deleteNote(currentNote))
-                // dispatch(setCurrentNote(null))
-                // navigator(`/folder/${currentFolder.id}`)
+                dispatch(deleteNote(currentNote))
+                dispatch(setCurrentNote(null))
+                navigator(`/folder/${currentFolder.id}`)
                 toast.success("Document moved to trash")
             }
         },

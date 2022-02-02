@@ -8,7 +8,7 @@ export const momentConfig = {
 }
 
 export const apiConfig = {
-    url: "http://localhost:8000/qpi"
+    url: "http://localhost:8000"
 }
 
 export const UNTITLED = "Untitled"

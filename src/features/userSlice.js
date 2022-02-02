@@ -1,11 +1,12 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import {apiConfig} from "../config/config";
 
 const initialState = []
 
 export const login = createAsyncThunk(
     'user/login',
     async (data, thunkAPI) => {
-        const response = await fetch("http://localhost:8000/api/users/login",{
+        const response = await fetch(apiConfig.url + "/api/users/login", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -25,9 +26,7 @@ export const login = createAsyncThunk(
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {
-
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(login.fulfilled, (state, action) => {
             return action.payload

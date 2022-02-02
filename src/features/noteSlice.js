@@ -1,4 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
+import {apiConfig} from "../config/config";
 
 const initialState = []
 
@@ -6,7 +7,7 @@ export const fetchAllNotes = createAsyncThunk(
     'notes/fetchAllNotes',
     async (folderId = 0, thunkAPI) => {
 
-        const response = await fetch("http://localhost:8000/api/notes")
+        const response = await fetch(apiConfig.url + "/api/notes")
             .then(response => response.json())
         return response;
     }
@@ -14,7 +15,7 @@ export const fetchAllNotes = createAsyncThunk(
 export const addNote = createAsyncThunk(
     'notes/addNote',
     async (folderId = 0, thunkAPI) => {
-        const response = await fetch("http://localhost:8000/api/notes", {
+        const response = await fetch(apiConfig.url + "/api/notes", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -31,7 +32,7 @@ export const addNote = createAsyncThunk(
 export const updateNoteBody = createAsyncThunk(
     'notes/updateNoteBody',
     async (note, thunkAPI) => {
-        const response = await fetch("http://localhost:8000/api/notes/" + note.id, {
+        const response = await fetch(apiConfig.url + "/api/notes/" + note.id, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json'
@@ -46,7 +47,7 @@ export const updateNoteBody = createAsyncThunk(
 export const updateNoteTitle = createAsyncThunk(
     'notes/updateNoteTitle',
     async (note, thunkAPI) => {
-        const response = await fetch("http://localhost:8000/api/notes/" + note.id, {
+        const response = await fetch(apiConfig.url + "/api/notes/" + note.id, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json'
@@ -63,7 +64,7 @@ export const updateBookMark = createAsyncThunk(
     'notes/updateBookMark',
     async (note, thunkAPI) => {
         console.log(note)
-        const response = await fetch("http://localhost:8000/api/notes/" + note.id, {
+        const response = await fetch(apiConfig.url + "/api/notes/" + note.id, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json'
@@ -78,7 +79,7 @@ export const updateBookMark = createAsyncThunk(
 export const updateLock = createAsyncThunk(
     'notes/updateLock',
     async (note, thunkAPI) => {
-        const response = await fetch("http://localhost:8000/api/notes/" + note.id, {
+        const response = await fetch(apiConfig.url + "/api/notes/" + note.id, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json'
@@ -94,7 +95,7 @@ export const deleteNote = createAsyncThunk(
     'notes/deleteNote',
     async (noteId, thunkAPI) => {
         console.log(noteId)
-        const response = await fetch("http://localhost:8000/api/notes/" + noteId, {
+        const response = await fetch(apiConfig.url + "/api/notes/" + noteId, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json'

@@ -71,27 +71,26 @@ body {
 .ql-editor h4,
 .ql-editor h5,
 .ql-editor h6 {
-    @apply mb-2 font-semibold;
-    font-weight: 600;
-    margin-top: 10px;
-    margin-bottom: 4px;
+    font-weight: 600 !important;
+    margin-top: 10px !important;
+    margin-bottom: 6px !important;
 }
 
 .ql-bubble .ql-editor h1 {
-    font-size: 2em;
+    font-size: 1.4em !important;
 }
 
 .ql-bubble .ql-editor h2 {
-    font-size: 1.7em;
+    font-size: 1.2em !important;
 }
 
 .ql-bubble .ql-editor h3 {
-    font-size: 1.5em;
+    font-size: 1.1em !important
 }
 
 .ql-bubble .ql-editor code, .ql-bubble .ql-editor pre {
     border-radius: 3px !important;
-    @apply text-base;
+    @apply text-base bg-blue-600 dark:bg-gray-700;
 }
 
 .ql-bubble .ql-editor p,
@@ -122,7 +121,7 @@ body {
     overflow-x: hidden;
     font-family: 'Inter', sans-serif !important;
     font-size: 16px !important;
-    @apply text-gray-800 dark:text-gray-200
+    @apply text-gray-800 dark:text-gray-400
 }
 
 /* Placeholder */

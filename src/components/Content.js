@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import ReactQuill from 'react-quill';
+import ReactQuill, {Quill} from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import {useCallback, useEffect, useRef, useState} from "react";
 import {updateBookMark, updateLock, updateNoteBody, updateNoteTitle} from "../features/noteSlice";
@@ -13,6 +13,7 @@ import {momentConfig} from "../config/config";
 import Moment from "react-moment";
 import ThemeSwitcher from "./ThemeSwitcher";
 import NoteMenu from "./menus/noteMenu";
+const Delta = Quill.import('delta')
 
 export default function Content() {
 
@@ -26,7 +27,6 @@ export default function Content() {
     const note = useSelector((state) => Object.values(state.notes).find(note => note.id === currentNote))
 
     const debounced = useCallback(debounce(() => {
-        console.log("debounce")
         dispatch(updateNoteBody({
             text: JSON.stringify(editorRef.current.editor.getContents()),
             id: note.id
@@ -51,13 +51,6 @@ export default function Content() {
             debounced()
         }
     }
-    const onBlurHandler = () => {
-        console.log("onBlurHandler")
-        // dispatch(updateNoteBody({
-        //     text: JSON.stringify(editorRef.current.editor.getContents()),
-        //     id: currentNote
-        // }))
-    }
     const titleChangeHandler = (e) => {
         dispatch(updateNoteTitle({
             name: title,
@@ -69,6 +62,24 @@ export default function Content() {
         setTitle(note && note.name || "")
     }, [currentNote])
 
+    const modules = {
+        clipboard: {
+            matchers: [
+                [Node.ELEMENT_NODE, function (node, delta) {
+                    return delta.compose(new Delta().retain(delta.length(),
+                        {
+                            color: false,
+                            background: false,
+                            bold: false,
+                            strike: false,
+                            underline: false
+                        }
+                    ));
+                }
+                ]
+            ]
+        }
+    }
     return (
 
         <div className={"text-slate-500 flex flex-col "}>
@@ -76,25 +87,25 @@ export default function Content() {
                 <button className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={() => dispatch(setOpen(!sidebar))}>
                     <BiMenu className={"h-6 w-6"}/>
                 </button>
-                {currentNote?
-                <div className={"px-3 my-4 w-full"}>
-                    <div className={"flex justify-end"}>
-                        <button className={"flex items-center hover:text-indigo-500 mr-3"} onClick={bookMarkHandler}>
-                            {note && note.bookmark
-                                ? <FaStar className={"text-yellow-400"}/>
-                                : <FaRegStar/>
-                            }
-                        </button>
-                        <button className={"flex items-center hover:text-indigo-500"} onClick={lockHandler}>
-                            {note && note.locked
-                                ? <BiLock className={"text-red-600"}/>
-                                : <BiLock/>
-                            }
-                        </button>
+                {currentNote ?
+                    <div className={"px-3 my-4 w-full"}>
+                        <div className={"flex justify-end"}>
+                            <button className={"flex items-center hover:text-indigo-500 mr-3"} onClick={bookMarkHandler}>
+                                {note && note.bookmark
+                                    ? <FaStar className={"text-yellow-400"}/>
+                                    : <FaRegStar/>
+                                }
+                            </button>
+                            <button className={"flex items-center hover:text-indigo-500"} onClick={lockHandler}>
+                                {note && note.locked
+                                    ? <BiLock className={"text-red-600"}/>
+                                    : <BiLock/>
+                                }
+                            </button>
+                        </div>
                     </div>
-                </div>
-                :""}
-                {currentNote?<div className={"ml-auto"}><NoteMenu/></div>:""}
+                    : ""}
+                {currentNote ? <div className={"ml-auto"}><NoteMenu/></div> : ""}
                 <ThemeSwitcher/>
             </div>
             <div className={"flex justify-center p-4 overflow-y-auto editor-wrapper "}>
@@ -115,7 +126,7 @@ export default function Content() {
                                 onChange={(e) => setTitle(e.target.value)}
                                 placeholder={"Give me a title"}
                                 value={title}
-                                className={"resize-none font-extrabold tracking-tight text-gray-800 dark:text-gray-300  bg-transparent px-3 w-full text-5xl border-0 focus:outline-none focus:ring-0"}
+                                className={"resize-none font-extrabold tracking-tight text-gray-800 dark:text-gray-300  bg-transparent px-3 w-full text-4xl border-0 focus:outline-none focus:ring-0"}
                             />
                             <ReactQuill
                                 readOnly={note.locked || note.deleted ? true : false}
@@ -124,6 +135,7 @@ export default function Content() {
                                 value={(note.text) ? JSON.parse(note.text) : ""}
                                 ref={editorRef}
                                 bounds={".quill"}
+                                modules={modules}
                                 onChange={changeHandler}/>
                         </>
                         : <div className={"mt-60"}><NoDocumentOpen/></div>}
