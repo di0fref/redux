@@ -11,6 +11,8 @@ import debounce from 'lodash.debounce';
 import {FaRegStar, FaStar} from "react-icons/fa";
 import {momentConfig} from "../config/config";
 import Moment from "react-moment";
+import ThemeSwitcher from "./ThemeSwitcher";
+import NoteMenu from "./menus/noteMenu";
 
 export default function Content() {
 
@@ -24,6 +26,7 @@ export default function Content() {
     const note = useSelector((state) => Object.values(state.notes).find(note => note.id === currentNote))
 
     const debounced = useCallback(debounce(() => {
+        console.log("debounce")
         dispatch(updateNoteBody({
             text: JSON.stringify(editorRef.current.editor.getContents()),
             id: note.id
@@ -49,10 +52,11 @@ export default function Content() {
         }
     }
     const onBlurHandler = () => {
-        dispatch(updateNoteBody({
-            text: JSON.stringify(editorRef.current.editor.getContents()),
-            id: currentNote
-        }))
+        console.log("onBlurHandler")
+        // dispatch(updateNoteBody({
+        //     text: JSON.stringify(editorRef.current.editor.getContents()),
+        //     id: currentNote
+        // }))
     }
     const titleChangeHandler = (e) => {
         dispatch(updateNoteTitle({
@@ -67,57 +71,62 @@ export default function Content() {
 
     return (
 
-        <div className={"text-slate-500 flex flex-col"}>
-            <div className={"bg-gray-600 h-14 flex items-center justify-between"}>
-                <button className={"ml-2"} onClick={() => dispatch(setOpen(!sidebar))}>
-                    <BiMenu className={"h-6 w-6 text-gray-200"}/>
+        <div className={"text-slate-500 flex flex-col "}>
+            <div className={"bg-gray-200 border-b-gray-300/50 dark:bg-gray-800 h-14 flex items-center justify-between border-b dark:border-gray-700/50"}>
+                <button className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={() => dispatch(setOpen(!sidebar))}>
+                    <BiMenu className={"h-6 w-6"}/>
                 </button>
+                {currentNote?
+                <div className={"px-3 my-4 w-full"}>
+                    <div className={"flex justify-end"}>
+                        <button className={"flex items-center hover:text-indigo-500 mr-3"} onClick={bookMarkHandler}>
+                            {note && note.bookmark
+                                ? <FaStar className={"text-yellow-400"}/>
+                                : <FaRegStar/>
+                            }
+                        </button>
+                        <button className={"flex items-center hover:text-indigo-500"} onClick={lockHandler}>
+                            {note && note.locked
+                                ? <BiLock className={"text-red-600"}/>
+                                : <BiLock/>
+                            }
+                        </button>
+                    </div>
+                </div>
+                :""}
+                {currentNote?<div className={"ml-auto"}><NoteMenu/></div>:""}
+                <ThemeSwitcher/>
             </div>
-            <div className={"flex justify-center"}>
-                <div className={"md:w-160 w-full"}>
+            <div className={"flex justify-center p-4 overflow-y-auto editor-wrapper "}>
+                <div className={"max-w-4xl editor"}>
                     {currentNote ?
                         <>
                             <div className={"px-3 my-4"}>
                                 <div className={"flex"}>
-                                    <button className={"flex items-center"} onClick={bookMarkHandler}>
-                                        {note && note.bookmark
-                                            ? <FaStar className={"text-yellow-400"}/>
-                                            : <FaRegStar/>
-                                        }
-                                        <div className={"ml-1 mr-4 hover:text-sky-500 text-gray-500"}>Bookmark</div>
-                                    </button>
-                                    <button className={"flex items-center"} onClick={lockHandler}>
-                                        {note && note.locked
-                                            ? <BiLock className={"text-red-600"}/>
-                                            : <BiLock/>
-                                        }
-                                        <div className={"ml-1 hover:text-sky-500 text-gray-500"}>
-                                            {note && note.locked ? "Locked" : "Lock"}
-                                        </div>
-                                    </button>
-                                    <div className={"text-sm ml-auto"}>Updated: <Moment calendar={momentConfig}>{note && note.updated_at}</Moment>
+                                    <div className={"text-sm"}>Updated: <Moment calendar={momentConfig}>{note && note.updated_at}</Moment>
                                     </div>
                                 </div>
                             </div>
 
                             <TextareaAutosize
+                                readOnly={note.locked || note.deleted ? true : false}
                                 onBlur={titleChangeHandler}
                                 maxLength="100"
                                 onChange={(e) => setTitle(e.target.value)}
-                                placeholder={"Give your document a title"}
+                                placeholder={"Give me a title"}
                                 value={title}
-                                className={"resize-none font-extrabold tracking-tight text-gray-800  bg-transparent px-3 w-full text-5xl  border-0 focus:outline-none focus:ring-0"}
+                                className={"resize-none font-extrabold tracking-tight text-gray-800 dark:text-gray-300  bg-transparent px-3 w-full text-5xl border-0 focus:outline-none focus:ring-0"}
                             />
                             <ReactQuill
+                                readOnly={note.locked || note.deleted ? true : false}
                                 theme={"bubble"}
-                                placeholder="Click here to start writing"
+                                placeholder="Write something awesome..."
                                 value={(note.text) ? JSON.parse(note.text) : ""}
                                 ref={editorRef}
                                 bounds={".quill"}
-                                onBlur={onBlurHandler}
                                 onChange={changeHandler}/>
                         </>
-                        : <NoDocumentOpen/>}
+                        : <div className={"mt-60"}><NoDocumentOpen/></div>}
 
                 </div>
             </div>

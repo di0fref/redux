@@ -3,9 +3,66 @@
 @tailwind utilities;
 @import url('https://rsms.me/inter/inter.css');
 
-html { font-family: 'Inter', sans-serif; }
+
+:root {
+    --scrollbar-base: #f2f3f5;
+    --scrollbar-thumb: #d8dadf;
+}
+
+html.dark {
+    --scrollbar-base: rgb(57, 72, 86);
+    --scrollbar-thumb: #5e646e;
+}
+
+html {
+    font-family: 'Inter', sans-serif;
+}
+
 @supports (font-variation-settings: normal) {
-    html { font-family: 'Inter var', sans-serif; }
+    html {
+        font-family: 'Inter var', sans-serif;
+    }
+}
+
+body {
+    font-feature-settings: "salt"
+}
+
+.editor {
+    background-image: url("./assets/bg.svg");
+}
+
+.editor-wrapper {
+    max-height: calc(100vh - 4rem);
+    overflow: hidden;
+}
+
+.notelist {
+    height: calc(100vh - 4rem);
+}
+
+.ql-container.ql-snow {
+    border: none;
+    height: calc(100vh - 14rem);
+    overflow-y: scroll;
+}
+
+* {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+*::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+.ql-container.ql-snow {
+    border: none !important
+}
+
+.ql-toolbar.ql-snow {
+    border: none !important;
 }
 
 .ql-editor h1,
@@ -51,6 +108,7 @@ html { font-family: 'Inter', sans-serif; }
     @apply mb-3
 }
 
+
 .ql-editor a {
     color: var(--editor-url-color) !important;
     text-decoration: none !important;
@@ -73,3 +131,25 @@ html { font-family: 'Inter', sans-serif; }
     font-size: 16px;
     @apply dark:text-gray-200 text-gray-600
 }
+
+/*!* Works on Firefox *!*/
+/** {*/
+/*    scrollbar-width: thin;*/
+/*    scrollbar-color: var(--scrollbar-base);*/
+/*}*/
+
+/*!* Works on Chrome, Edge, and Safari *!*/
+/**::-webkit-scrollbar {*/
+/*    width: 8px;*/
+/*}*/
+
+/**::-webkit-scrollbar-track {*/
+/*    background: var(--scrollbar-base);*/
+/*}*/
+
+/**::-webkit-scrollbar-thumb {*/
+/*    background-color: var(--scrollbar-thumb);*/
+/*    border-radius: 6px;*/
+/*    border: 2px solid transparent*/
+/*}*/
+

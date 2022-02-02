@@ -1,12 +1,12 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 
-const initialState = {}
+const initialState = []
 
-export const fetchNotesByFolderId = createAsyncThunk(
-    'notes/fetchNotesByFolderId',
+export const fetchAllNotes = createAsyncThunk(
+    'notes/fetchAllNotes',
     async (folderId = 0, thunkAPI) => {
 
-        const response = await fetch("http://localhost:8000/api/notes/folder/" + folderId)
+        const response = await fetch("http://localhost:8000/api/notes")
             .then(response => response.json())
         return response;
     }
@@ -31,7 +31,6 @@ export const addNote = createAsyncThunk(
 export const updateNoteBody = createAsyncThunk(
     'notes/updateNoteBody',
     async (note, thunkAPI) => {
-        console.log(note)
         const response = await fetch("http://localhost:8000/api/notes/" + note.id, {
             method: "PUT",
             headers: {
@@ -79,7 +78,6 @@ export const updateBookMark = createAsyncThunk(
 export const updateLock = createAsyncThunk(
     'notes/updateLock',
     async (note, thunkAPI) => {
-        console.log(note)
         const response = await fetch("http://localhost:8000/api/notes/" + note.id, {
             method: "PUT",
             headers: {
@@ -92,6 +90,23 @@ export const updateLock = createAsyncThunk(
         return response;
     }
 )
+export const deleteNote = createAsyncThunk(
+    'notes/deleteNote',
+    async (noteId, thunkAPI) => {
+        console.log(noteId)
+        const response = await fetch("http://localhost:8000/api/notes/" + noteId, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                deleted: 1
+            })
+        }).then(response => response.json())
+        return response;
+    }
+)
+
 export const noteSlice = createSlice({
     name: 'notes',
     initialState,
@@ -105,12 +120,11 @@ export const noteSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchNotesByFolderId.fulfilled, (state, action) => {
+            .addCase(fetchAllNotes.fulfilled, (state, action) => {
                 return action.payload
             })
             .addCase(addNote.fulfilled, (state, action) => {
                 state.unshift(action.payload)
-                // return action.payload.id
             })
             .addCase(updateNoteBody.fulfilled, (state, action) => {
                 const {id, text, updated_at} = action.payload
@@ -136,7 +150,12 @@ export const noteSlice = createSlice({
                 existingNote.locked = locked;
                 existingNote.updated_at = updated_at;
             })
-
+            .addCase(deleteNote.fulfilled, (state, action) => {
+                const {id, deleted, updated_at} = action.payload
+                const existingNote = state.find(note => note.id === id)
+                existingNote.deleted = deleted;
+                existingNote.updated_at = updated_at;
+            })
     },
 })
 export const {sortNotes} = noteSlice.actions

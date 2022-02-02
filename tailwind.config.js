@@ -12,13 +12,18 @@ module.exports = {
         extend: {
             fontSize: {
                 'md': ['.9rem', "1.25rem"],
+                menu: ["13px"]
             },
             width: {
                 "160": "40rem",
                 "144": "36rem"
             },
             margin:{
-                "144": "36rem"
+                "144": "38rem"
+            },
+            colors:{
+                // "side-indigo": "#4f46e5"
+                "side-indigo": "rgb(130, 142, 241)"
             }
         },
     },

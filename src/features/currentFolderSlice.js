@@ -1,7 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {fetchNotesByFolderId} from "./noteSlice";
 
-const initialState = {}
+const initialState = []
 
 
 export const setCurrentFolder = createAsyncThunk(

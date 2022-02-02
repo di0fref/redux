@@ -21,7 +21,7 @@ export default function NoDocumentOpen() {
                 <div className={"text-xl font-bold mb-2 text-gray-400 w-full"}>No document is open</div>
                 <div className={"flex items-center justify-center"}>
                     <BiFile className={"mx-2"}/>
-                    <Link to={"#"} className={"hover:text-sky-500 text-slate-500"}
+                    <Link to={"#"} className={"hover:text-indigo-500 text-slate-500"}
                           onClick={newDocumentHandler}>Create new</Link>
                 </div>
             </div>
