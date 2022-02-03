@@ -8,8 +8,8 @@ export const momentConfig = {
 }
 
 export const apiConfig = {
-    // url: "http://localhost:8000/api",
-    url: "http://backend.loc",
+    url: "http://localhost:8000",
+    // url: "http://backend.loc",
 }
 
 export const UNTITLED = "Untitled"

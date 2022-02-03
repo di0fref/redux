@@ -48,6 +48,7 @@ function ThemeSwitcher() {
 
     return (
         <button
+            data-tip={"Switch theme"}
             id="theme-toggle"
             type="button"
             className="text-gray-400  focus:outline-none rounded-lg text-sm p-2 mr-4">

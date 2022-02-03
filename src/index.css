@@ -117,11 +117,13 @@ body {
     @apply mb-2
 }
 
+.ql-editor *{
+    @apply text-gray-800 dark:text-gray-400
+}
 .ql-editor {
     overflow-x: hidden;
     font-family: 'Inter', sans-serif !important;
     font-size: 16px !important;
-    @apply text-gray-800 dark:text-gray-400
 }
 
 /* Placeholder */
@@ -130,7 +132,13 @@ body {
     font-size: 16px;
     @apply dark:text-gray-200 text-gray-600
 }
+.sidebar-item{
+    @apply hover:bg-gray-800 hover:text-white text-menu
+}
 
+#registerTip{
+    padding: 5px !important;
+}
 /*!* Works on Firefox *!*/
 /** {*/
 /*    scrollbar-width: thin;*/

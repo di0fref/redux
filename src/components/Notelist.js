@@ -1,16 +1,17 @@
 import {useDispatch, useSelector} from "react-redux";
 import {setCurrentNote} from "../features/currentNoteSlice";
-import {addNote, fetchNotesByFolderId, sortNotes} from "../features/noteSlice";
-import {useEffect, useMemo, useState} from "react";
+import {addNote} from "../features/noteSlice";
+import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import Moment from "react-moment";
 import {QuillDeltaToHtmlConverter} from "quill-delta-to-html";
 import {useNavigate, useParams} from "react-router";
-import {BiEdit, BiLock, BiSearch} from "react-icons/bi";
+import {BiEdit, BiLock, BiSearch, BiTrash} from "react-icons/bi";
 import {setOpen} from "../features/sidebarSlice";
 import {FaSearch, FaStar, FaTimes} from "react-icons/fa";
 import {momentConfig, UNTITLED} from "../config/config";
 import {createSelector} from 'reselect'
+import ReactHtmlParser from 'react-html-parser';
 
 String.prototype.trunc = function (n) {
     return this.substr(0, n - 1) + (this.length > n ? "..." : "");
@@ -31,14 +32,19 @@ function NoteCard(props) {
     }, [params.note_id])
 
     const strip = (text) => {
-        return text.replace(/(<([^>]+)>)/gi, "");
+        // return text.replace(/(<([^>]+)>)/gi, "");
+        return text
+    }
+
+    const QuillDeltaToHtmlConverterConfig = {
+        encodeHtml: false
     }
 
     const getIngress = (text) => {
 
         if (typeof text === "string") {
             let json = JSON.parse(text);
-            let converter = new QuillDeltaToHtmlConverter(json.ops, {});
+            let converter = new QuillDeltaToHtmlConverter(json.ops, QuillDeltaToHtmlConverterConfig);
             return strip(converter.convert().trunc(95));
         }
         return "..."
@@ -66,7 +72,7 @@ function NoteCard(props) {
                   className={`text-sm block px-6 pt-3 pb-4 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700 ${currentNote === note.id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}`}>
                 <div className={"flex justify-between items-center mb-1"}>
 
-                    <div className={"font-semibold text-gray-800 dark:text-gray-400 mr-auto"}>
+                    <div className={"font-semibold text-gray-800 dark:text-gray-200 mr-auto"}>
                         {note.name ? note.name : UNTITLED}
                     </div>
                     <div className={"text-xs text-gray-500"}>
@@ -74,11 +80,14 @@ function NoteCard(props) {
                     </div>
                 </div>
                 <div>
-                    <span className={"break-words text-sm text-gray-500 dark:text-gray-400"}> {getIngress(note.text)}</span>
+                    <span className={"break-words text-sm text-gray-500 dark:text-gray-400"}>
+                        { ReactHtmlParser(getIngress(note.text)) }
+                    </span>
                 </div>
                 <div className={"w-full flex items-center justify-end"}>
-                    {note.locked ? <BiLock className={"ml-auto text-gray-400 mr-1"}/> : ""}
-                    {note.bookmark ? <FaStar className={"text-yellow-400 mr-1"}/> : ""}
+                    {note.locked ? <BiLock className={"ml-auto text-red-500 mr-1 h-3 w-3"}/> : ""}
+                    {note.bookmark ? <FaStar className={"text-yellow-400 mr-1 h-3 w-3"}/> : ""}
+                    {note.deleted ? <BiTrash className={"text-gray-400 mr-1 h-3 w-3"}/> : ""}
                 </div>
             </Link>
 
@@ -183,7 +192,7 @@ export default function Notelist() {
                     </span>
                     <input value={term} onChange={(e) => setTerm(e.target.value)} type="search" name="q" className="w-full mr-2 py-2 text-sm dark:text-white text-gray-700 dark:bg-gray-700 rounded-lg pl-10 focus:outline-none focus:bg-white dark:focus:bg-gray-600 focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-500" placeholder="Search..." autoComplete="off"/>
                 </div>
-                <button className={"mx-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={newDocumentHandler}>
+                <button data-tip={"New document"} className={"mx-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={newDocumentHandler}>
                     <BiEdit className={"h-5 w-5"}/>
                 </button>
                 <button className={`mr-2 block md:hidden ${sidebar ? "block" : "hidden"}`} onClick={() => dispatch(setOpen(false))}>

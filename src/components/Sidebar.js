@@ -32,7 +32,7 @@ function SidebarItem(props) {
         <>
             <Link to={`/folder/${props.item.id}`} className={"flex w-full my-1"}>
                 <div className=
-                         {`${currentFolder.id === props.item.id ? "bg-gray-800 dark:bg-gray-800 text-white" : ""} flex items-center rounded hover:bg-gray-800 py-2 w-full px-2`}
+                         {`sidebar-item ${currentFolder.id === props.item.id ? "bg-gray-800 dark:bg-gray-800 text-white " : ""} flex items-center rounded  py-2 w-full px-2`}
                      style={{
                          marginLeft: props.depth * 1.3
                      }}>
@@ -75,7 +75,6 @@ export default function Sidebar() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log(params.folder_id);
         dispatch(setCurrentFolder(params.folder_id))
         dispatch(setCurrentNote(null))
     }, [params.folder_id])
@@ -110,11 +109,11 @@ export default function Sidebar() {
                 <div className={"mb-2"}><Tags/></div>
                 <div className={"mb-2"}><Recent/></div>
                 <div className={"flex items-center justify-between ml-2 mt-4 mb-3"}>
-                    <div className={"text-side-indigo font-bold uppercase text-[12px] tracking-wide"}>My Documents</div>
+                    <div className={"text-side-indigo font-bold uppercase text-[12px] tracking-wide"}>Documents</div>
                     <div className={""}><NewFolderButton/></div>
                 </div>
 
-                <Link to={`/folder/0`} className={`${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded hover:bg-gray-800 py-2 w-full px-2`}>
+                <Link to={`/documents`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
                     <div className={""}>
                         <BiFile className={"h-6 w-6"}/>
                     </div>

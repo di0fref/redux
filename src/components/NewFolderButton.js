@@ -4,7 +4,6 @@ import {useState} from "react";
 import {modalstyleSmall} from "../config/styles";
 import {useDispatch, useSelector} from "react-redux";
 import {addFolder, fetchTree} from "../features/treeSlice";
-import ReactTooltip from "react-tooltip";
 
 export default function NewFolderButton() {
 
@@ -40,11 +39,10 @@ export default function NewFolderButton() {
     }
     return (
         <>
-            <ReactTooltip id={"new-folder-tip"}>New folder</ReactTooltip>
-            
-                <button data-tip data-for="new-folder-tip" onClick={handleModalOpen} className={"hover:bg-indigo-500 rounded mr-2 flex items-center"}>
+
+                <button data-tip={"New folder"} onClick={handleModalOpen} className={"hover:bg-indigo-500_ rounded mr-2 flex items-center"}>
                     <div className={"flex items-center"}>
-                        <BiFolderPlus className={"text-gray-200 h-7 w-7 hover:text-white p-1 flex items-center"}/>
+                        <BiFolderPlus className={"text-gray-400 h-7 w-7 hover:text-white p-1 flex items-center"}/>
                     </div>
                 </button>
 

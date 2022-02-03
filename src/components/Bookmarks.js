@@ -8,7 +8,7 @@ export default function Bookmarks() {
 
     const [open, setOpen] = useState(false)
     return (
-        <Link to={`/folder/bookmarks`} onClick={() => setOpen(!open)} className={`${(currentFolder.id === "bookmarks") ? "bg-gray-800 text-white" : ""} flex items-center rounded hover:bg-gray-800 py-2 w-full px-2 text-menu`}>
+        <Link to={`/bookmarks`} onClick={() => setOpen(!open)} className={`sidebar-item ${(currentFolder.id === "bookmarks") ? "bg-gray-800 text-white" : ""} flex items-center rounded  py-2 w-full px-2`}>
             <div><BiStar className={"h-6 w-6"}/></div>
             <div className={"ml-3"}>Bookmarks</div>
         </Link>

@@ -22,10 +22,11 @@ module.exports = {
                 "144": "38rem"
             },
             colors:{
-                // "side-indigo": "#4f46e5"
                 "side-indigo": "rgb(130, 142, 241)"
             }
         },
     },
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/typography'),
+    ],
 }

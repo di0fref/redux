@@ -18,10 +18,10 @@ export default function NoDocumentOpen() {
     return (
         <div className={"flex items-center flex-col"}>
             <div className={"break-words block px-6 pt-3 pb-4 text-center"}>
-                <div className={"text-xl font-bold mb-2 text-gray-400 w-full"}>No document is open</div>
+                <div className={"text-xl font-bold mb-2 text-gray-400 w-full"}>No note is open</div>
                 <div className={"flex items-center justify-center"}>
                     <BiFile className={"mx-2"}/>
-                    <Link to={"#"} className={"hover:text-indigo-500 text-slate-500"}
+                    <Link to={"#"} className={"hover:text-indigo-500 text-slate-500 decoration-0"}
                           onClick={newDocumentHandler}>Create new</Link>
                 </div>
             </div>

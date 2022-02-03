@@ -6,7 +6,6 @@ const initialState = []
 export const fetchAllNotes = createAsyncThunk(
     'notes/fetchAllNotes',
     async (folderId = 0, thunkAPI) => {
-
         const response = await fetch(apiConfig.url + "/api/notes")
             .then(response => response.json())
         return response;
