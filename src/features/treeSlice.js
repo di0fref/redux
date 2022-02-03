@@ -12,6 +12,24 @@ export const fetchTree = createAsyncThunk(
     }
 )
 
+export const addFolder = createAsyncThunk(
+    'tree/addFolder',
+    async (data, thunkAPI) => {
+        const response = await fetch(apiConfig.url + "/api/folders", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                parent_id: (typeof data.parent_id == "number")?data.parent_id:0,
+                name: data.name
+            })
+        }).then(response => response.json())
+
+        return response;
+    }
+)
+
 export const treeSlice = createSlice({
     name: 'tree',
     initialState,
@@ -19,6 +37,12 @@ export const treeSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchTree.fulfilled, (state, action) => {
             return action.payload
+        })
+        builder.addCase(addFolder.fulfilled, (state, action) => {
+
+            // console.log(action.payload);
+
+            // return action.payload
         })
     },
 })

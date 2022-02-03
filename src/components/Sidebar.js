@@ -16,6 +16,7 @@ import Tags from "./Tags";
 import {getAuth} from "firebase/auth";
 import Trash from "./Trash";
 import Shared from "./Shared";
+import NewFolderButton from "./NewFolderButton";
 
 function SidebarItem(props) {
 
@@ -74,6 +75,7 @@ export default function Sidebar() {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        console.log(params.folder_id);
         dispatch(setCurrentFolder(params.folder_id))
         dispatch(setCurrentNote(null))
     }, [params.folder_id])
@@ -107,7 +109,10 @@ export default function Sidebar() {
                 <div className={"mb-2"}><Bookmarks/></div>
                 <div className={"mb-2"}><Tags/></div>
                 <div className={"mb-2"}><Recent/></div>
-                <div className={"ml-2 mt-4 mb-2 text-side-indigo font-bold uppercase text-[12px] tracking-wide"}>My Documents</div>
+                <div className={"flex items-center justify-between ml-2 mt-4 mb-3"}>
+                    <div className={"text-side-indigo font-bold uppercase text-[12px] tracking-wide"}>My Documents</div>
+                    <div className={""}><NewFolderButton/></div>
+                </div>
 
                 <Link to={`/folder/0`} className={`${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded hover:bg-gray-800 py-2 w-full px-2`}>
                     <div className={""}>

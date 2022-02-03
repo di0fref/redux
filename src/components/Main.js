@@ -10,7 +10,9 @@ export default function Main() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(fetchAllNotes())
+        dispatch(fetchAllNotes()).then((result) => {
+            console.log(result.payload);
+        })
     },[])
 
 
