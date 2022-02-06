@@ -1,21 +1,36 @@
-import {useEffect, useState} from "react";
-import {FaChevronDown, FaEdit, FaFilePdf, FaShare, FaTrash} from "react-icons/fa";
+import {forwardRef, useEffect, useState} from "react";
+import {FaChevronDown, FaEdit, FaFilePdf, FaLink, FaShare, FaTimes, FaTrash, FaUserAlt} from "react-icons/fa";
 import {Menu} from '@headlessui/react'
-import {BiShare, BiTrash} from "react-icons/bi";
+import {BiChevronDown, BiLink, BiShare, BiTrash} from "react-icons/bi";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteNote} from "../../features/noteSlice";
 import {setCurrentNote} from "../../features/currentNoteSlice";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import {Modal} from "@mui/material";
+import {modalstyleLarge, modalstyleSmall} from "../../config/styles";
+import ReactTooltip from "react-tooltip";
 
 function NoteMenu(props) {
 
-    const dispatch = useDispatch();
     const currentNote = useSelector((state) => state.currentNote)
     const currentFolder = useSelector((state) => state.currentFolder)
+    const dispatch = useDispatch()
+    const [modalOpen, setModalOpen] = useState(false)
+    const [permissionOpen, setPermissionOpen] = useState(false)
+
+    const handleModalOpen = () => {
+        setModalOpen(true)
+        ReactTooltip.rebuild()
+    };
+    const handleModalClose = () => {
+        setModalOpen(false)
+        // setShowError(false)
+    };
 
     const navigator = useNavigate()
-    const _action = (e) => {}
+    const _action = (e) => {
+    }
     const data = [
         {
             title: "Download as PDF",
@@ -25,7 +40,7 @@ function NoteMenu(props) {
         {
             title: "Share document",
             icon: <BiShare/>,
-            action: () => _action()
+            action: () => handleModalOpen()
         },
         {
             title: "Move to trash",
@@ -38,6 +53,19 @@ function NoteMenu(props) {
             }
         },
     ]
+
+
+    const UpdatePermissionButton = forwardRef(({children}, ref) => (
+        <button onClick={() => setPermissionOpen(false)} ref={ref} className={"hover:bg-indigo-600 relative items-center flex justify-center w-full h-10 px-4 py-3 mt-6 font-medium text-white border border-transparent rounded-md group bg-indigo-500"}>
+            {children}
+        </button>
+    ));
+
+    const CustomMenuButton = forwardRef(({children}, ref) => (
+        <button onClick={() => setPermissionOpen(!permissionOpen)} ref={ref}>
+            {children}
+        </button>
+    ));
 
     return (
         <>
@@ -54,7 +82,7 @@ function NoteMenu(props) {
                         {data.map((item, index) => {
                             return (
                                 <div className="py-1" key={index}>
-                                    <Menu.Item >
+                                    <Menu.Item>
                                         {({active}) => (
                                             <div
                                                 onClick={item.action}
@@ -72,6 +100,76 @@ function NoteMenu(props) {
                     </Menu.Items>
                 </Menu>
             </div>
+            <Modal open={modalOpen} onClose={handleModalClose} keepMounted={true}>
+                <div style={modalstyleLarge} className={"block rounded rounded- shadow-lg bg-gray-100 dark:bg-gray-700 w-144 text-gray-600 dark:text-gray-200"}>
+                    <div className={"bg-white dark:bg-gray-700 rounded rounded-lg"}>
+                        <div className={"w-full"}>
+                            <input placeholder={"Type email"} type={"email"} autoFocus={true} className={"text-sm w-full rounded-t rounded-t-lg px-3 py-4 focus:outline-0 bg-white dark:bg-gray-500"}/>
+                        </div>
+                    </div>
+                    <div className={"flex items-center p-4 text-sm"}>
+                        <div><FaUserAlt/></div>
+                        <div className={"ml-4 font-semibold"}>Fredrik Fahlstad</div>
+                        <div className={"ml-auto"}>
+                            <div className={"mt-3 mb-3 px-4"}>
+                                <Menu as="div" className="relative inline-block text-left w-full">
+                                    <Menu.Button as={CustomMenuButton}>
+                                        <div className={"flex items-center"}>
+                                            <div>Menu</div>
+                                            <div><BiChevronDown/></div>
+                                        </div>
+                                    </Menu.Button>
+                                    <Menu.Items static={true} className={"bg-white dark:bg-gray-700 z-10 absolute right-0 w-72 mt-2 origin-top-right rounded-md shadow-lg dark:shadow-neutral-900 shadow-gray-600/60"}>
+                                        {permissionOpen && (
+                                            <Menu.Item>
+                                                <div className={"p-4 "}>
+                                                    <div className={"mb-6"}>
+                                                        <div className={"font-semibold text-sm"}>Role</div>
+                                                    </div>
+                                                    <div>
+                                                        <div className={"flex items-center"}>
+                                                            <input type={"radio"} name="role"/>
+                                                            <div className={"ml-4"}>Reader</div>
+                                                        </div>
+                                                        <div className={"flex items-center mt-3"}>
+                                                            <input type={"radio"} name="role"/>
+                                                            <div className={"ml-4"}>Writer</div>
+                                                        </div>
+                                                        <div>
+                                                            <UpdatePermissionButton>
+                                                                <span>Update</span>
+                                                            </UpdatePermissionButton>
+                                                            <button className={"flex items-center w-full justify-center mt-4"}>
+                                                                <span><BiTrash/></span>
+                                                                <span className={"ml-2"}>Remove permission</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Menu.Item>
+                                        )}
+                                    </Menu.Items>
+                                </Menu>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={"flex items-center text-sm border-t border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400"}>
+                        <div className={"w-full p-4 flex items-center justify-end "}>
+
+                            <div></div>
+                            <button className={" flex items-center mr-4"} data-tip={"Create a link to a public version of this document"}>
+                                <div></div>
+                                <div>Publish to web</div>
+                            </button>
+                            <button className={"flex items-center "}>
+                                <div className={"mr-1"}><BiLink/></div>
+                                <div>Copy link</div>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </Modal>
         </>
     )
 }

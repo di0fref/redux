@@ -1,14 +1,19 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {apiConfig} from "../config/config";
 
+import getHeaders from "../helpers/getHeaders";
+
 const initialState = []
 
 export const fetchAllNotes = createAsyncThunk(
     'notes/fetchAllNotes',
     async (folderId = 0, thunkAPI) => {
-        const response = await fetch(apiConfig.url + "/api/notes")
+        const response = await fetch(apiConfig.url + "/api/notes",{
+            headers: getHeaders()
+        })
             .then(response => response.json())
         return response;
+
     }
 )
 export const addNote = createAsyncThunk(
@@ -16,9 +21,7 @@ export const addNote = createAsyncThunk(
     async (folderId = 0, thunkAPI) => {
         const response = await fetch(apiConfig.url + "/api/notes", {
             method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getHeaders(),
             body: JSON.stringify({
                 folder_id: folderId
             })
@@ -33,9 +36,7 @@ export const updateNoteBody = createAsyncThunk(
     async (note, thunkAPI) => {
         const response = await fetch(apiConfig.url + "/api/notes/" + note.id, {
             method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getHeaders(),
             body: JSON.stringify({
                 text: note.text,
             })
@@ -48,9 +49,7 @@ export const updateNoteTitle = createAsyncThunk(
     async (note, thunkAPI) => {
         const response = await fetch(apiConfig.url + "/api/notes/" + note.id, {
             method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getHeaders(),
             body: JSON.stringify({
                 name: note.name,
             })
@@ -65,9 +64,7 @@ export const updateBookMark = createAsyncThunk(
         console.log(note)
         const response = await fetch(apiConfig.url + "/api/notes/" + note.id, {
             method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getHeaders(),
             body: JSON.stringify({
                 bookmark: note.bookmark
             })
@@ -80,9 +77,7 @@ export const updateLock = createAsyncThunk(
     async (note, thunkAPI) => {
         const response = await fetch(apiConfig.url + "/api/notes/" + note.id, {
             method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getHeaders(),
             body: JSON.stringify({
                 locked: note.locked
             })
@@ -96,9 +91,7 @@ export const deleteNote = createAsyncThunk(
         console.log(noteId)
         const response = await fetch(apiConfig.url + "/api/notes/" + noteId, {
             method: "PUT",
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getHeaders(),
             body: JSON.stringify({
                 deleted: 1
             })
@@ -129,7 +122,7 @@ export const noteSlice = createSlice({
             .addCase(updateNoteBody.fulfilled, (state, action) => {
                 const {id, text, updated_at} = action.payload
                 const existingNote = state.find(note => note.id === id)
-                existingNote.text = text;
+                existingNote.text = JSON.stringify(text);
                 existingNote.updated_at = updated_at;
             })
             .addCase(updateNoteTitle.fulfilled, (state, action) => {

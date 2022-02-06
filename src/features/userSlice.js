@@ -12,9 +12,7 @@ export const login = createAsyncThunk(
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                idToken: data.credential.idToken,
-                provider: data.credential.providerId,
-                credential: data.credential,
+                idToken: data.idToken,
                 user: data.user
             })
         })

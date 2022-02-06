@@ -4,13 +4,16 @@ import {useState} from "react";
 import {modalstyleSmall} from "../config/styles";
 import {useDispatch, useSelector} from "react-redux";
 import {addFolder, fetchTree} from "../features/treeSlice";
+import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 
-export default function NewFolderButton() {
+export default function NewFolderButton(props) {
 
     const [modalOpen, setModalOpen] = useState(false)
     const [folderName, setFolderName] = useState("")
     const [showError, setShowError] = useState(false)
     const currentFolder = useSelector((state) => state.currentFolder)
+    const navigate = useNavigate();
 
     const dispatch = useDispatch()
     const handleModalOpen = () => setModalOpen(true);
@@ -29,6 +32,11 @@ export default function NewFolderButton() {
                 name: folderName
             })).then((result) => {
                 dispatch(fetchTree())
+                props.opelAll()
+                navigate(`/folder/${result.payload.id}`)
+                setFolderName("")
+                handleModalClose()
+                toast.success("Folder created")
             })
         }
     }
@@ -40,16 +48,17 @@ export default function NewFolderButton() {
     return (
         <>
 
-                <button data-tip={"New folder"} onClick={handleModalOpen} className={"hover:bg-indigo-500_ rounded mr-2 flex items-center"}>
-                    <div className={"flex items-center"}>
-                        <BiFolderPlus className={"text-gray-400 h-7 w-7 hover:text-white p-1 flex items-center"}/>
-                    </div>
-                </button>
+            <button data-tip={"New folder"} onClick={handleModalOpen} className={"hover:bg-indigo-500_ rounded mr-2 flex items-center"}>
+                <div className={"flex items-center"}>
+                    <BiFolderPlus className={"text-gray-400 h-7 w-7 hover:text-white p-1 flex items-center"}/>
+                </div>
+            </button>
 
             <Modal open={modalOpen} onClose={handleModalClose}>
-                <div style={modalstyleSmall} className={"block p-6 rounded-lg shadow-lg bg-white max-w-sm dark:bg-gray-700"}>
+                <div style={modalstyleSmall} className={"block p-6 rounded shadow-lg bg-white max-w-sm dark:bg-gray-700"}>
                     <div className={"bg-white dark:bg-gray-700 form-group mb-6"}>
-                        <label htmlFor="foldername" className="form-label inline-block mb-2 text-gray-700 dark:text-gray-200 font-medium">Create new folder in "{currentFolder.name}"</label>
+                        <label htmlFor="foldername" className="form-label inline-block mb-2 text-gray-700 dark:text-gray-200 font-medium">Create
+                            new folder in "{currentFolder.name}"</label>
                         <input type="text" className="form-control
                                 block
                                 w-full

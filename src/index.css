@@ -34,129 +34,100 @@ body {
 
 .editor-wrapper {
     max-height: calc(100vh - 4rem);
-    overflow: hidden;
+    overflow-y: auto;
+overflow-x: hidden;
 }
 
 .notelist {
     height: calc(100vh - 4rem);
 }
 
-.ql-container.ql-snow {
-    border: none;
-    height: calc(100vh - 14rem);
-    overflow-y: scroll;
-}
+/*.ql-container.ql-snow {*/
+/*    border: none;*/
+/*    height: calc(100vh - 14rem);*/
+/*    overflow-y: scroll;*/
+/*}*/
 
-* {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
+/** {*/
+/*    scrollbar-width: none; !* Firefox *!*/
+/*    -ms-overflow-style: none; !* Internet Explorer 10+ *!*/
+/*}*/
 
-*::-webkit-scrollbar { /* WebKit */
-    width: 0;
-    height: 0;
-}
-
-.ql-container.ql-snow {
-    border: none !important
-}
-
-.ql-toolbar.ql-snow {
-    border: none !important;
-}
-
-.ql-editor h1,
-.ql-editor h2,
-.ql-editor h3,
-.ql-editor h4,
-.ql-editor h5,
-.ql-editor h6 {
-    font-weight: 600 !important;
-    margin-top: 10px !important;
-    margin-bottom: 6px !important;
-}
-
-.ql-bubble .ql-editor h1 {
-    font-size: 1.4em !important;
-}
-
-.ql-bubble .ql-editor h2 {
-    font-size: 1.2em !important;
-}
-
-.ql-bubble .ql-editor h3 {
-    font-size: 1.1em !important
-}
-
-.ql-bubble .ql-editor code, .ql-bubble .ql-editor pre {
-    border-radius: 3px !important;
-    @apply text-base bg-blue-600 dark:bg-gray-700;
-}
-
-.ql-bubble .ql-editor p,
-.ql-bubble .ql-editor ul,
-.ql-bubble .ql-editor ol {
-    /*line-height: 1.6em;*/
-    font-size: 1rem;
-}
-
-.ql-bubble .ql-editor p,
-.ql-bubble .ql-editor pre,
-.ql-bubble .ql-editor code,
-.ql-bubble .ql-editor blockquote {
-    @apply mb-3
-}
-
-
-.ql-editor a {
-    color: var(--editor-url-color) !important;
-    text-decoration: none !important;
-}
-
-.ql-editor ul, .ql-editor ol {
-    @apply mb-2
-}
-
-.ql-editor *{
-    @apply text-gray-800 dark:text-gray-400
-}
-.ql-editor {
-    overflow-x: hidden;
-    font-family: 'Inter', sans-serif !important;
-    font-size: 16px !important;
-}
-
-/* Placeholder */
-.quill > .ql-container > .ql-editor.ql-blank::before {
-    opacity: 0.5;
-    font-size: 16px;
-    @apply dark:text-gray-200 text-gray-600
-}
-.sidebar-item{
-    @apply hover:bg-gray-800 hover:text-white text-menu
-}
+/**::-webkit-scrollbar { !* WebKit *!*/
+/*    width: 0;*/
+/*    height: 0;*/
+/*}*/
 
 #registerTip{
     padding: 5px !important;
 }
-/*!* Works on Firefox *!*/
-/** {*/
-/*    scrollbar-width: thin;*/
-/*    scrollbar-color: var(--scrollbar-base);*/
-/*}*/
+/* Works on Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-base);
+}
 
-/*!* Works on Chrome, Edge, and Safari *!*/
-/**::-webkit-scrollbar {*/
-/*    width: 8px;*/
-/*}*/
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 8px;
+}
 
-/**::-webkit-scrollbar-track {*/
-/*    background: var(--scrollbar-base);*/
-/*}*/
+*::-webkit-scrollbar-track {
+    background: var(--scrollbar-base);
+}
 
-/**::-webkit-scrollbar-thumb {*/
-/*    background-color: var(--scrollbar-thumb);*/
-/*    border-radius: 6px;*/
-/*    border: 2px solid transparent*/
-/*}*/
+*::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 6px;
+    border: 2px solid transparent
+}
 
+.bubble-menu {
+    display: flex;
+    @apply bg-black dark:bg-gray-600;
+    padding: 0.2rem;
+    border-radius: 0.5rem;
+}
+.bubble-menu button {
+    border: none;
+    background: none;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0 0.5rem;
+    opacity: 0.6;
+}
+.bubble-menu button:hover, .bubble-menu button.is-active {
+    opacity: 1;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}
+
+ul[data-type="taskList"] {
+    list-style: none;
+    padding: 0;
+}
+ul[data-type="taskList"] p {
+    margin: 0;
+}
+ul[data-type="taskList"] li {
+    display: flex;
+}
+ul[data-type="taskList"] li > label {
+    flex: 0 0 auto;
+    margin-right: 0.5rem;
+    user-select: none;
+}
+ul[data-type="taskList"] li > div {
+    flex: 1 1 auto;
+}
+
+.z{
+    z-index: 1500 !important;
+}

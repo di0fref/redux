@@ -6,19 +6,23 @@ import {fetchAllNotes} from "../features/noteSlice";
 import {useEffect} from "react";
 
 export default function Main() {
-    const sidebar = useSelector((state) => state.sidebar)
+    const sidebar = useSelector((state) => state.side.sidebar)
+    // const notelist = useSelector((state) => state.side.notelist)
+
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(fetchAllNotes()).then((result) => {
-            console.log(result.payload);
-        })
-    },[])
+        dispatch(fetchAllNotes())
+    }, [])
+
+    useEffect(() => {
+        console.log(sidebar)
+    }, [sidebar])
 
 
     return (
-        <div className={`flex h-screen bg-white dark:bg-gray-900_`}>
-            <div className={`flex ${sidebar ? "ml-0" : "-ml-144"} transition-all absolute md:relative z-10 w-full md:w-auto`}>
+        <div className={`flex h-screen bg-white dark:bg-gray-900_ `}>
+            <div className={`print:hidden flex ${sidebar ? "ml-0" : "-ml-144"} transition-all absolute md:relative z-10 w-full md:w-auto`}>
                 <div className={`${sidebar ? "ml-0" : "md:ml-0 -ml-72"} md:w-72 w-1/2 h-screen overflow-y-auto md:h-full bg-gray-900 bg-gray-900 text-gray-300 flex-shrink-0 `}>
                     <Sidebar/>
                 </div>

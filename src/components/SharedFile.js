@@ -28,6 +28,7 @@ export default function SharedFile() {
     };
 
     return (
+        note?
         <div className={"flex justify-center h-screen p-6"}>
             <div className={"text-gray-700 prose"}>
                 <div>Updated: <Moment calendar={momentConfig}>{note.updated_at}</Moment></div>
@@ -35,5 +36,6 @@ export default function SharedFile() {
                 {ReactHtmlParser(getHtml(note&&note.text))}
             </div>
         </div>
+            :""
     )
 }

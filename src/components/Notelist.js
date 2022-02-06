@@ -4,14 +4,30 @@ import {addNote} from "../features/noteSlice";
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import Moment from "react-moment";
-import {QuillDeltaToHtmlConverter} from "quill-delta-to-html";
 import {useNavigate, useParams} from "react-router";
 import {BiEdit, BiLock, BiSearch, BiTrash} from "react-icons/bi";
-import {setOpen} from "../features/sidebarSlice";
+import {setSidebarOpen} from "../features/sideSlice";
 import {FaSearch, FaStar, FaTimes} from "react-icons/fa";
 import {momentConfig, UNTITLED} from "../config/config";
 import {createSelector} from 'reselect'
 import ReactHtmlParser from 'react-html-parser';
+import {toast} from "react-toastify";
+import {generateHTML} from '@tiptap/html'
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
+import Text from '@tiptap/extension-text'
+import Bold from '@tiptap/extension-bold'
+import Italic from '@tiptap/extension-italic'
+import Heading from '@tiptap/extension-heading'
+import Strike from '@tiptap/extension-strike'
+import ListItem from '@tiptap/extension-list-item'
+import BulletList from '@tiptap/extension-bullet-list'
+import OrderList from '@tiptap/extension-ordered-list'
+import {CodeBlock} from "@tiptap/extension-code-block";
+import Code from '@tiptap/extension-code'
+import {HorizontalRule} from "@tiptap/extension-horizontal-rule";
+import {TaskList} from "@tiptap/extension-task-list";
+import {TaskItem} from "@tiptap/extension-task-item";
 
 String.prototype.trunc = function (n) {
     return this.substr(0, n - 1) + (this.length > n ? "..." : "");
@@ -43,9 +59,24 @@ function NoteCard(props) {
     const getIngress = (text) => {
 
         if (typeof text === "string") {
-            let json = JSON.parse(text);
-            let converter = new QuillDeltaToHtmlConverter(json.ops, QuillDeltaToHtmlConverterConfig);
-            return strip(converter.convert().trunc(95));
+            let html = generateHTML(JSON.parse(text), [
+                Document,
+                Paragraph,
+                Text,
+                Bold,
+                ListItem,
+                BulletList,
+                Italic,
+                Heading,
+                Strike,
+                OrderList,
+                CodeBlock,
+                Code,
+                HorizontalRule,
+                TaskList,
+                TaskItem
+            ])
+            return strip(html.trunc(95));
         }
         return "..."
     };
@@ -67,9 +98,9 @@ function NoteCard(props) {
         <>
             <Link to={`/folder/${note.folder_id}/note/${note.id}`} onClick={
                 () => {
-                    if (windowSize < 768) dispatch(setOpen(false))
+                    if (windowSize < 768) dispatch(setSidebarOpen(false))
                 }}
-                  className={`text-sm block px-6 pt-3 pb-4 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700 ${currentNote === note.id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}`}>
+                  className={`text-sm block px-6 py-6 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700 ${currentNote === note.id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}`}>
                 <div className={"flex justify-between items-center mb-1"}>
 
                     <div className={"font-semibold text-gray-800 dark:text-gray-200 mr-auto"}>
@@ -81,7 +112,7 @@ function NoteCard(props) {
                 </div>
                 <div>
                     <span className={"break-words text-sm text-gray-500 dark:text-gray-400"}>
-                        { ReactHtmlParser(getIngress(note.text)) }
+                        {ReactHtmlParser(getIngress(note.text))}
                     </span>
                 </div>
                 <div className={"w-full flex items-center justify-end"}>
@@ -104,7 +135,7 @@ export default function Notelist() {
     const [term, setTerm] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const dispatch = useDispatch();
-    const sidebar = useSelector((state) => state.sidebar)
+    const sidebar = useSelector((state) => state.side.sidebar)
     const currentFolder = useSelector((state) => state.currentFolder)
     const navigator = useNavigate()
     const notes = useSelector((state) => state.notes)
@@ -142,6 +173,7 @@ export default function Notelist() {
 
     const newDocumentHandler = () => {
         dispatch(addNote(currentFolder.id)).then((result) => {
+            toast.success("Document created")
             navigator(`/folder/${currentFolder.id}/note/${result.payload.id}`)
         })
     }
@@ -195,11 +227,11 @@ export default function Notelist() {
                 <button data-tip={"New document"} className={"mx-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={newDocumentHandler}>
                     <BiEdit className={"h-5 w-5"}/>
                 </button>
-                <button className={`mr-2 block md:hidden ${sidebar ? "block" : "hidden"}`} onClick={() => dispatch(setOpen(false))}>
+                <button className={`mr-2 block md:hidden ${sidebar ? "block" : "hidden"}`} onClick={() => dispatch(setSidebarOpen(false))}>
                     <FaTimes className={"h-5 w-5 text-gray-400 hover:text-gray-200"}/>
                 </button>
             </div>
-            <div className={"overflow-y-auto h-full border-l border-r dark:border-gray-700/40"}>
+            <div className={"overflow-y-auto h-full border-l_ border-r border-gray-700/40"}>
 
                 {getListType()}
 

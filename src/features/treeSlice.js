@@ -1,12 +1,15 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {apiConfig} from "../config/config";
+import getHeaders from "../helpers/getHeaders";
 
 const initialState = []
 
 export const fetchTree = createAsyncThunk(
     'tree/fetchTree',
     async (folderId, thunkAPI) => {
-        const response = await fetch(apiConfig.url + "/api/tree")
+        const response = await fetch(apiConfig.url + "/api/tree",{
+            headers: getHeaders()
+        })
             .then(response => response.json())
         return response;
     }
@@ -17,9 +20,7 @@ export const addFolder = createAsyncThunk(
     async (data, thunkAPI) => {
         const response = await fetch(apiConfig.url + "/api/folders", {
             method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: getHeaders(),
             body: JSON.stringify({
                 parent_id: (typeof data.parent_id == "number")?data.parent_id:0,
                 name: data.name
@@ -39,10 +40,7 @@ export const treeSlice = createSlice({
             return action.payload
         })
         builder.addCase(addFolder.fulfilled, (state, action) => {
-
-            // console.log(action.payload);
-
-            // return action.payload
+            // No op
         })
     },
 })

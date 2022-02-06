@@ -18,13 +18,16 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 const auth = getAuth()
+const provider = new GoogleAuthProvider();
 
 export const signOutFireBase = () => {
     auth.signOut().then((res) =>{})
 }
 
 setPersistence(auth, browserLocalPersistence)
-    .then(() => {})
+    .then(() => {
+        return auth;
+    })
     .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;

@@ -3,7 +3,7 @@ import NotesReducer from "../features/noteSlice"
 import currentFolderReducer from "../features/currentFolderSlice"
 import currentNotesReducer from "../features/currentNoteSlice"
 import treeReducer from "../features/treeSlice"
-import sidebarReducer from "../features/sidebarSlice"
+import sideReducer from "../features/sideSlice"
 import userReducer from "../features/userSlice"
 
 export const store = configureStore({
@@ -12,7 +12,7 @@ export const store = configureStore({
         currentNote: currentNotesReducer,
         tree: treeReducer,
         currentFolder: currentFolderReducer,
-        sidebar: sidebarReducer,
+        side: sideReducer,
         user: userReducer
     }
 })

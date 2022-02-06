@@ -28,6 +28,11 @@ function SidebarItem(props) {
         e.stopPropagation()
         setOpen(!open)
     }
+
+    useEffect(() => {
+        setOpen(props.open)
+    }, [props.open])
+
     return (
         <>
             <Link to={`/folder/${props.item.id}`} className={"flex w-full my-1"}>
@@ -74,6 +79,8 @@ export default function Sidebar() {
     const tree = useSelector((state) => state.tree)
     const dispatch = useDispatch()
 
+    const [allOpen, setAllOpen] = useState(false)
+
     useEffect(() => {
         dispatch(setCurrentFolder(params.folder_id))
         dispatch(setCurrentNote(null))
@@ -87,10 +94,18 @@ export default function Sidebar() {
         e.stopPropagation()
         setOpen(!open)
     }
+
+    const opelAll = () => {
+        setAllOpen(true)
+        setOpen(true)
+    }
+
     return (
         <>
             <div className={"flex items-center justify-between w-full h-14"}>
-                <div className={"ml-4"}><img className="w-auto h-7 mx-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow"/></div>
+                <div className={"ml-4"}>
+                    <img className="w-auto h-7 mx-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow"/>
+                </div>
                 <div className={"mr-4"}>
                     <Usermenu/>
                 </div>
@@ -98,7 +113,9 @@ export default function Sidebar() {
 
             <div className={"h-40 flex flex-col items-center justify-center mt-2_ mb-4"}>
                 <div className={""}>
-                    <img src={user.photoURL} alt={"Avatar"} className={"rounded rounded-full h-20 w-20"}/>
+                    {user.photoURL
+                        ? <img src={user.photoURL} alt={"Avatar"} className={"rounded rounded-full h-20 w-20"}/>
+                        : <FaUser className={"h-16 w-16 bg-gray-400 rounded p-2"}/>}
                 </div>
                 <div className={"text-sm mt-2"}>{user.displayName}</div>
                 <div className={"text-gray-400 text-xs mt-1"}>{user.email}</div>
@@ -109,8 +126,8 @@ export default function Sidebar() {
                 <div className={"mb-2"}><Tags/></div>
                 <div className={"mb-2"}><Recent/></div>
                 <div className={"flex items-center justify-between ml-2 mt-4 mb-3"}>
-                    <div className={"text-side-indigo font-bold uppercase text-[12px] tracking-wide"}>Documents</div>
-                    <div className={""}><NewFolderButton/></div>
+                    <div className={"text-side-indigo font-'bold uppercase text-[12px] tracking-wide"}>Documents</div>
+                    <div className={""}><NewFolderButton opelAll={opelAll}/></div>
                 </div>
 
                 <Link to={`/documents`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
@@ -130,7 +147,7 @@ export default function Sidebar() {
                 <div className={`${open ? "block" : "hidden"} ml-6`}>
                     {Object.entries(tree).map(([key, item]) => {
                         return (
-                            <SidebarItem item={item} key={key} depth={0}/>
+                            <SidebarItem item={item} key={key} depth={0} open={allOpen}/>
                         )
                     })}
                 </div>

@@ -4,15 +4,17 @@ import {useState} from "react";
 import {FaLock} from "react-icons/fa";
 import {HiLockClosed, HiMail} from "react-icons/hi";
 import app, {signOutFireBase} from "../firebase"
-import {getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
+import {getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword} from "firebase/auth";
 import {useDispatch} from "react-redux";
 import {login} from "../features/userSlice";
+import {apiConfig} from "../config/config";
 
 export default function Login() {
-    const [username, setUsername] = useState("fredrik.fahlstad@gmail.com")
-    const [password, setPassword] = useState("Sk84ever32!")
+    const [username, setUsername] = useState("fredrik@fahlstad.se")
+    const [password, setPassword] = useState("kalle1234")
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [showUserError, setShowUserError] = useState(false)
 
     const google = () => {
         const provider = new GoogleAuthProvider();
@@ -22,7 +24,7 @@ export default function Login() {
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const user = result.user;
                 dispatch(login({
-                    credential: credential,
+                    idToken: credential.idToken,
                     user: user
                 })).then((result) => {
                     localStorage.setItem("api_token", result.payload.api_token)
@@ -36,13 +38,44 @@ export default function Login() {
             const credential = GoogleAuthProvider.credentialFromError(error);
         });
     }
-    const submitHandler = () => {
+    const submitHandler = (e) => {
+        const auth = getAuth();
+
+        e.preventDefault()
+        signInWithEmailAndPassword(auth, username, password)
+            .then((result) => {
+                dispatch(login({
+                    user: result.user,
+                    idToken: result.user.accessToken
+                }))
+                    .then((result) => {
+                        console.log(result)
+                        localStorage.setItem("api_token", result.payload.api_token)
+                        navigate('/')
+                    }).catch((err) => {
+                    console.log(err);
+                    /* Sign out user on net fail */
+                    signOutFireBase()
+                })
+                // ...
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                if (errorCode === "auth/user-not-found") {
+                    setShowUserError(true)
+                }
+            });
 
     }
     return (
         <>
             <div className="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-gray-200 h-screen">
                 <div className="w-full max-w-md p-4 rounded rounded-lg bg-white shadow shadow-xl">
+                    {showUserError
+                        ? <div className={"text-red-500 mt-4 mb-6 text-center"}>We cannot find any user with those
+                            credentials.</div>
+                        : ""}
                     <div>
                         <img className="w-auto h-12 mx-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow"/>
                         <h2 className="mt-6 text-3xl font-extrabold text-center text-normal">
@@ -70,12 +103,11 @@ export default function Login() {
                                     name="email"
                                     type="email"
                                     autoComplete="email"
-                                    className="relative block w-full px-3 py-2 pl-10 pr-3 rounded bg-white ring-1 ring-indigo-200" placeholder="Email"/>
-                                <div className="absolute inset-y-0 left-0 flex items-center px-2 m-px rounded pointer-events-none bg-gray-200_">
+                                    className="relative block w-full px-3 py-2 pl-10 pr-3 rounded bg-white ring-1 ring-gray-200" placeholder="Email"/>
+                                <div className="absolute inset-y-0 left-0 flex items-center px-2 m-px rounded pointer-events-none">
                                     <HiMail/>
                                 </div>
                             </div>
-
 
                             <div className={"mt-2 relative"}>
                                 <label htmlFor="password" className="sr-only">Password</label>
@@ -86,7 +118,7 @@ export default function Login() {
                                     name="password"
                                     type="password"
                                     autoComplete="off"
-                                    className="relative block w-full px-3 py-2 pl-10 pr-3 rounded bg-white ring-1 ring-indigo-200" placeholder="Password"/>
+                                    className="relative block w-full px-3 py-2 pl-10 pr-3 rounded bg-white ring-1 ring-gray-200" placeholder="Password"/>
                                 <div className="absolute inset-y-0 left-0 flex items-center px-2 m-px rounded pointer-events-none bg-gray-200_">
                                     <FaLock/>
                                 </div>
@@ -102,8 +134,6 @@ export default function Login() {
                                 <span>Sign in</span>
                             </button>
                         </div>
-
-
                     </form>
                     <div className={"flex justify-end items-center font-semibold"}>
                         <span>Don't have an account? <Link to={"/signup"} className={"link"}>Sign up</Link></span>

@@ -23,7 +23,19 @@ module.exports = {
             },
             colors:{
                 "side-indigo": "rgb(130, 142, 241)"
-            }
+            },
+            // typography: (theme) => ({
+            //     DEFAULT: {
+            //         css: {
+            //             color: theme('colors.gray.700'),
+            //         },
+            //     },
+            //     invert:{
+            //         css:{
+            //             color: theme('colors.gray.200'),
+            //         }
+            //     },
+            // })
         },
     },
     plugins: [

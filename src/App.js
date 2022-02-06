@@ -4,10 +4,13 @@ import PrivateRoute from "./helpers/PrivateRoute";
 import Login from "./components/Login";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {useEffect, useState} from "react";
-import { ToastContainer, toast } from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from "react-tooltip";
 import SharedFile from "./components/SharedFile"
+import SignUp from "./components/SignUp";
+
+
 function App() {
     const [user, setUser] = useState(null)
     const auth = getAuth();
@@ -22,31 +25,32 @@ function App() {
             setUser(null)
         }
     });
-    useEffect(() =>{
+    useEffect(() => {
         ReactTooltip.rebuild()
-    },[])
+    }, [])
+
+
     return (
         <>
-            <ToastContainer
-                hideProgressBar={true}
-                className={""}
-                position="top-center"/>
-            <ReactTooltip backgroundColor={"#000"} effect={"solid"}/>
-            <Routes>
-                <Route exact path={'/'} element={<PrivateRoute user={user}/>}>
-                    <Route path={"/folder/:folder_id/note/:note_id"} element={<Main/>}/>
-                    <Route exact path={"/folder/:folder_id"} element={<Main/>}/>
-                    <Route exact path={"/note/:note_id"} element={<Main/>}/>
-                    <Route exact path={"/:folder_id"} element={<Main/>}/>
-                    <Route exact path={"/"} element={<Main/>}/>
-                </Route>
-                <Route exact path={"/login"} element={<Login/>}/>
-                <Route exact path={"/shared/:id"} element={<SharedFile/>}/>
-
-            </Routes>
+                <ToastContainer
+                    hideProgressBar={true}
+                    className={""}
+                    position="top-center"/>
+                <ReactTooltip backgroundColor={"#000"} effect={"solid"} className={"z"}/>
+                <Routes>
+                    <Route exact path={'/'} element={<PrivateRoute user={user}/>}>
+                        <Route path={"/folder/:folder_id/note/:note_id"} element={<Main/>}/>
+                        <Route exact path={"/folder/:folder_id"} element={<Main/>}/>
+                        <Route exact path={"/note/:note_id"} element={<Main/>}/>
+                        <Route exact path={"/:folder_id"} element={<Main/>}/>
+                        <Route exact path={"/"} element={<Main/>}/>
+                    </Route>
+                    <Route exact path={"/login"} element={<Login/>}/>
+                    <Route exact path={"/shared/:id"} element={<SharedFile/>}/>
+                    <Route exact path={"/signup"} element={<SignUp/>}/>
+                </Routes>
         </>
-    )
-        ;
+    );
 }
 
 export default App;
