@@ -5,7 +5,7 @@ import currentNotesReducer from "../features/currentNoteSlice"
 import treeReducer from "../features/treeSlice"
 import sideReducer from "../features/sideSlice"
 import userReducer from "../features/userSlice"
-
+import todoReducer from "../features/todeSlice"
 export const store = configureStore({
     reducer: {
         notes: NotesReducer,
@@ -13,7 +13,8 @@ export const store = configureStore({
         tree: treeReducer,
         currentFolder: currentFolderReducer,
         side: sideReducer,
-        user: userReducer
+        user: userReducer,
+        todos: todoReducer
     }
 })
 window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

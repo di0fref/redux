@@ -8,7 +8,7 @@ import {setCurrentNote} from "../features/currentNoteSlice";
 import {Link} from "react-router-dom";
 import {useParams} from "react-router";
 import useUrl from "../hooks/useUrl";
-import {BiFile, BiFolder, BiLock, BiUser, BiUserCircle} from "react-icons/bi";
+import {BiFile, BiFolder, BiLock, BiNote, BiUser, BiUserCircle} from "react-icons/bi";
 import Bookmarks from "./Bookmarks";
 import Usermenu from "./menus/Usermenu";
 import Recent from "./Recent";
@@ -17,12 +17,15 @@ import {getAuth} from "firebase/auth";
 import Trash from "./Trash";
 import Shared from "./Shared";
 import NewFolderButton from "./NewFolderButton";
+import Todo from "./Todo";
+import Todos from "./Todos";
 
 function SidebarItem(props) {
 
     const dispatch = useDispatch();
     const currentFolder = useSelector((state) => state.currentFolder)
     const [open, setOpen] = useState(true)
+
     const chevronClicked = (e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -30,7 +33,7 @@ function SidebarItem(props) {
     }
 
     useEffect(() => {
-        setOpen(props.open)
+        // setOpen(props.open)
     }, [props.open])
 
     return (
@@ -39,7 +42,7 @@ function SidebarItem(props) {
                 <div className=
                          {`sidebar-item ${currentFolder.id === props.item.id ? "bg-gray-800 dark:bg-gray-800 text-white " : ""} flex items-center rounded  py-2 w-full px-2`}
                      style={{
-                         marginLeft: props.depth * 1.3
+                         marginLeft: props.depth * 0.8
                      }}>
 
                     <div className={"mr-2 flex items-center"}><BiFolder className={"h-5 w-5"}/></div>
@@ -53,7 +56,13 @@ function SidebarItem(props) {
                         }
                     </button>
                 </div>
+
             </Link>
+
+
+
+
+
             {(props.item.items) ? (
                 Object.entries(props.item.items).map(([key, items]) => {
                     return (
@@ -82,13 +91,16 @@ export default function Sidebar() {
     const [allOpen, setAllOpen] = useState(false)
 
     useEffect(() => {
+        console.log(params)
         dispatch(setCurrentFolder(params.folder_id))
         dispatch(setCurrentNote(null))
     }, [params.folder_id])
 
     useEffect(() => {
         dispatch(fetchTree())
+        opelAll()
     }, [])
+
     const chevronClicked = (e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -121,10 +133,13 @@ export default function Sidebar() {
                 <div className={"text-gray-400 text-xs mt-1"}>{user.email}</div>
             </div>
             <div className={"p-2 text-sm"}>
-                <div className={"ml-2 mb-2 text-side-indigo font-bold uppercase text-[12px] tracking-wide"}>Filters</div>
+                <div className={"mb-2"}><Todos/></div>
+
+                <div className={"ml-2 mb-2 text-side-indigo font-bold_ uppercase text-[12px] tracking-wide"}>Filters</div>
                 <div className={"mb-2"}><Bookmarks/></div>
                 <div className={"mb-2"}><Tags/></div>
                 <div className={"mb-2"}><Recent/></div>
+
                 <div className={"flex items-center justify-between ml-2 mt-4 mb-3"}>
                     <div className={"text-side-indigo font-'bold uppercase text-[12px] tracking-wide"}>Documents</div>
                     <div className={""}><NewFolderButton opelAll={opelAll}/></div>
@@ -144,7 +159,7 @@ export default function Sidebar() {
                         </button>
                     </div>
                 </Link>
-                <div className={`${open ? "block" : "hidden"} ml-6`}>
+                <div className={`${open ? "block" : "hidden"} ml-4`}>
                     {Object.entries(tree).map(([key, item]) => {
                         return (
                             <SidebarItem item={item} key={key} depth={0} open={allOpen}/>

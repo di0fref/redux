@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@ericz1803/react-google-calendar": "^4.2.1",
     "@headlessui/react": "^1.4.3",
     "@hookform/resolvers": "^2.8.8",
     "@mui/material": "^5.3.1",
@@ -31,6 +32,7 @@
     "@tiptap/html": "^2.0.0-beta.171",
     "@tiptap/react": "^2.0.0-beta.107",
     "@tiptap/starter-kit": "^2.0.0-beta.181",
+    "axios": "^0.25.0",
     "firebase": "^9.6.5",
     "is-hotkey": "^0.2.0",
     "lodash.debounce": "^4.0.8",

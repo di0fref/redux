@@ -131,3 +131,6 @@ ul[data-type="taskList"] li > div {
 .z{
     z-index: 1500 !important;
 }
+.sidebar-item{
+    @apply hover:bg-gray-800
+}

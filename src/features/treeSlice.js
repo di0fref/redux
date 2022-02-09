@@ -1,33 +1,23 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {apiConfig} from "../config/config";
-import getHeaders from "../helpers/getHeaders";
+import http from "../helpers/http-common";
 
 const initialState = []
 
 export const fetchTree = createAsyncThunk(
     'tree/fetchTree',
     async (folderId, thunkAPI) => {
-        const response = await fetch(apiConfig.url + "/api/tree",{
-            headers: getHeaders()
-        })
-            .then(response => response.json())
-        return response;
+        return await http.get(apiConfig.url + "/tree").then(response => response.data)
     }
 )
 
 export const addFolder = createAsyncThunk(
     'tree/addFolder',
     async (data, thunkAPI) => {
-        const response = await fetch(apiConfig.url + "/api/folders", {
-            method: "POST",
-            headers: getHeaders(),
-            body: JSON.stringify({
-                parent_id: (typeof data.parent_id == "number")?data.parent_id:0,
+        return await http.post(apiConfig.url + "/folders", {
+                parent_id: (typeof data.parent_id == "number") ? data.parent_id : 0,
                 name: data.name
-            })
-        }).then(response => response.json())
-
-        return response;
+            }).then(response => response.data)
     }
 )
 

@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {apiConfig} from "../config/config";
-import getHeaders from "../helpers/getHeaders";
+import http from "../helpers/http-common";
 
 const initialState = []
 
@@ -8,11 +8,8 @@ const initialState = []
 export const setCurrentFolder = createAsyncThunk(
     'folder/setCurrentFolder',
     async (folderId = 0, thunkAPI) => {
-        const response = await fetch(apiConfig.url + "/api/folders/" + folderId,{
-            headers: getHeaders()
-        })
-            .then(response => response.json())
-        return response;
+        return await http.get(apiConfig.url + "/folders/" + folderId)
+            .then(response => response.data)
     }
 )
 

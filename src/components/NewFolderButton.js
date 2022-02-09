@@ -59,7 +59,7 @@ export default function NewFolderButton(props) {
                     <div className={"bg-white dark:bg-gray-700 form-group mb-6"}>
                         <label htmlFor="foldername" className="form-label inline-block mb-2 text-gray-700 dark:text-gray-200 font-medium">Create
                             new folder in "{currentFolder.name}"</label>
-                        <input type="text" className="form-control
+                        <input type="text" autoFocus={true} className="form-control
                                 block
                                 w-full
                                 px-3

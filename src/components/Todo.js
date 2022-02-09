@@ -1,10 +1,13 @@
 import Sidebar from "./Sidebar";
-import Notelist from "./Notelist";
-import Content from "./Content";
 import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
+import TodoList from "./TodoList";
+import Notelist from "./Notelist";
 
-export default function Main() {
+export default function Todos() {
     const sidebar = useSelector((state) => state.side.sidebar)
+
+    const dispatch = useDispatch()
 
     return (
         <div className={`flex h-screen bg-white dark:bg-gray-900_ `}>
@@ -16,8 +19,9 @@ export default function Main() {
                     <Notelist/>
                 </div>
             </div>
-            <div className={"flex-grow h-full bg-white dark:bg-gray-900 editor"}>
-                <Content/>
+            <div className={"flex-grow h-full bg-white dark:bg-gray-800 editor"}>
+                {/*<Content/>*/}
+                <TodoList/>
             </div>
         </div>
 

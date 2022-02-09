@@ -79,7 +79,6 @@ export default function Content() {
     }, [currentNote])
 
     const modules = {
-        // syntax: true,
         history: {
             delay: 2000,
             maxStack: 500,
@@ -156,9 +155,7 @@ export default function Content() {
                                 <div key={"Tiptap"}><Tiptap/></div>
                             </ErrorBoundary>
                         </>
-
                         : <div className={"mt-60"}><NoDocumentOpen/></div>}
-
                 </div>
             </div>
         </div>

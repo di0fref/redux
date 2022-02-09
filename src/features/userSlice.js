@@ -1,23 +1,16 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {apiConfig} from "../config/config";
+import http from "../helpers/http-common";
 
 const initialState = []
 
 export const login = createAsyncThunk(
     'user/login',
     async (data, thunkAPI) => {
-        const response = await fetch(apiConfig.url + "/api/users/login", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                idToken: data.idToken,
-                user: data.user
-            })
-        })
-            .then(response => response.json())
-        return response;
+        return await http.post(apiConfig.url + "/users/login", {
+            idToken: data.idToken,
+            user: data.user
+        }).then(response => response.data)
     }
 )
 
