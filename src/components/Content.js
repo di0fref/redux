@@ -1,14 +1,12 @@
 import {useDispatch, useSelector} from "react-redux";
-import ReactQuill, {Quill} from 'react-quill';
 import 'react-quill/dist/quill.core.css'
 import 'react-quill/dist/quill.bubble.css';
-import {useCallback, useEffect, useRef, useState} from "react";
-import {updateBookMark, updateLock, updateNoteBody, updateNoteTitle} from "../features/noteSlice";
+import React, {useEffect, useState} from "react";
+import {updateBookMark, updateLock, updateNoteTitle} from "../features/noteSlice";
 import {TextareaAutosize} from "@mui/material";
 import NoDocumentOpen from "./NoDocumentOpen";
 import {BiLock, BiMenu} from "react-icons/bi";
 import {setSidebarOpen} from "../features/sideSlice";
-import debounce from 'lodash.debounce';
 import {FaRegStar, FaStar} from "react-icons/fa";
 import {momentConfig} from "../config/config";
 import Moment from "react-moment";
@@ -20,14 +18,10 @@ import Tiptap from "./Tiptap";
 import {ErrorBoundary} from "react-error-boundary";
 import ErrorFallback from "./ErrorFallback";
 
-const Delta = Quill.import('delta')
-
 export default function Content() {
 
-    const notes = useSelector((state) => state.notes)
     const sidebar = useSelector((state) => state.side.sidebar)
     const currentNote = useSelector((state) => state.currentNote)
-    const editorRef = useRef(null);
     const dispatch = useDispatch();
     const [title, setTitle] = useState("");
 
@@ -36,13 +30,6 @@ export default function Content() {
         (notes) => Object.values(notes).find(note => note.id == currentNote)
     )
     const note = useSelector(selectNote);
-
-    // const debounced = useCallback(debounce(() => {
-    //     dispatch(updateNoteBody({
-    //         text: JSON.stringify(editorRef.current.editor.getContents()),
-    //         id: note.id
-    //     }))
-    // }, 1000), [currentNote]);
 
     const bookMarkHandler = () => {
         dispatch(updateBookMark({
@@ -61,11 +48,7 @@ export default function Content() {
             ReactTooltip.rebuild()
         })
     }
-    // const changeHandler = (content, delta, source, editor) => {
-    //     if (source === "user") {
-    //         debounced()
-    //     }
-    // }
+
     const titleChangeHandler = (e) => {
         dispatch(updateNoteTitle({
             name: title,
@@ -78,29 +61,6 @@ export default function Content() {
         ReactTooltip.rebuild()
     }, [currentNote])
 
-    const modules = {
-        history: {
-            delay: 2000,
-            maxStack: 500,
-            userOnly: true,
-        },
-        clipboard: {
-            matchers: [
-                [Node.ELEMENT_NODE, function (node, delta) {
-                    return delta.compose(new Delta().retain(delta.length(),
-                        {
-                            color: false,
-                            background: false,
-                            bold: false,
-                            strike: false,
-                            underline: false
-                        }
-                    ));
-                }
-                ]
-            ]
-        }
-    }
     return (
         <div className={"text-slate-500 flex flex-col "}>
             <div className={"print:hidden bg-gray-200 border-b-gray-300/50 dark:bg-gray-800 h-14 flex items-center justify-between border-b dark:border-gray-700/50"}>
@@ -131,7 +91,7 @@ export default function Content() {
             </div>
 
             <div className={"flex justify-center p-4 overflow-y-auto editor-wrapper "}>
-                <div className={"max-w-[65ch] editor _prose print:w-full print:text-black"}>
+                <div className={"max-w-[65ch] editor print:w-full print:text-black"}>
                     {currentNote ?
                         <>
                             <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -155,7 +115,9 @@ export default function Content() {
                                 <div key={"Tiptap"}><Tiptap/></div>
                             </ErrorBoundary>
                         </>
+
                         : <div className={"mt-60"}><NoDocumentOpen/></div>}
+
                 </div>
             </div>
         </div>

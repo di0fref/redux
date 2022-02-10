@@ -91,7 +91,6 @@ export default function Sidebar() {
     const [allOpen, setAllOpen] = useState(false)
 
     useEffect(() => {
-        console.log(params)
         dispatch(setCurrentFolder(params.folder_id))
         dispatch(setCurrentNote(null))
     }, [params.folder_id])
@@ -135,28 +134,29 @@ export default function Sidebar() {
             <div className={"p-2 text-sm"}>
                 <div className={"mb-2"}><Todos/></div>
 
-                <div className={"ml-2 mb-2 text-side-indigo font-bold_ uppercase text-[12px] tracking-wide"}>Filters</div>
-                <div className={"mb-2"}><Bookmarks/></div>
-                <div className={"mb-2"}><Tags/></div>
-                <div className={"mb-2"}><Recent/></div>
+                {/*<div className={"ml-2 mb-2 text-side-indigo font-bold_ uppercase text-[12px] tracking-wide"}>Filters</div>*/}
+                {/*<div className={"mb-2"}><Bookmarks/></div>*/}
+                {/*<div className={"mb-2"}><Tags/></div>*/}
+                {/*<div className={"mb-2"}><Recent/></div>*/}
 
                 <div className={"flex items-center justify-between ml-2 mt-4 mb-3"}>
                     <div className={"text-side-indigo font-'bold uppercase text-[12px] tracking-wide"}>Documents</div>
                     <div className={""}><NewFolderButton opelAll={opelAll}/></div>
                 </div>
+                <div className={"mb-2"}><Bookmarks/></div>
 
                 <Link to={`/documents`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
                     <div className={""}>
                         <BiFile className={"h-6 w-6"}/>
                     </div>
-                    <div className={"ml-3 font-medium text-menu"}>Notebooks</div>
+                    <div className={"ml-3 font-medium text-menu"}>All documents</div>
                     <div className={"ml-auto"}>
-                        <button className={"text-gray-500 w-5 h-5 hover:bg-indigo-500 hover:text-white rounded flex items-center justify-center ml-auto"} onClick={chevronClicked}>
-                            {open
-                                ? <FaChevronDown className={"h-3 w-3 "}/>
-                                : <FaChevronRight className={"h-3 w-3 "}/>
-                            }
-                        </button>
+                        {/*<button className={"text-gray-500 w-5 h-5 hover:bg-indigo-500 hover:text-white rounded flex items-center justify-center ml-auto"} onClick={chevronClicked}>*/}
+                        {/*    {open*/}
+                        {/*        ? <FaChevronDown className={"h-3 w-3 "}/>*/}
+                        {/*        : <FaChevronRight className={"h-3 w-3 "}/>*/}
+                        {/*    }*/}
+                        {/*</button>*/}
                     </div>
                 </Link>
                 <div className={`${open ? "block" : "hidden"} ml-4`}>

@@ -1,7 +1,7 @@
 import Sidebar from "./Sidebar";
 import Notelist from "./Notelist";
 import Content from "./Content";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 
 export default function Main() {
     const sidebar = useSelector((state) => state.side.sidebar)

@@ -10,7 +10,6 @@ import {
     FaCode,
     FaHeading,
     FaItalic,
-    FaList,
     FaListOl,
     FaListUl,
     FaRulerHorizontal,

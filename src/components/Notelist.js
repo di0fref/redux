@@ -37,10 +37,11 @@ function NoteCard(props) {
 
     const currentNote = useSelector((state) => state.currentNote)
     const dispatch = useDispatch();
+    const currentFolder = useSelector((state) => state.currentFolder)
+    const navigate = useNavigate()
 
     let params = useParams();
     const [windowSize, setWindowSize] = useState(window.innerWidth);
-
     useEffect(() => {
         if (params.note_id == props.note.id) {
             dispatch(setCurrentNote(props.note.id))
@@ -52,9 +53,6 @@ function NoteCard(props) {
         return text
     }
 
-    const QuillDeltaToHtmlConverterConfig = {
-        encodeHtml: false
-    }
 
     const getIngress = (text) => {
 
@@ -90,17 +88,32 @@ function NoteCard(props) {
         function handleResize() {
             setWindowSize(window.innerWidth)
         }
-
         window.addEventListener('resize', handleResize)
     })
 
+    const clickHandle = () => {
+        console.log(currentFolder.id)
+        switch (currentFolder.id){
+            case "documents":
+            case "bookmarks":
+            case "trash":
+            case 0:
+            case "0":
+                 // dispatch(setCurrentNote(note.id))
+                navigate(`/${currentFolder.id}/note/${note.id}`)
+                break;
+            default:
+                 navigate(`/folder/${note.folder_id}/note/${note.id}`)
+        }
+    }
+    
     return (
         <>
             <Link to={`/folder/${note.folder_id}/note/${note.id}`} onClick={
                 () => {
-                    if (windowSize < 768) dispatch(setSidebarOpen(false))
+                    if (windowSize < 768) dispatch(setSidebarOpen(false));
                 }}
-                  className={`text-sm block px-6 py-6 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700 ${currentNote === note.id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}`}>
+                  className={`w-full text-left text-sm block px-6 py-6 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700 ${currentNote === note.id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}`}>
                 <div className={"flex justify-between items-center mb-1"}>
 
                     <div className={"font-semibold text-gray-800 dark:text-gray-200 mr-auto"}>
@@ -138,7 +151,6 @@ export default function Notelist() {
     const sidebar = useSelector((state) => state.side.sidebar)
     const currentFolder = useSelector((state) => state.currentFolder)
     const navigator = useNavigate()
-    const notes = useSelector((state) => state.notes)
 
     const selectNotesInFolder = createSelector(
         (state) => state.notes,
@@ -157,9 +169,15 @@ export default function Notelist() {
         (state, term) => term,
         (notes) => Object.values(notes).filter(note => note.name.startsWith(term) && note.deleted !== true)
     )
+    const allNotes = createSelector(
+        (state) => state.notes,
+        (notes) => Object.values(notes).filter(note => note.deleted !== true)
+    )
+
     const bookmarks = useSelector(selectNotesInBookmarks)
     const notesInFolder = useSelector(selectNotesInFolder)
     const trash = useSelector(selectNotesInTrash);
+    const all = useSelector(allNotes);
 
     useEffect(() => {
         if (term !== "") {
@@ -204,6 +222,13 @@ export default function Notelist() {
                         data.push(<NoteCard note={note} key={key}/>)
                     })
                     break;
+                case "documents":
+                case "0":
+                case 0:
+                    all.map((note, key) => {
+                        data.push(<NoteCard note={note} key={key}/>)
+                    })
+                    break;
                 default:
                     notesInFolder.map((note, key) => {
                         data.push(<NoteCard note={note} key={key}/>)
@@ -231,8 +256,8 @@ export default function Notelist() {
                     <FaTimes className={"h-5 w-5 text-gray-400 hover:text-gray-200"}/>
                 </button>
             </div>
-            <div className={"overflow-y-auto h-full border-l_ border-r border-gray-700/40"}>
-
+            <div className={"h-10 bg-gray-900/20 font-semibold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>{currentFolder.name}</div>
+            <div className={"overflow-y-auto h-full border-r border-gray-700/40"}>
                 {getListType()}
 
             </div>

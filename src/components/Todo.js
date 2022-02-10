@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import TodoList from "./TodoList";
 import Notelist from "./Notelist";
+import TodoSide from "./TodoSide";
 
 export default function Todos() {
     const sidebar = useSelector((state) => state.side.sidebar)
@@ -16,10 +17,10 @@ export default function Todos() {
                     <Sidebar/>
                 </div>
                 <div className={`${sidebar ? "ml-0" : "md:ml-0 -ml-80"} md:w-80 w-1/2 h-screen md:h-full bg-white dark:bg-gray-800 flex-shrink-0 `}>
-                    <Notelist/>
+                    <TodoSide/>
                 </div>
             </div>
-            <div className={"flex-grow h-full bg-white dark:bg-gray-800 editor"}>
+            <div className={"flex-grow h-full bg-white dark:bg-gray-900 editor"}>
                 {/*<Content/>*/}
                 <TodoList/>
             </div>

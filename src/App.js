@@ -52,8 +52,11 @@ function App() {
                     <Route exact path={"/folder/:folder_id"} element={<Main/>}/>
                     <Route exact path={"/note/:note_id"} element={<Main/>}/>
                     <Route exact path={"/:folder_id"} element={<Main/>}/>
+                    {/*<Route exact path={"/bookmarks/note/:note_id"} element={<Main/>}/>*/}
                     <Route exact path={"/"} element={<Main/>}/>
                     <Route exact path={"/app/:folder_id"} element={<Todo/>}/>
+                    <Route exact path={"/app/:folder_id/list/:list_id"} element={<Todo/>}/>
+
                 </Route>
                 <Route exact path={"/login"} element={<Login/>}/>
                 <Route exact path={"/shared/:id"} element={<SharedFile/>}/>
