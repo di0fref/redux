@@ -6,7 +6,7 @@ import {useState} from "react";
 import {useNavigate} from "react-router";
 import {Link, useParams} from "react-router-dom";
 
-export default function TodoSide(){
+export default function TodoSide() {
     const dispatch = useDispatch();
     const sidebar = useSelector((state) => state.side.sidebar)
     const currentFolder = useSelector((state) => state.currentFolder)
@@ -16,7 +16,7 @@ export default function TodoSide(){
     const todoLists = useSelector(state => state.todos)
     let params = useParams()
 
-    return(
+    return (
         <div className={"notelist"}>
             <div className="flex items-center justify-between h-14 bg-gray-200 dark:bg-gray-800 bg-gray-200 border-b border-b-gray-300/50  border-b dark:border-gray-700/50">
                 <div className="relative text-gray-400 focus-within:text-gray-400 ml-2 w-full">
@@ -34,14 +34,19 @@ export default function TodoSide(){
                     <FaTimes className={"h-5 w-5 text-gray-400 hover:text-gray-200"}/>
                 </button>
             </div>
-            <div className={"h-10 bg-gray-900/20 font-semibold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>Task list</div>
+            <div className={"h-10 bg-gray-900/20 font-semibold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>Task
+                list
+            </div>
             <div className={"overflow-y-auto h-full border-r border-gray-700/40"}>
 
                 {todoLists.map((list, key) => {
                     return (
-                        <Link to={`/app/todos/list/${list.id}`} className={`${list.id == params.list_id?"bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"} flex w-full items-center gap-x-3 text-sm block px-6 py-6 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700`} key={key}>
-                            <div><BiCheckCircle className={"text-gray-700 dark:text-gray-200"}/></div>
-                            <div className={"text-gray-700 dark:text-gray-200"}>{list.name}</div>
+                        <Link to={`/app/todos/list/${list.id}`} className={`${list.id == params.list_id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}  w-full text-sm block px-6 py-6 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700`} key={key}>
+                            <div className={"flex items-center gap-x-3 "}>
+                                <div><BiCheckCircle className={`${list.remaining?"dark:text-gray-400 text-gray-400":"text-green-500"}   h-5 w-5`}/></div>
+                                <div className={"text-gray-700 dark:text-gray-200 font-semibold"}>{list.name}</div>
+                            </div>
+                            <div className={"text-gray-400 dark:text-gray-500 ml-8 mt-1"}>{list.remaining? list.remaining + " remaining tasks":"Good job, all tasks are completed"} </div>
                         </Link>
                     )
                 })}

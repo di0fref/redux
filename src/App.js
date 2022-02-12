@@ -12,6 +12,8 @@ import SignUp from "./components/SignUp";
 import Todo from "./components/Todo";
 import {useDispatch} from "react-redux";
 import {fetchAllNotes} from "./features/noteSlice";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
 
 
 function App() {
@@ -41,27 +43,30 @@ function App() {
 
     return (
         <>
-            <ToastContainer
-                hideProgressBar={true}
-                className={""}
-                position="top-center"/>
-            <ReactTooltip backgroundColor={"#000"} effect={"solid"} className={"z"}/>
-            <Routes>
-                <Route exact path={'/'} element={<PrivateRoute user={user}/>}>
-                    <Route path={"/folder/:folder_id/note/:note_id"} element={<Main/>}/>
-                    <Route exact path={"/folder/:folder_id"} element={<Main/>}/>
-                    <Route exact path={"/note/:note_id"} element={<Main/>}/>
-                    <Route exact path={"/:folder_id"} element={<Main/>}/>
-                    {/*<Route exact path={"/bookmarks/note/:note_id"} element={<Main/>}/>*/}
-                    <Route exact path={"/"} element={<Main/>}/>
-                    <Route exact path={"/app/:folder_id"} element={<Todo/>}/>
-                    <Route exact path={"/app/:folder_id/list/:list_id"} element={<Todo/>}/>
+            <DndProvider backend={HTML5Backend}>
 
-                </Route>
-                <Route exact path={"/login"} element={<Login/>}/>
-                <Route exact path={"/shared/:id"} element={<SharedFile/>}/>
-                <Route exact path={"/signup"} element={<SignUp/>}/>
-            </Routes>
+                <ToastContainer
+                    hideProgressBar={true}
+                    className={""}
+                    position="top-center"/>
+                <ReactTooltip backgroundColor={"#000"} effect={"solid"} className={"z"}/>
+                <Routes>
+                    <Route exact path={'/'} element={<PrivateRoute user={user}/>}>
+                        <Route path={"/folder/:folder_id/note/:note_id"} element={<Main/>}/>
+                        <Route exact path={"/folder/:folder_id"} element={<Main/>}/>
+                        <Route exact path={"/note/:note_id"} element={<Main/>}/>
+                        <Route exact path={"/:folder_id"} element={<Main/>}/>
+                        {/*<Route exact path={"/bookmarks/note/:note_id"} element={<Main/>}/>*/}
+                        <Route exact path={"/"} element={<Main/>}/>
+                        <Route exact path={"/app/:folder_id"} element={<Todo/>}/>
+                        <Route exact path={"/app/:folder_id/list/:list_id"} element={<Todo/>}/>
+
+                    </Route>
+                    <Route exact path={"/login"} element={<Login/>}/>
+                    <Route exact path={"/shared/:id"} element={<SharedFile/>}/>
+                    <Route exact path={"/signup"} element={<SignUp/>}/>
+                </Routes>
+            </DndProvider>
         </>
     );
 }

@@ -4,6 +4,7 @@ import {useEffect} from "react";
 import TodoList from "./TodoList";
 import Notelist from "./Notelist";
 import TodoSide from "./TodoSide";
+import SortableComponent from "./Sort";
 
 export default function Todos() {
     const sidebar = useSelector((state) => state.side.sidebar)
@@ -23,6 +24,7 @@ export default function Todos() {
             <div className={"flex-grow h-full bg-white dark:bg-gray-900 editor"}>
                 {/*<Content/>*/}
                 <TodoList/>
+{/*<SortableComponent/>*/}
             </div>
         </div>
 

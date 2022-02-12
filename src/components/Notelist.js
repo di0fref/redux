@@ -259,7 +259,6 @@ export default function Notelist() {
             <div className={"h-10 bg-gray-900/20 font-semibold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>{currentFolder.name}</div>
             <div className={"overflow-y-auto h-full border-r border-gray-700/40"}>
                 {getListType()}
-
             </div>
         </div>
     )
