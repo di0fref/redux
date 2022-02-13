@@ -35,11 +35,11 @@ body {
 .editor-wrapper {
     max-height: calc(100vh - 4rem);
     overflow-y: auto;
-overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 .notelist {
-    height: calc(100vh - 6rem);
+    height: calc(100vh - 8rem);
 }
 
 /*.ql-container.ql-snow {*/
@@ -58,9 +58,10 @@ overflow-x: hidden;
 /*    height: 0;*/
 /*}*/
 
-#registerTip{
+#registerTip {
     padding: 5px !important;
 }
+
 /* Works on Firefox */
 * {
     scrollbar-width: thin;
@@ -88,6 +89,7 @@ overflow-x: hidden;
     padding: 0.2rem;
     border-radius: 0.5rem;
 }
+
 .bubble-menu button {
     border: none;
     background: none;
@@ -97,6 +99,7 @@ overflow-x: hidden;
     padding: 0 0.5rem;
     opacity: 0.6;
 }
+
 .bubble-menu button:hover, .bubble-menu button.is-active {
     opacity: 1;
 }
@@ -113,24 +116,29 @@ ul[data-type="taskList"] {
     list-style: none;
     padding: 0;
 }
+
 ul[data-type="taskList"] p {
     margin: 0;
 }
+
 ul[data-type="taskList"] li {
     display: flex;
 }
+
 ul[data-type="taskList"] li > label {
     flex: 0 0 auto;
     margin-right: 0.5rem;
     user-select: none;
 }
+
 ul[data-type="taskList"] li > div {
     flex: 1 1 auto;
 }
 
-.z{
+.z {
     z-index: 1500 !important;
 }
-.sidebar-item{
+
+.sidebar-item {
     @apply hover:bg-gray-800
 }

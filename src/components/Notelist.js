@@ -256,8 +256,8 @@ export default function Notelist() {
                     <FaTimes className={"h-5 w-5 text-gray-400 hover:text-gray-200"}/>
                 </button>
             </div>
-            <div className={"h-10 bg-gray-900/20 font-semibold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>{currentFolder.name}</div>
-            <div className={"overflow-y-auto h-full border-r border-gray-700/40"}>
+            <div className={"dark:text-gray-100 py-8 border-r border-gray-200 dark:border-gray-700/40 h-10 text-2xl font-bold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>{currentFolder.name}</div>
+            <div className={"overflow-y-auto h-full border-r dark:border-gray-700/40"}>
                 {getListType()}
             </div>
         </div>

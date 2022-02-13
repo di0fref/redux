@@ -18,6 +18,7 @@ export default function TodoList() {
     const [listId, setListId] = useState(null)
     let params = useParams()
     const [todoName, setTodoName] = useState("");
+    const list = useSelector(state => state.todos.find(list => list.id == listId))
 
     const selectTodosInList = createSelector(
         (state) => state.todos,
@@ -41,11 +42,8 @@ export default function TodoList() {
 
     const todosSortedByDue = useSelector(state => selectTodosInListSortedByDue(todos, state));
 
-    const toggleStatus = (todoId) => {
-        dispatch(toggleTodoCompleted({
-            todoId: todoId,
-            listId: listId
-        }))
+    const toggleStatus = (todo) => {
+        dispatch(toggleTodoCompleted(todo))
     }
 
     useEffect(() => {
@@ -55,9 +53,13 @@ export default function TodoList() {
     const addTask = (e) => {
         if (e.key === 'Enter') {
             if (todoName != "") {
-                dispatch(addTodo({listId: listId, text: todoName, due: "2021-05-05"}))
+                dispatch(addTodo(
+                    {
+                        task_list_id: listId,
+                        text: todoName,
+                        due: "2021-05-05"
+                    }))
                 setTodoName("")
-                // toast.success("New task added")
             }
         }
     }
@@ -74,12 +76,13 @@ export default function TodoList() {
                     <ThemeSwitcher/>
                 </div>
             </div>
-            <div className={"m-auto max-w-xl_ w-full w-full overflow-hidden mb-4"}>
-                {/*<div className={"flex items-center gap-x-8 border-b-2_ _border-gray-800 p-4"}>*/}
-                {/*    <button className={"text-gray-200"} onClick={() => setStatus(null)}>All</button>*/}
-                {/*    <button className={"text-orange-400"} onClick={() => setStatus(false)}>Active</button>*/}
-                {/*    <button className={"text-green-400 ml-auto"} onClick={() => setStatus(true)}>Completed</button>*/}
-                {/*</div>*/}
+            {listId?
+            <div className={"m-auto  w-full overflow-hidden mb-4"}>
+                <div className={"flex items-center gap-x-8 border-b-2_ _border-gray-800 px-6 py-5  text-sm font-bold"}>
+                    <button className={`px-4 py-1 rounded ${status === null ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline`} onClick={() => setStatus(null)}>All</button>
+                    <button className={`px-4 py-1 rounded ${status === false ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline`} onClick={() => setStatus(false)}>Active</button>
+                    <button className={`px-4 py-1 rounded ${status ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline  `} onClick={() => setStatus(true)}>Completed</button>
+                </div>
 
                 <div className={"w-full"}>
                     <div className={"border-b dark:border-gray-800"}>
@@ -90,30 +93,32 @@ export default function TodoList() {
                             onChange={(e) => setTodoName(e.target.value)}
                             type={"text"}
                             name={"todo-name"}
-                            className={"dark:text-white text-gray-700 dark:bg-gray-700 bg-gray-100 w-full py-4 px-6 focus:outline-none _focus:bg-white dark:focus:bg-gray-600"}/>
+                            className={"text-xl_ dark:text-white text-gray-700 dark:bg-gray-800 bg-gray-100 w-full py-5 px-6 focus:outline-none _focus:bg-white dark:focus:bg-gray-800/70"}/>
                     </div>
                 </div>
                 <div className={"m-0 my-4 p-0 list-none w-full dark:text-gray-200 text-gray-700"}>
-                    <div className={"ml-6 font-bold text-3xl  _border-b dark:border-gray-800"}>Tasks</div>
+                    <div className={"ml-6 mb-3 font-bold text-3xl"}>Tasks</div>
+                    <div className={"ml-7 text-sm text-gray-400 dark:text-gray-400 mb-2"}>{list && list.remaining ? list.remaining + " remaining tasks" : "All task are completed"}</div>
+
                     {todosSortedByDue && todosSortedByDue.map((todo, todoKey) => {
                         return (
-                            <button /*onMouseLeave={() => setHovering(false)} onMouseEnter={() => setHovering(true)}*/ onClick={() => toggleStatus(todo.id)} className={"hover:bg-gray-100 dark:hover:bg-gray-800 text-left w-full flex gap-x-4 py-4 px-6 items-center border-b dark:border-gray-800 dark:bg-gray-900"} key={todoKey}>
+                            <button /*onMouseLeave={() => setHovering(false)} onMouseEnter={() => setHovering(true)}*/ onClick={() => toggleStatus(todo)} className={"hover:bg-gray-100 dark:hover:bg-gray-800 text-left w-full flex gap-x-4 py-4 px-6 items-center border-b dark:border-gray-800 dark:bg-gray-900"} key={todoKey}>
                                 {/*<div className={"mb-auto w-7"}>{isHovering ?*/}
                                 {/*    <BiMenu className={"w-6 h-6 text-gray-600"}/> : ""}*/}
                                 {/*</div>*/}
                                 <div className={"rounded-full mb-auto"}>
-                                    <BiCheckCircle className={`${todo.completed ? "text-green-600" : "text-gray-400/30"} w-6 h-6`}/>
+                                    <BiCheckCircle className={`${todo.completed ? "text-green-500" : "text-gray-400"} w-6 h-6`}/>
                                 </div>
-                                <div className={"text-sm w-full"}>{todo.id} - {todo.text} </div>
+                                <div className={`${todo.completed ? "dark:text-gray-600 text-gray-400" : ""} text-sm w-full`}>{todo.text} </div>
                                 <div className={"text-xs flex-grow flex-shrink-0 mb-auto text-gray-400 dark:text-gray-500 ml-auto font-light"}>
                                     {todo.due}
                                 </div>
                             </button>
                         )
                     })}
-
                 </div>
             </div>
+                :""}
         </>
     )
 }

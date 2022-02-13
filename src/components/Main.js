@@ -2,9 +2,16 @@ import Sidebar from "./Sidebar";
 import Notelist from "./Notelist";
 import Content from "./Content";
 import {useSelector} from "react-redux";
+import {useEffect} from "react";
+import ReactTooltip from "react-tooltip";
 
 export default function Main() {
     const sidebar = useSelector((state) => state.side.sidebar)
+
+
+    useEffect(()=>{
+        ReactTooltip.rebuild()
+    },[])
 
     return (
         <div className={`flex h-screen bg-white dark:bg-gray-900_ `}>

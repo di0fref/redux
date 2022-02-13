@@ -3,65 +3,25 @@ import http from "../helpers/http-common";
 import {apiConfig} from "../config/config";
 
 
-const initialState = [
-    {
-        name: "List 1",
-        id: 1,
-        remaining: 2,
-        todos: [
-            {
-                due: "2022-04-04",
-                text: "Tailwind CSS to do list with system date and time and strike option snippet for your project . this snippet is created using HTML, CSS, Tailwind CSS, Tailwind CSS to do list with system date and time and strike option snippet for your project . this snippet is created using HTML, CSS, Tailwind CSS,",
-                completed: false,
-                id: 1
-            },
-            {
-                due: "2022-05-04",
-                text: "Tailwind CSS to do list with system date and time and strike option snippet for your project . this snippet is created using HTML, CSS, Tailwind CSS, Tailwind CSS to do list with system date and time and strike option snippet for your project . this snippet is created using HTML, CSS, Tailwind CSS,",
-                completed: false,
-                id: 2
-            },
-        ],
+const initialState = []
 
-    },
-    {
-        name: "List number 2",
-        id: 2,
-        remaining: 1,
-        todos: [
-            {
-                due: "2023-04-04",
-                text: "Tailwind CSS to do list with system date and time and strike option snippet for your project . this snippet is created using HTML, CSS, Tailwind CSS, Tailwind CSS to do list with system date and time and strike option snippet for your project . this snippet is created using HTML, CSS, Tailwind CSS,",
-                completed: false,
-                id: 8
-            },
-            {
-                due: "2024-04-04",
-                text: "Grab milk",
-                completed: true,
-                id: 7
-            },
-            {
-                due: "2023-02-04",
-                text: "Milk a cow",
-                completed: true,
-                id: 12
-            },
-        ]
-    }
-]
-
-export const _toggleTodocompleted = createAsyncThunk(
-    'todo/setTodocompleted',
+export const updateTodo = createAsyncThunk(
+    'todo/updateTodo',
     async (todo, thunkAPI) => {
-        // return await http.get(apiConfig.url + "/tree").then(response => response.data)
+        return await http.put(apiConfig.url + "/todos", {
+            text: todo.text,
+        }).then(response => response.data)
     }
 )
 
-export const _addTodo = createAsyncThunk(
-    'todo/setPending',
-    async (folderId, thunkAPI) => {
-        // return await http.get(apiConfig.url + "/tree").then(response => response.data)
+
+export const addTodo = createAsyncThunk(
+    'todo/addTodo',
+    async (todo, thunkAPI) => {
+        return await http.post(apiConfig.url + "/tasks", {
+            text: todo.text,
+            task_list_id: todo.task_list_id
+        }).then(response => response.data)
     }
 )
 export const deleteTodo = createAsyncThunk(
@@ -70,41 +30,55 @@ export const deleteTodo = createAsyncThunk(
         // return await http.get(apiConfig.url + "/tree").then(response => response.data)
     }
 )
+
+export const getAll = createAsyncThunk(
+    'todo/getAll',
+    async () => {
+        const response = await http.get(apiConfig.url + "/tasks").then(response => response.data)
+        response.map((list) => {
+            list.remaining = list.todos.filter(todo => todo.completed == false).length
+        })
+        return response;
+    }
+)
+
+export const toggleTodoCompleted = createAsyncThunk(
+    'todo/toggleTodoCompleted',
+    async (todo, thunkAPI) => {
+        return await http.put(apiConfig.url + "/tasks/" + todo.id, {
+            completed: todo.completed ? 0 : 1
+        }).then(response => response.data)
+    }
+)
+
 export const todoSlice = createSlice({
     name: 'todo',
     initialState,
     reducers: {
-        toggleTodoCompleted(state, action) {
-            const todo = state.filter(lists => lists.todos.find(todo => todo.id == action.payload.todoId))[0].todos.find(todo => todo.id == action.payload.todoId)
-            const list = state.find(list => list.id == action.payload.listId);
-            todo.completed = !todo.completed;
-            list.remaining = list.todos.filter(todo => todo.completed == false).length
+        filterTodos(state, action) {
+           return state.filter(list => action.payload?list.remaining === 0:list.remaining !== 0)
         },
-        addTodo(state, action){
-            const list = state.find(list => list.id == action.payload.listId);
-            const allTodos = state.reduce((a, b) => a.todos.concat(b.todos))
-            const i = Math.max(...allTodos.map(o => o.id), 0) +1 ;
-            list.todos.unshift(
-                {
-                    text: action.payload.text,
-                    due: action.payload.due,
-                    id: i
-                }
-            )
-        }
     },
     extraReducers: (builder) => {
-        // builder.addCase(toggleTodocompleted.fulfilled, (state, action) => {
-        //     return action.payload
-        // })
-        // builder.addCase(addTodo.fulfilled, (state, action) => {
-        //     return action.payload
-        // })
-        // builder.addCase(deleteTodo.fulfilled, (state, action) => {
-        //     return action.payload
-        // })
+        builder.addCase(getAll.fulfilled, (state, action) => {
+            return action.payload
+        })
+        builder.addCase(addTodo.fulfilled, (state, action) => {
+            const list = state.find(list => list.id == action.payload.task_list_id);
+            list.todos.push(action.payload)
+            list.remaining++
+            console.log(JSON.parse(JSON.stringify(list)))
+        })
+        builder.addCase(toggleTodoCompleted.fulfilled, (state, action) => {
+            const todo = state.filter(lists => lists.todos.find(todo => todo.id == action.payload.id))[0].todos.find(todo => todo.id == action.payload.id)
+
+            todo.completed = action.payload.completed
+            const list = state.find(list => list.id == action.payload.task_list_id);
+            console.log(JSON.parse(JSON.stringify(list)))
+            list.remaining = list.todos.filter(todo => todo.completed == false).length
+        })
     },
 })
-export const {toggleTodoCompleted, addTodo} = todoSlice.actions
+export const {filterTodos} = todoSlice.actions
 
 export default todoSlice.reducer

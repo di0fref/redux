@@ -5,11 +5,22 @@ import TodoList from "./TodoList";
 import Notelist from "./Notelist";
 import TodoSide from "./TodoSide";
 import SortableComponent from "./Sort";
+import {getAll} from "../features/todeSlice";
+import ReactTooltip from "react-tooltip";
 
 export default function Todos() {
     const sidebar = useSelector((state) => state.side.sidebar)
 
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getAll())
+        ReactTooltip.rebuild()
+    }, [])
+
+
+
+
 
     return (
         <div className={`flex h-screen bg-white dark:bg-gray-900_ `}>
@@ -21,10 +32,10 @@ export default function Todos() {
                     <TodoSide/>
                 </div>
             </div>
-            <div className={"flex-grow h-full bg-white dark:bg-gray-900 editor"}>
+            <div className={"flex-grow bg-white dark:bg-gray-900 _editor"}>
                 {/*<Content/>*/}
                 <TodoList/>
-{/*<SortableComponent/>*/}
+                {/*<SortableComponent/>*/}
             </div>
         </div>
 

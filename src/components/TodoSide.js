@@ -2,19 +2,42 @@ import {BiCheckCircle, BiEdit, BiSearch} from "react-icons/bi";
 import {setSidebarOpen} from "../features/sideSlice";
 import {FaTimes} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
+
 
 export default function TodoSide() {
     const dispatch = useDispatch();
     const sidebar = useSelector((state) => state.side.sidebar)
-    const currentFolder = useSelector((state) => state.currentFolder)
     const [term, setTerm] = useState("");
     const [searchResults, setSearchResults] = useState([]);
 
-    const todoLists = useSelector(state => state.todos)
+    const todoListsAll = useSelector(state => state.todos)
+
+    const [showCompleted, setShowCompleted] = useState("")
+
     let params = useParams()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const show = localStorage.getItem("showCompleted");
+        const last = localStorage.getItem("lastList");
+
+        navigate(`/app/todos/list/${last}`);
+        console.log(show)
+        setShowCompleted(show)
+    }, [])
+
+    const clickHandle = (id) => {
+        navigate(`/app/todos/list/${id}`);
+        localStorage.setItem("lastList", id);
+    }
+
+    const toggleCompleted = () => {
+        setShowCompleted(showCompleted === "1" ? "0" : "1")
+        localStorage.setItem("showCompleted", showCompleted === "1" ? "0" : "1")
+    }
 
     return (
         <div className={"notelist"}>
@@ -34,23 +57,30 @@ export default function TodoSide() {
                     <FaTimes className={"h-5 w-5 text-gray-400 hover:text-gray-200"}/>
                 </button>
             </div>
-            <div className={"h-10 bg-gray-900/20 font-semibold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>Task
-                list
+            <div className={"py-8 border-r border-gray-200 dark:border-gray-700/40 h-10 text-2xl font-bold text-gray-700 dark:text-gray-400 flex items-center justify-center dark:text-gray-100"}>
+                Task lists
             </div>
-            <div className={"overflow-y-auto h-full border-r border-gray-700/40"}>
+            <div className={"flex items-center justify-center"}>
+                <button className={"dark:text-gray-200 text-gray-600 -font-bold text-sm hover:underline mb-3"} onClick={toggleCompleted}>
+                    <span>{showCompleted === "0"? "Hide" : "Show"} completed</span>
+                </button>
+            </div>
+            <div className={"overflow-y-auto h-full border-r border-gray-200 dark:border-gray-700/40"}>
 
-                {todoLists.map((list, key) => {
+                {todoListsAll.map((list, key) => {
                     return (
-                        <Link to={`/app/todos/list/${list.id}`} className={`${list.id == params.list_id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}  w-full text-sm block px-6 py-6 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700`} key={key}>
-                            <div className={"flex items-center gap-x-3 "}>
-                                <div><BiCheckCircle className={`${list.remaining?"dark:text-gray-400 text-gray-400":"text-green-500"}   h-5 w-5`}/></div>
-                                <div className={"text-gray-700 dark:text-gray-200 font-semibold"}>{list.name}</div>
-                            </div>
-                            <div className={"text-gray-400 dark:text-gray-500 ml-8 mt-1"}>{list.remaining? list.remaining + " remaining tasks":"Good job, all tasks are completed"} </div>
-                        </Link>
+                        (showCompleted === "1" && list.remaining === 0) ? "" :
+                            <button onClick={() => clickHandle(list.id)} className={`${list.id == params.list_id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}  w-full text-sm block px-6 py-6 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700`} key={key}>
+                                <div className={"flex items-center gap-x-3 "}>
+                                    <div>
+                                        <BiCheckCircle className={`${list.remaining ? "dark:text-gray-400 text-gray-400" : "text-green-500"}  h-5 w-5`}/>
+                                    </div>
+                                    <div className={"text-gray-700 dark:text-gray-200 font-bold"}>{list.name} {list.remaining}</div>
+                                </div>
+                                <div className={"text-left text-gray-400 dark:text-gray-500 ml-8 mt-1"}>{list.remaining ? list.remaining + " remaining tasks" : "Good job, all tasks are completed"} </div>
+                            </button>
                     )
                 })}
-
             </div>
         </div>
     )
