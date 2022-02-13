@@ -1,11 +1,9 @@
-import React, {Component, useEffect, useState} from 'react';
-import {render} from 'react-dom';
+import React, {useEffect, useState} from 'react';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import {arrayMoveImmutable} from 'array-move';
 import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
 import {useParams} from "react-router-dom";
-import {BiCheckCircle, BiMenu} from "react-icons/bi";
 
 const SortableItem = SortableElement(({value}) => <li>{value}</li>);
 

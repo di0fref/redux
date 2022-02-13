@@ -1,4 +1,3 @@
-import {HiExclamation} from "react-icons/hi";
 import {FaExclamationCircle} from "react-icons/fa";
 
 export default function ErrorFallback({error, resetErrorBoundary}) {

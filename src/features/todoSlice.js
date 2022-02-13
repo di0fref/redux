@@ -51,6 +51,15 @@ export const toggleTodoCompleted = createAsyncThunk(
     }
 )
 
+export const addTaskList = createAsyncThunk(
+    'todo/addTaskList',
+    async (list, thunkAPI) => {
+        return await http.post(apiConfig.url + "/tasklists/", {
+            name: list.name
+        }).then(response => response.data)
+    }
+)
+
 export const todoSlice = createSlice({
     name: 'todo',
     initialState,
@@ -67,15 +76,16 @@ export const todoSlice = createSlice({
             const list = state.find(list => list.id == action.payload.task_list_id);
             list.todos.push(action.payload)
             list.remaining++
-            console.log(JSON.parse(JSON.stringify(list)))
         })
         builder.addCase(toggleTodoCompleted.fulfilled, (state, action) => {
             const todo = state.filter(lists => lists.todos.find(todo => todo.id == action.payload.id))[0].todos.find(todo => todo.id == action.payload.id)
-
             todo.completed = action.payload.completed
             const list = state.find(list => list.id == action.payload.task_list_id);
             console.log(JSON.parse(JSON.stringify(list)))
             list.remaining = list.todos.filter(todo => todo.completed == false).length
+        })
+        builder.addCase(addTaskList.fulfilled, (state, action) => {
+            state.unshift(action.payload)
         })
     },
 })

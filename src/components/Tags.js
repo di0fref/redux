@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {BiHash, BiStar, BiTag, BiTime} from "react-icons/bi";
+import {BiHash} from "react-icons/bi";
 import {useState} from "react";
 import {useSelector} from "react-redux";
 

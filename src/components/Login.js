@@ -3,11 +3,10 @@ import {FcGoogle} from "react-icons/fc";
 import {useState} from "react";
 import {FaLock} from "react-icons/fa";
 import {HiLockClosed, HiMail} from "react-icons/hi";
-import app, {signOutFireBase} from "../firebase"
-import {getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword} from "firebase/auth";
+import {signOutFireBase} from "../firebase"
+import {getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from "firebase/auth";
 import {useDispatch} from "react-redux";
 import {login} from "../features/userSlice";
-import {apiConfig} from "../config/config";
 
 export default function Login() {
     const [username, setUsername] = useState("fredrik@fahlstad.se")

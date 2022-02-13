@@ -1,11 +1,10 @@
-import ThemeSwitcher from "./ThemeSwitcher";
 import {FaLock, FaUser} from "react-icons/fa";
 import {HiLockClosed, HiMail} from "react-icons/hi";
 import {Link, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import {yupResolver} from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import {getAuth, createUserWithEmailAndPassword, GoogleAuthProvider} from "firebase/auth";
+import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
 import {useState} from "react";
 import {useDispatch} from "react-redux";
 import {login} from "../features/userSlice";

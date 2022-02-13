@@ -35,6 +35,8 @@
     "array-move": "^4.0.0",
     "axios": "^0.25.0",
     "firebase": "^9.6.5",
+    "frappe-gantt-react": "^0.2.2",
+    "gantt-task-react": "^0.3.7",
     "immutability-helper": "^3.1.1",
     "is-hotkey": "^0.2.0",
     "lodash.debounce": "^4.0.8",

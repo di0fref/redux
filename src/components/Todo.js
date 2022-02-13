@@ -2,11 +2,10 @@ import Sidebar from "./Sidebar";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import TodoList from "./TodoList";
-import Notelist from "./Notelist";
 import TodoSide from "./TodoSide";
-import SortableComponent from "./Sort";
-import {getAll} from "../features/todeSlice";
+import {getAll} from "../features/todoSlice";
 import ReactTooltip from "react-tooltip";
+import {setCurrentFolder} from "../features/currentFolderSlice";
 
 export default function Todos() {
     const sidebar = useSelector((state) => state.side.sidebar)
@@ -14,13 +13,9 @@ export default function Todos() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getAll())
         ReactTooltip.rebuild()
+        dispatch(setCurrentFolder("tasks"))
     }, [])
-
-
-
-
 
     return (
         <div className={`flex h-screen bg-white dark:bg-gray-900_ `}>

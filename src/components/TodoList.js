@@ -2,12 +2,10 @@ import {BiCheckCircle, BiMenu} from "react-icons/bi";
 import ThemeSwitcher from "./ThemeSwitcher";
 import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
-import {addTodo, toggleTodoCompleted} from "../features/todeSlice";
+import {addTodo, toggleTodoCompleted} from "../features/todoSlice";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {FaHamburger} from "react-icons/fa";
-import moment from 'moment';
-import {toast} from "react-toastify";
+import {setSidebarOpen} from "../features/sideSlice";
 
 
 export default function TodoList() {
@@ -24,6 +22,7 @@ export default function TodoList() {
         (state) => state.todos,
         (todos) => Object.values(todos).filter(list => list.id == listId).map(list => list.todos.filter(todo => status == null ? todo : todo.completed == status))[0]
     )
+    const sidebar = useSelector((state) => state.side.sidebar)
 
     const todos = useSelector(state => selectTodosInList(state));
 
@@ -66,19 +65,18 @@ export default function TodoList() {
 
     return (
         <>
-            <div className={"text-slate-500 flex flex-col "}>
+            <div className={"text-slate-500 flex flex-col"}>
                 <div className={"print:hidden bg-gray-200 border-b-gray-300/50 dark:bg-gray-800 h-14 flex items-center justify-between border-b dark:border-gray-700/50"}>
                     <button data-tip={"Toggle sidebar"} className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"}
-                            onClick={() => {
-                            }}>
+                            onClick={() => {dispatch(setSidebarOpen(!sidebar))}}>
                         <BiMenu className={"h-6 w-6"}/>
                     </button>
                     <ThemeSwitcher/>
                 </div>
             </div>
             {listId?
-            <div className={"m-auto  w-full overflow-hidden mb-4"}>
-                <div className={"flex items-center gap-x-8 border-b-2_ _border-gray-800 px-6 py-5  text-sm font-bold"}>
+            <div className={"m-auto w-full overflow-hidden mb-4"}>
+                <div className={"flex items-center gap-x-8 border-b-2_ _border-gray-800 px-6 py-[1.27em]  text-sm font-bold"}>
                     <button className={`px-4 py-1 rounded ${status === null ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline`} onClick={() => setStatus(null)}>All</button>
                     <button className={`px-4 py-1 rounded ${status === false ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline`} onClick={() => setStatus(false)}>Active</button>
                     <button className={`px-4 py-1 rounded ${status ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline  `} onClick={() => setStatus(true)}>Completed</button>

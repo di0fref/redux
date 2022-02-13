@@ -1,7 +1,6 @@
 import {getAuth, signOut} from "firebase/auth";
-import {FaChevronDown, FaChevronRight, FaCog, FaExclamation, FaSignOutAlt} from "react-icons/fa";
 import {Menu} from '@headlessui/react'
-import {BiLogOut, BiLogOutCircle, BiUserCircle} from "react-icons/bi";
+import {BiLogOut, BiUserCircle} from "react-icons/bi";
 
 export default function Usermenu(){
 

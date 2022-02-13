@@ -100,16 +100,16 @@ function NoteCard(props) {
             case 0:
             case "0":
                  // dispatch(setCurrentNote(note.id))
-                navigate(`/${currentFolder.id}/note/${note.id}`)
+                navigate(`/app/documents/${currentFolder.id}/note/${note.id}`)
                 break;
             default:
-                 navigate(`/folder/${note.folder_id}/note/${note.id}`)
+                 navigate(`/app/documents/folder/${note.folder_id}/note/${note.id}`)
         }
     }
     
     return (
         <>
-            <Link to={`/folder/${note.folder_id}/note/${note.id}`} onClick={
+            <Link to={`/app/documents/folder/${note.folder_id}/note/${note.id}`} onClick={
                 () => {
                     if (windowSize < 768) dispatch(setSidebarOpen(false));
                 }}

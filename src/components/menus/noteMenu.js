@@ -1,5 +1,5 @@
-import {forwardRef, useEffect, useState} from "react";
-import {FaChevronDown, FaEdit, FaFilePdf, FaLink, FaShare, FaTimes, FaTrash, FaUserAlt} from "react-icons/fa";
+import {forwardRef, useState} from "react";
+import {FaChevronDown, FaFilePdf, FaUserAlt} from "react-icons/fa";
 import {Menu} from '@headlessui/react'
 import {BiChevronDown, BiLink, BiShare, BiTrash} from "react-icons/bi";
 import {useDispatch, useSelector} from "react-redux";
@@ -8,7 +8,7 @@ import {setCurrentNote} from "../../features/currentNoteSlice";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import {Modal} from "@mui/material";
-import {modalstyleLarge, modalstyleSmall} from "../../config/styles";
+import {modalstyleLarge} from "../../config/styles";
 import ReactTooltip from "react-tooltip";
 
 function NoteMenu(props) {

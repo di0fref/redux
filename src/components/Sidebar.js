@@ -1,24 +1,20 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {fetchTree} from "../features/treeSlice";
-import {fetchNotesByFolderId} from "../features/noteSlice";
 import {setCurrentFolder} from "../features/currentFolderSlice";
-import {FaChevronDown, FaChevronRight, FaFileAlt, FaFolder, FaRegFolder, FaUser, FaUserAlt} from "react-icons/fa";
+import {FaChevronDown, FaChevronRight, FaUser} from "react-icons/fa";
 import {setCurrentNote} from "../features/currentNoteSlice";
 import {Link} from "react-router-dom";
 import {useParams} from "react-router";
-import useUrl from "../hooks/useUrl";
-import {BiFile, BiFolder, BiLock, BiNote, BiUser, BiUserCircle} from "react-icons/bi";
+import {BiFile, BiFolder} from "react-icons/bi";
 import Bookmarks from "./Bookmarks";
 import Usermenu from "./menus/Usermenu";
-import Recent from "./Recent";
-import Tags from "./Tags";
 import {getAuth} from "firebase/auth";
 import Trash from "./Trash";
 import Shared from "./Shared";
 import NewFolderButton from "./NewFolderButton";
-import Todo from "./Todo";
 import Todos from "./Todos";
+import NewTaskListButton from "./NewTaskListButton";
 
 function SidebarItem(props) {
 
@@ -38,7 +34,7 @@ function SidebarItem(props) {
 
     return (
         <>
-            <Link to={`/folder/${props.item.id}`} className={"flex w-full my-1"}>
+            <Link to={`/app/documents/folder/${props.item.id}`} className={"flex w-full my-1"}>
                 <div className=
                          {`sidebar-item ${currentFolder.id === props.item.id ? "bg-gray-800 dark:bg-gray-800 text-white " : ""} flex items-center rounded  py-2 w-full px-2`}
                      style={{
@@ -91,7 +87,12 @@ export default function Sidebar() {
     const [allOpen, setAllOpen] = useState(false)
 
     useEffect(() => {
-        dispatch(setCurrentFolder(params.folder_id))
+        if(params.folder_id){
+            dispatch(setCurrentFolder(params.folder_id))
+        }
+        else{
+            dispatch(setCurrentFolder("documents"))
+        }
         dispatch(setCurrentNote(null))
     }, [params.folder_id])
 
@@ -132,6 +133,10 @@ export default function Sidebar() {
                 <div className={"text-gray-400 text-xs mt-1"}>{user.email}</div>
             </div>
             <div className={"p-2 text-sm"}>
+                <div className={"flex items-center justify-between ml-2 mt-4 mb-3"}>
+                    <div className={"text-side-indigo font-'bold uppercase text-[12px] tracking-wide"}>Activities</div>
+                    <div className={""}><NewTaskListButton/></div>
+                </div>
                 <div className={"mb-2"}><Todos/></div>
 
                 {/*<div className={"ml-2 mb-2 text-side-indigo font-bold_ uppercase text-[12px] tracking-wide"}>Filters</div>*/}
@@ -145,18 +150,12 @@ export default function Sidebar() {
                 </div>
                 <div className={"mb-2"}><Bookmarks/></div>
 
-                <Link to={`/documents`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
+                <Link to={`/app/documents`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
                     <div className={""}>
                         <BiFile className={"h-6 w-6"}/>
                     </div>
                     <div className={"ml-3 font-medium text-menu"}>All documents</div>
                     <div className={"ml-auto"}>
-                        {/*<button className={"text-gray-500 w-5 h-5 hover:bg-indigo-500 hover:text-white rounded flex items-center justify-center ml-auto"} onClick={chevronClicked}>*/}
-                        {/*    {open*/}
-                        {/*        ? <FaChevronDown className={"h-3 w-3 "}/>*/}
-                        {/*        : <FaChevronRight className={"h-3 w-3 "}/>*/}
-                        {/*    }*/}
-                        {/*</button>*/}
                     </div>
                 </Link>
                 <div className={`${open ? "block" : "hidden"} ml-4`}>

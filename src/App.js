@@ -14,6 +14,7 @@ import {useDispatch} from "react-redux";
 import {fetchAllNotes} from "./features/noteSlice";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
+import {getAll} from "./features/todoSlice";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
+        console.log(user)
         if (user) {
             setUser(user)
             localStorage.setItem('expectSignIn', '1')
@@ -39,6 +41,7 @@ function App() {
 
     useEffect(() => {
         dispatch(fetchAllNotes())
+        dispatch(getAll())
     }, [])
 
     return (
@@ -52,14 +55,17 @@ function App() {
                 <ReactTooltip backgroundColor={"#000"} effect={"solid"} className={"z"}/>
                 <Routes>
                     <Route exact path={'/'} element={<PrivateRoute user={user}/>}>
-                        <Route path={"/folder/:folder_id/note/:note_id"} element={<Main/>}/>
-                        <Route exact path={"/folder/:folder_id"} element={<Main/>}/>
-                        <Route exact path={"/note/:note_id"} element={<Main/>}/>
-                        <Route exact path={"/:folder_id"} element={<Main/>}/>
+                        <Route path={"/app/documents/folder/:folder_id/note/:note_id"} element={<Main/>}/>
+                        <Route exact path={"/app/documents/folder/:folder_id"} element={<Main/>}/>
+                        <Route exact path={"/app/documents/note/:note_id"} element={<Main/>}/>
+                        <Route exact path={"/app/documents/:folder_id"} element={<Main/>}/>
+                        <Route exact path={"/app/documents"} element={<Main/>}/>
+
                         {/*<Route exact path={"/bookmarks/note/:note_id"} element={<Main/>}/>*/}
                         <Route exact path={"/"} element={<Main/>}/>
-                        <Route exact path={"/app/:folder_id"} element={<Todo/>}/>
-                        <Route exact path={"/app/:folder_id/list/:list_id"} element={<Todo/>}/>
+
+                        <Route exact path={"/app/tasks"} element={<Todo/>}/>
+                        <Route exact path={"/app/tasks/list/:list_id"} element={<Todo/>}/>
 
                     </Route>
                     <Route exact path={"/login"} element={<Login/>}/>

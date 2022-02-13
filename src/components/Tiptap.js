@@ -1,9 +1,5 @@
 import React, {useCallback} from 'react'
-import {
-    useEditor,
-    EditorContent,
-    BubbleMenu,
-} from '@tiptap/react'
+import {BubbleMenu, EditorContent, useEditor,} from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import {
     FaBold,

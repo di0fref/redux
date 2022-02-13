@@ -1,11 +1,11 @@
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import ReactQuill from "react-quill";
 import {apiConfig, momentConfig} from "../config/config";
 import 'react-quill/dist/quill.bubble.css';
 import ReactHtmlParser from "react-html-parser";
 import {QuillDeltaToHtmlConverter} from "quill-delta-to-html";
 import Moment from "react-moment";
+
 export default function SharedFile() {
 
     let params = useParams()

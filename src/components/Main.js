@@ -4,14 +4,16 @@ import Content from "./Content";
 import {useSelector} from "react-redux";
 import {useEffect} from "react";
 import ReactTooltip from "react-tooltip";
+import TodoList from "./TodoList";
 
 export default function Main() {
     const sidebar = useSelector((state) => state.side.sidebar)
-
-
-    useEffect(()=>{
+    const currentFolder = useSelector(state => state.currentFolder)
+    useEffect(() => {
         ReactTooltip.rebuild()
-    },[])
+    }, [])
+
+    console.log(currentFolder)
 
     return (
         <div className={`flex h-screen bg-white dark:bg-gray-900_ `}>
@@ -24,7 +26,11 @@ export default function Main() {
                 </div>
             </div>
             <div className={"flex-grow h-full bg-white dark:bg-gray-900 editor"}>
+                {/*{(currentFolder.id === "documents")*/}
+                {/*    ? */}
                 <Content/>
+                {/*    : <TodoList/>*/}
+                {/*}*/}
             </div>
         </div>
 
