@@ -100,16 +100,16 @@ function NoteCard(props) {
             case 0:
             case "0":
                  // dispatch(setCurrentNote(note.id))
-                navigate(`/app/documents/${currentFolder.id}/note/${note.id}`)
+                navigate(`/app/docs/${currentFolder.id}/note/${note.id}`)
                 break;
             default:
-                 navigate(`/app/documents/folder/${note.folder_id}/note/${note.id}`)
+                 navigate(`/app/docs/folder/${note.folder_id}/note/${note.id}`)
         }
     }
     
     return (
         <>
-            <Link to={`/app/documents/folder/${note.folder_id}/note/${note.id}`} onClick={
+            <Link to={`/app/docs/folder/${note.folder_id}/note/${note.id}`} onClick={
                 () => {
                     if (windowSize < 768) dispatch(setSidebarOpen(false));
                 }}
@@ -192,7 +192,7 @@ export default function Notelist() {
     const newDocumentHandler = () => {
         dispatch(addNote(currentFolder.id)).then((result) => {
             toast.success("Document created")
-            navigator(`/folder/${currentFolder.id}/note/${result.payload.id}`)
+            navigator(`/app/docs/folder/${currentFolder.id}/note/${result.payload.id}`)
         })
     }
 

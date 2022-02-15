@@ -53,6 +53,7 @@ export default function SortableComponent() {
 
     const onSortEnd = ({oldIndex, newIndex}) => {
         setData(arrayMoveImmutable(data, oldIndex, newIndex));
+
     };
     return (
     sections && sections.map((section, sectionKey) => {

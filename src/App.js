@@ -22,7 +22,6 @@ function App() {
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {
-        console.log(user)
         if (user) {
             setUser(user)
             localStorage.setItem('expectSignIn', '1')
@@ -55,11 +54,11 @@ function App() {
                 <ReactTooltip backgroundColor={"#000"} effect={"solid"} className={"z"}/>
                 <Routes>
                     <Route exact path={'/'} element={<PrivateRoute user={user}/>}>
-                        <Route path={"/app/documents/folder/:folder_id/note/:note_id"} element={<Main/>}/>
-                        <Route exact path={"/app/documents/folder/:folder_id"} element={<Main/>}/>
-                        <Route exact path={"/app/documents/note/:note_id"} element={<Main/>}/>
-                        <Route exact path={"/app/documents/:folder_id"} element={<Main/>}/>
-                        <Route exact path={"/app/documents"} element={<Main/>}/>
+                        <Route path={"/app/docs/folder/:folder_id/note/:note_id"} element={<Main/>}/>
+                        <Route exact path={"/app/docs/folder/:folder_id"} element={<Main/>}/>
+                        <Route exact path={"/app/docs/note/:note_id"} element={<Main/>}/>
+                        <Route exact path={"/app/docs/:folder_id"} element={<Main/>}/>
+                        <Route exact path={"/app/docs"} element={<Main/>}/>
 
                         {/*<Route exact path={"/bookmarks/note/:note_id"} element={<Main/>}/>*/}
                         <Route exact path={"/"} element={<Main/>}/>

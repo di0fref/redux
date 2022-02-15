@@ -22,7 +22,7 @@ export default function NewFolderButton(props) {
         setShowError(false)
     };
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = (e) => {
         if (folderName === "") {
             setShowError(true)
         } else {
@@ -33,7 +33,7 @@ export default function NewFolderButton(props) {
             })).then((result) => {
                 dispatch(fetchTree())
                 props.opelAll()
-                navigate(`/folder/${result.payload.id}`)
+                navigate(`/app/docs/folder/${result.payload.id}`)
                 setFolderName("")
                 handleModalClose()
                 toast.success("Folder created")
@@ -75,7 +75,13 @@ export default function NewFolderButton(props) {
                                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none dark:bg-gray-200"
                                id="foldername"
                                aria-describedby="emailHelp" placeholder="Enter folder name" value={folderName}
-                               onChange={setFolderNameHandler}/>
+                               onChange={setFolderNameHandler}
+                               onKeyDown={(e) => {
+                                   if (e.key === 'Enter') {
+                                       handleFormSubmit(e)
+                                   }
+                               }}
+                        />
 
                         <div className={`h-8`}>
                             <span className={`${showError ? "block" : "hidden"} error text-red-500 text-sm`}>Please enter a folder name</span>

@@ -1,15 +1,16 @@
-import {BiCheckCircle, BiMenu} from "react-icons/bi";
+import {BiCheckCircle, BiMenu, BiPlus} from "react-icons/bi";
 import ThemeSwitcher from "./ThemeSwitcher";
 import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
-import {addTodo, toggleTodoCompleted} from "../features/todoSlice";
-import {useEffect, useState} from "react";
+import {addTodo, move, toggleTodoCompleted} from "../features/todoSlice";
+import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {setSidebarOpen} from "../features/sideSlice";
+import {SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
+import AddTodoButton from "./AddTodoButton";
 
 
 export default function TodoList() {
-
 
     const dispatch = useDispatch();
     const [status, setStatus] = useState(null)
@@ -24,7 +25,8 @@ export default function TodoList() {
     )
     const sidebar = useSelector((state) => state.side.sidebar)
 
-    const todos = useSelector(state => selectTodosInList(state));
+    // const todos = useSelector(state => selectTodosInList(state));
+    const sections = useSelector(state => state.todos);
 
     const selectTodosInListSortedByDue = createSelector(
         (state) => state,
@@ -39,7 +41,7 @@ export default function TodoList() {
         }).map(el => el[1])
     )
 
-    const todosSortedByDue = useSelector(state => selectTodosInListSortedByDue(todos, state));
+    // const todosSortedByOrder = useSelector(state => selectTodosInListSortedByOrder(todos, state));
 
     const toggleStatus = (todo) => {
         dispatch(toggleTodoCompleted(todo))
@@ -47,76 +49,114 @@ export default function TodoList() {
 
     useEffect(() => {
         setListId(params.list_id)
+        console.log(sections)
     }, [params.list_id])
 
     const addTask = (e) => {
         if (e.key === 'Enter') {
             if (todoName != "") {
+                console.log(listId)
                 dispatch(addTodo(
                     {
                         task_list_id: listId,
                         text: todoName,
                         due: "2021-05-05"
-                    }))
-                setTodoName("")
+                    })).then((result) => {
+                    setTodoName("")
+                })
             }
         }
     }
-
+    const onSortEnd = ({oldIndex, newIndex, collection, isKeySorting}, e) => {
+        dispatch(move({
+            oldIndex: oldIndex,
+            newIndex:newIndex,
+            id: collection
+        }))
+    };
     return (
         <>
             <div className={"text-slate-500 flex flex-col"}>
                 <div className={"print:hidden bg-gray-200 border-b-gray-300/50 dark:bg-gray-800 h-14 flex items-center justify-between border-b dark:border-gray-700/50"}>
                     <button data-tip={"Toggle sidebar"} className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"}
-                            onClick={() => {dispatch(setSidebarOpen(!sidebar))}}>
+                            onClick={() => {
+                                dispatch(setSidebarOpen(!sidebar))
+                            }}>
                         <BiMenu className={"h-6 w-6"}/>
                     </button>
                     <ThemeSwitcher/>
                 </div>
             </div>
-            {listId?
             <div className={"m-auto w-full overflow-hidden mb-4"}>
-                <div className={"flex items-center gap-x-8 border-b-2_ _border-gray-800 px-6 py-[1.27em]  text-sm font-bold"}>
-                    <button className={`px-4 py-1 rounded ${status === null ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline`} onClick={() => setStatus(null)}>All</button>
-                    <button className={`px-4 py-1 rounded ${status === false ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline`} onClick={() => setStatus(false)}>Active</button>
-                    <button className={`px-4 py-1 rounded ${status ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline  `} onClick={() => setStatus(true)}>Completed</button>
-                </div>
+                {/*<div className={"flex items-center gap-x-8 border-b-2_ _border-gray-800 px-10 py-[1.27em] text-sm font-bold"}>*/}
+                {/*    <button className={`px-4 py-1 rounded ${status === null ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium`} onClick={() => setStatus(null)}>All</button>*/}
+                {/*    <button className={`px-4 py-1 rounded ${status === false ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium`} onClick={() => setStatus(false)}>Active</button>*/}
+                {/*    <button className={`px-4 py-1 rounded ${status ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium `} onClick={() => setStatus(true)}>Completed</button>*/}
+                {/*</div>*/}
 
-                <div className={"w-full"}>
-                    <div className={"border-b dark:border-gray-800"}>
-                        <input
-                            onKeyDown={addTask}
-                            placeholder={"Type task title and press enter..."}
-                            value={todoName}
-                            onChange={(e) => setTodoName(e.target.value)}
-                            type={"text"}
-                            name={"todo-name"}
-                            className={"text-xl_ dark:text-white text-gray-700 dark:bg-gray-800 bg-gray-100 w-full py-5 px-6 focus:outline-none _focus:bg-white dark:focus:bg-gray-800/70"}/>
-                    </div>
-                </div>
-                <div className={"m-0 my-4 p-0 list-none w-full dark:text-gray-200 text-gray-700"}>
-                    <div className={"ml-6 mb-3 font-bold text-3xl"}>Tasks</div>
-                    <div className={"ml-7 text-sm text-gray-400 dark:text-gray-400 mb-2"}>{list && list.remaining ? list.remaining + " remaining tasks" : "All task are completed"}</div>
-
-                    {todosSortedByDue && todosSortedByDue.map((todo, todoKey) => {
-                        return (
-                            <button /*onMouseLeave={() => setHovering(false)} onMouseEnter={() => setHovering(true)}*/ onClick={() => toggleStatus(todo)} className={"hover:bg-gray-100 dark:hover:bg-gray-800 text-left w-full flex gap-x-4 py-4 px-6 items-center border-b dark:border-gray-800 dark:bg-gray-900"} key={todoKey}>
-                                {/*<div className={"mb-auto w-7"}>{isHovering ?*/}
-                                {/*    <BiMenu className={"w-6 h-6 text-gray-600"}/> : ""}*/}
-                                {/*</div>*/}
-                                <div className={"rounded-full mb-auto"}>
-                                    <BiCheckCircle className={`${todo.completed ? "text-green-500" : "text-gray-400"} w-6 h-6`}/>
-                                </div>
-                                <div className={`${todo.completed ? "dark:text-gray-600 text-gray-400" : ""} text-sm w-full`}>{todo.text} </div>
-                                <div className={"text-xs flex-grow flex-shrink-0 mb-auto text-gray-400 dark:text-gray-500 ml-auto font-light"}>
-                                    {todo.due}
-                                </div>
+                <div className={"m-0 my-4 p-0 list-none w-full dark:text-gray-200 text-gray-700 border-b"}>
+                    <div className={"flex items-center gap-x-4"}>
+                        <div className={"px-10 font-bold text-3xl flex-grow"}>Tasks</div>
+                        {/*<div className={"flex items-center"}>*/}
+                        {/*    <button className={"bg-indigo-500 hover:bg-indigo-700 rounded rounded-3xl px-5 py-2 flex items-center"}>*/}
+                        {/*        <span><BiPlus className={"text-white font-bold h-5 w-5"}/></span>*/}
+                        {/*        <span className={"text-white text-sm font-medium"}>Add task</span>*/}
+                        {/*    </button>*/}
+                        {/*</div>*/}
+                        <AddTodoButton/>
+                        <div className={"flex items-center pr-10"}>
+                            <button className={"bg-black rounded rounded-3xl px-5 py-2 flex items-center"}>
+                                <span><BiPlus className={"text-white font-bold h-5 w-5"}/></span>
+                                <span className={"text-white text-sm font-medium"}>Add section</span>
                             </button>
+                        </div>
+                    </div>
+                    <div className={"px-10 text-sm text-gray-400 dark:text-gray-400 mb-2"}>{list && list.remaining ? list.remaining + " remaining tasks" : "All task are completed"}</div>
+
+                    {sections && sections.map((section, sectionKey) => {
+                        return (
+                            <div key={sectionKey}>
+                                <button onClick={() => toggleStatus(section)} className={"bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-800 text-left w-full flex gap-x-4 py-4 px-10 items-center border-t dark:border-gray-800 dark:bg-gray-900"} key={sectionKey}>
+                                    <div className={`text-sm w-full font-semibold text-[16px] `}>
+                                        {section.name} </div>
+                                </button>
+                                <SortableList items={section.todos} onSortEnd={onSortEnd} lockAxis={"y"} lockToContainerEdges={true}/>
+                            </div>
                         )
                     })}
                 </div>
             </div>
-                :""}
         </>
     )
+
 }
+
+const SortableItem = SortableElement(({todo}) => {
+
+    const [isHovering, setIsHovering] = useState(false)
+
+    return (
+        <div className={"h-16 hover:bg-gray-100"} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+            <div className={"flex h-full items-center gap-x-1 border-t pr-9"}>
+                <button className={"w-7 ml-2"}>
+                    <BiMenu className={`${isHovering?"visible":"hidden"} h-6 w-6`}/>
+                </button>
+                <button className={"rounded-full hover:bg-gray-200 p-1"} >
+                    <BiCheckCircle className={`${todo.completed ? "text-indigo-500" : "text-gray-400"} w-6 h-6`}/>
+                </button>
+                {todo.order}
+                <button className={`${todo.completed ? "text-gray-400" : "text-gray-900"} w-full text-sm text-left`}>{todo.name}</button>
+            </div>
+        </div>
+    )
+});
+
+const SortableList = SortableContainer(({items}) => {
+    return (
+        <div>
+            {items.map((todo, index) => (
+                <SortableItem key={`item-${todo.id}`} index={index} todo={todo} collection={todo.task_list_id}/>
+            ))}
+        </div>
+    );
+});

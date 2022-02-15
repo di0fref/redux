@@ -1,19 +1,33 @@
 import Sidebar from "./Sidebar";
 import Notelist from "./Notelist";
 import Content from "./Content";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import ReactTooltip from "react-tooltip";
 import TodoList from "./TodoList";
+import {setCurrentFolder} from "../features/currentFolderSlice";
+import {setCurrentNote} from "../features/currentNoteSlice";
+import {useParams} from "react-router-dom";
 
 export default function Main() {
     const sidebar = useSelector((state) => state.side.sidebar)
     const currentFolder = useSelector(state => state.currentFolder)
+    let params = useParams()
+    const dispatch = useDispatch();
+
     useEffect(() => {
         ReactTooltip.rebuild()
     }, [])
 
-    console.log(currentFolder)
+    useEffect(() => {
+        if(params.folder_id){
+            dispatch(setCurrentFolder(params.folder_id))
+        }
+        else{
+            dispatch(setCurrentFolder("docs"))
+        }
+        dispatch(setCurrentNote(null))
+    }, [params.folder_id])
 
     return (
         <div className={`flex h-screen bg-white dark:bg-gray-900_ `}>

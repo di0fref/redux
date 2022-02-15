@@ -9,7 +9,7 @@ export default function Trash() {
 
     const [open, setOpen] = useState(false)
     return (
-        <Link to={`/app/documents/trash`} onClick={() => setOpen(!open)} className={`sidebar-item ${(currentFolder.id === "trash") ? "bg-gray-800 text-white" : ""} flex items-center rounded  py-2 w-full px-2 text-menu`}>
+        <Link to={`/app/docs/trash`} onClick={() => setOpen(!open)} className={`sidebar-item ${(currentFolder.id === "trash") ? "bg-gray-800 text-white" : ""} flex items-center rounded  py-2 w-full px-2 text-menu`}>
             <div><BiTrash className={"h-6 w-6"}/></div>
             <div className={"ml-3 flex items-center justify-between w-full"}>
                 <div>Trash</div>

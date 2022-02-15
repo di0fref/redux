@@ -1,5 +1,6 @@
 import axios from "axios";
 import {apiConfig} from "../config/config";
+import {getAuth, signOut} from "firebase/auth";
 
 const http = axios.create({
     baseURL: apiConfig.url,
@@ -7,6 +8,8 @@ const http = axios.create({
         "Content-type": "application/json",
     },
 });
+
+// const auth = getAuth();
 
 http.interceptors.request.use(function (config) {
     config.headers.token = localStorage.getItem("api_token")
@@ -18,6 +21,13 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(function (config) {
     return config;
 }, function (error) {
+    if(error.response.status === 401){
+        signOut(getAuth()).then(() => {
+            console.log("Signed out Firebase");
+        }).catch((error) => {
+            console.log("ERROR::Signed out Firebase");
+        });
+    }
     return Promise.reject(error);
 });
 

@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import http from "../helpers/http-common";
 import {apiConfig} from "../config/config";
+import {arrayMoveImmutable} from "array-move";
 
 
 const initialState = []
@@ -18,9 +19,11 @@ export const updateTodo = createAsyncThunk(
 export const addTodo = createAsyncThunk(
     'todo/addTodo',
     async (todo, thunkAPI) => {
+        console.log(todo)
         return await http.post(apiConfig.url + "/tasks", {
             text: todo.text,
-            task_list_id: todo.task_list_id
+            task_list_id: todo.task_list_id,
+            due: "2022-05-05"
         }).then(response => response.data)
     }
 )
@@ -65,8 +68,27 @@ export const todoSlice = createSlice({
     initialState,
     reducers: {
         filterTodos(state, action) {
-           return state.filter(list => action.payload?list.remaining === 0:list.remaining !== 0)
+            return state.filter(list => action.payload ? list.remaining === 0 : list.remaining !== 0)
         },
+        sort(state, action) {
+            const list = state.find(list => list.id == action.payload.id);
+        },
+        move(state, action) {
+            const list = state.find(list => list.id == action.payload.id);
+            list.todos = arrayMoveImmutable(list.todos, action.payload.oldIndex, action.payload.newIndex)
+            list.todos.map((todo, index) => {
+                todo.order = index
+                todo.task_list_id = action.payload.id
+            })
+            list.todos.map((todo, index) => {
+                http.put(apiConfig.url + "/tasks/" + todo.id,{
+                    order: index,
+                    task_list_id: action.payload.id
+                }).then((result) => {
+
+                })
+            })
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(getAll.fulfilled, (state, action) => {
@@ -85,10 +107,15 @@ export const todoSlice = createSlice({
             list.remaining = list.todos.filter(todo => todo.completed == false).length
         })
         builder.addCase(addTaskList.fulfilled, (state, action) => {
-            state.unshift(action.payload)
+            const list = {
+                ...action.payload,
+                remaining: 0,
+                todos: [],
+            }
+            state.unshift(list)
         })
     },
 })
-export const {filterTodos} = todoSlice.actions
+export const {filterTodos, move} = todoSlice.actions
 
 export default todoSlice.reducer

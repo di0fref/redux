@@ -15,3 +15,13 @@
          // width: 700,
          // height: "80vh"
  };
+
+
+ export const modalstyleRight = {
+     position: 'absolute',
+     top: 0,
+     right: 0,
+     // transform: 'translate(-50%, -50%)',
+     width: 700,
+     height: "80vh"
+ };

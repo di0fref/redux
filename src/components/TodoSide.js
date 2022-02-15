@@ -70,13 +70,13 @@ export default function TodoSide() {
                             <button onClick={() => clickHandle(list.id)} className={`${list.id == params.list_id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}  w-full text-sm block px-6 py-6 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700`} key={key}>
                                 <div className={"flex items-center gap-x-3 "}>
                                     <div>
-                                        <BiCheckCircle className={`${(list.remaining || list.todos.length === 0) ? "dark:text-gray-400 text-gray-400" : "text-green-500"}  h-5 w-5`}/>
+                                        <BiCheckCircle className={`${list.todos&&((list.remaining || list.todos.length === 0)) ? "dark:text-gray-400 text-gray-400" : "text-green-500"}  h-5 w-5`}/>
                                     </div>
                                     <div className={"text-gray-700 dark:text-gray-200 font-bold"}>{list.name}</div>
                                 </div>
                                 <div
                                     className={"text-left text-gray-400 dark:text-gray-500 ml-8 mt-1"}>
-                                    {list.todos.length === 0
+                                    {(list.todos&&list.todos.length === 0)
                                         ? "No tasks in list"
                                         : list.remaining ? list.remaining + " remaining tasks" : "Good job, all tasks are completed"
                                     }

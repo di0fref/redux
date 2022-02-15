@@ -20,28 +20,17 @@ export default function NewTaskListButton(props) {
         setShowError(false)
     };
 
-    const handleFormSubmit = () => {
+    const handleFormSubmit = (e) => {
         if (taskListName === "") {
             setShowError(true)
         } else {
             setShowError(false)
-            // dispatch(addFolder({
-            //     parent_id: currentFolder.id,
-            //     name: folderName
-            // })).then((result) => {
-            //     dispatch(fetchTree())
-            //     props.opelAll()
-            //     navigate(`/folder/${result.payload.id}`)
-            //     setFolderName("")
-            //     handleModalClose()
-            //     toast.success("Folder created")
-            // })
-
             dispatch(addTaskList({
                 name: taskListName
-            })).then((res) =>{
+            })).then((res) => {
                 setTaskListName("")
                 handleModalClose()
+                navigate(`/app/tasks/list/${res.payload.id}`)
             })
         }
     }
@@ -55,7 +44,7 @@ export default function NewTaskListButton(props) {
 
             <button data-tip={"New task list"} onClick={handleModalOpen} className={"hover:bg-indigo-500_ rounded mr-2 flex items-center"}>
                 <div className={"flex items-center"}>
-                    <BiListPlus className={"text-gray-400 h-7 w-7 hover:text-white p-1 flex items-center"}/>
+                    <BiListPlus className={"text-gray-400 h-8 w-8 hover:text-white p-1 flex items-center"}/>
                 </div>
             </button>
 
@@ -80,7 +69,13 @@ export default function NewTaskListButton(props) {
                                 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none dark:bg-gray-200"
                                id="tasklistname"
                                aria-describedby="emailHelp" placeholder="Enter task list name" value={taskListName}
-                               onChange={setTaskListNameHandler}/>
+                               onChange={setTaskListNameHandler}
+                               onKeyDown={(e) => {
+                                   if (e.key === 'Enter') {
+                                       handleFormSubmit(e)
+                                   }
+                               }}
+                        />
 
                         <div className={`h-8`}>
                             <span className={`${showError ? "block" : "hidden"} error text-red-500 text-sm`}>Please enter a task list name</span>
