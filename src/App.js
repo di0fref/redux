@@ -39,8 +39,8 @@ function App() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(fetchAllNotes())
-        dispatch(getAll())
+        // dispatch(fetchAllNotes())
+        // dispatch(getAll())
     }, [])
 
     return (

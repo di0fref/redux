@@ -4,29 +4,26 @@ import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
 import {addTodo, move, toggleTodoCompleted} from "../features/todoSlice";
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {setSidebarOpen} from "../features/sideSlice";
 import {SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
-import AddTodoButton from "./AddTodoButton";
+import AddTodoButton from "./todo/AddTodoButton";
+import EditTodoButton from "./todo/EditTodoButton";
+import Moment from "react-moment";
+import {getPrio, momentConfig, taskMomentConfig} from "../config/config";
+import {HiArrowDown, HiArrowUp, HiDotsHorizontal} from "react-icons/hi";
+import {MdHorizontalRule} from "react-icons/md";
+import moment from "moment/moment";
+import AddSectionButton from "./todo/AddSectionButton";
+import EditSectionButton from "./todo/EditSectionButton";
 
 
 export default function TodoList() {
 
     const dispatch = useDispatch();
     const [status, setStatus] = useState(null)
-    const [listId, setListId] = useState(null)
-    let params = useParams()
-    const [todoName, setTodoName] = useState("");
-    const list = useSelector(state => state.todos.find(list => list.id == listId))
-
-    const selectTodosInList = createSelector(
-        (state) => state.todos,
-        (todos) => Object.values(todos).filter(list => list.id == listId).map(list => list.todos.filter(todo => status == null ? todo : todo.completed == status))[0]
-    )
     const sidebar = useSelector((state) => state.side.sidebar)
-
-    // const todos = useSelector(state => selectTodosInList(state));
-    const sections = useSelector(state => state.todos);
+    const todos = useSelector(state => state.todos.filter(todo => status === null ? todo : todo.completed == status));
 
     const selectTodosInListSortedByDue = createSelector(
         (state) => state,
@@ -41,43 +38,21 @@ export default function TodoList() {
         }).map(el => el[1])
     )
 
-    // const todosSortedByOrder = useSelector(state => selectTodosInListSortedByOrder(todos, state));
+    const totalTodos = useSelector(state => Object.values(state.todos).filter(todo => todo.type != "section")).length
+    const completedTodos = useSelector(state => Object.values(state.todos).filter(todo => todo.completed && todo.type != "section")).length
+    const remaining = totalTodos - completedTodos;
 
-    const toggleStatus = (todo) => {
-        dispatch(toggleTodoCompleted(todo))
-    }
-
-    useEffect(() => {
-        setListId(params.list_id)
-        console.log(sections)
-    }, [params.list_id])
-
-    const addTask = (e) => {
-        if (e.key === 'Enter') {
-            if (todoName != "") {
-                console.log(listId)
-                dispatch(addTodo(
-                    {
-                        task_list_id: listId,
-                        text: todoName,
-                        due: "2021-05-05"
-                    })).then((result) => {
-                    setTodoName("")
-                })
-            }
-        }
-    }
     const onSortEnd = ({oldIndex, newIndex, collection, isKeySorting}, e) => {
         dispatch(move({
             oldIndex: oldIndex,
-            newIndex:newIndex,
+            newIndex: newIndex,
             id: collection
         }))
     };
     return (
-        <>
+        <div>
             <div className={"text-slate-500 flex flex-col"}>
-                <div className={"print:hidden bg-gray-200 border-b-gray-300/50 dark:bg-gray-800 h-14 flex items-center justify-between border-b dark:border-gray-700/50"}>
+                <div className={"print:hidden bg-gray-200 border-b-gray-300/50 dark:border-b-gray-800 dark:bg-gray-800 h-14 flex items-center justify-between border-b dark:border-gray-700/50"}>
                     <button data-tip={"Toggle sidebar"} className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"}
                             onClick={() => {
                                 dispatch(setSidebarOpen(!sidebar))
@@ -88,65 +63,99 @@ export default function TodoList() {
                 </div>
             </div>
             <div className={"m-auto w-full overflow-hidden mb-4"}>
-                {/*<div className={"flex items-center gap-x-8 border-b-2_ _border-gray-800 px-10 py-[1.27em] text-sm font-bold"}>*/}
-                {/*    <button className={`px-4 py-1 rounded ${status === null ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium`} onClick={() => setStatus(null)}>All</button>*/}
-                {/*    <button className={`px-4 py-1 rounded ${status === false ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium`} onClick={() => setStatus(false)}>Active</button>*/}
-                {/*    <button className={`px-4 py-1 rounded ${status ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium `} onClick={() => setStatus(true)}>Completed</button>*/}
-                {/*</div>*/}
+                <div className={"flex items-center gap-x-8 border-b-2_ _border-gray-800 px-10 py-[1.27em] text-sm font-bold"}>
+                    <button className={`px-4 py-1 rounded rounded-3xl ${status === null ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium`} onClick={() => setStatus(null)}>All</button>
+                    <button className={`px-4 py-1 rounded rounded-3xl ${status === false ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium`} onClick={() => setStatus(false)}>Active</button>
+                    <button className={`px-4 py-1 rounded rounded-3xl ${status ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium `} onClick={() => setStatus(true)}>Completed</button>
+                </div>
 
-                <div className={"m-0 my-4 p-0 list-none w-full dark:text-gray-200 text-gray-700 border-b"}>
-                    <div className={"flex items-center gap-x-4"}>
-                        <div className={"px-10 font-bold text-3xl flex-grow"}>Tasks</div>
-                        {/*<div className={"flex items-center"}>*/}
-                        {/*    <button className={"bg-indigo-500 hover:bg-indigo-700 rounded rounded-3xl px-5 py-2 flex items-center"}>*/}
-                        {/*        <span><BiPlus className={"text-white font-bold h-5 w-5"}/></span>*/}
-                        {/*        <span className={"text-white text-sm font-medium"}>Add task</span>*/}
-                        {/*    </button>*/}
-                        {/*</div>*/}
-                        <AddTodoButton/>
-                        <div className={"flex items-center pr-10"}>
-                            <button className={"bg-black rounded rounded-3xl px-5 py-2 flex items-center"}>
-                                <span><BiPlus className={"text-white font-bold h-5 w-5"}/></span>
-                                <span className={"text-white text-sm font-medium"}>Add section</span>
-                            </button>
+                <div className={"m-0 my-4 p-0 list-none w-full dark:text-gray-200 text-gray-700 border-b dark:border-b-gray-800"}>
+
+                    <div className={"flex flex-col md:flex-row md:items-center gap-x-4_ md:justify-between justify-start mb-4"}>
+                        <div className={"px-10"}>
+                            <div className={"font-bold text-3xl"}>Tasks</div>
+                            <div className={" text-sm text-gray-400 dark:text-gray-400"}>{remaining ? remaining + " remaining tasks" : "All task are completed"}</div>
+
+                        </div>
+
+                        <div className={"flex items-center mx-10 mt-4 md:mt-0 gap-x-3"}>
+
+                            <AddTodoButton/>
+                            <AddSectionButton/>
+
                         </div>
                     </div>
-                    <div className={"px-10 text-sm text-gray-400 dark:text-gray-400 mb-2"}>{list && list.remaining ? list.remaining + " remaining tasks" : "All task are completed"}</div>
-
-                    {sections && sections.map((section, sectionKey) => {
-                        return (
-                            <div key={sectionKey}>
-                                <button onClick={() => toggleStatus(section)} className={"bg-gray-50 hover:bg-gray-100 dark:hover:bg-gray-800 text-left w-full flex gap-x-4 py-4 px-10 items-center border-t dark:border-gray-800 dark:bg-gray-900"} key={sectionKey}>
-                                    <div className={`text-sm w-full font-semibold text-[16px] `}>
-                                        {section.name} </div>
-                                </button>
-                                <SortableList items={section.todos} onSortEnd={onSortEnd} lockAxis={"y"} lockToContainerEdges={true}/>
-                            </div>
-                        )
-                    })}
+                    <SortableList items={todos} onSortEnd={onSortEnd} useDragHandle/>
                 </div>
             </div>
-        </>
+        </div>
     )
 
 }
 
-const SortableItem = SortableElement(({todo}) => {
+
+const SortableItem = SortableElement(({todo, index}) => {
 
     const [isHovering, setIsHovering] = useState(false)
+    const dispatch = useDispatch();
+
+    const [showModal, updateShowModal] = useState(false);
+    const [showSectionModal, updateSectionShowModal] = useState(false);
+
+    const toggleModal = () => updateShowModal(!showModal);
+    const toggleSectionModal = () => updateSectionShowModal(!showSectionModal);
+
+
+    const DragHandle = SortableHandle(() => {
+        return (
+            <button className={"w-7 ml-2"}>
+                <BiMenu className={`${isHovering ? "visible" : "hidden"} h-6 w-6`}/>
+            </button>
+        )
+    });
+
+    const toggleStatus = () => {
+        dispatch(toggleTodoCompleted(todo))
+    }
+
+
+    if (todo.type === "section") {
+        return (
+            <>
+                <div onClick={toggleSectionModal} className={"h-12 hover:bg-gray-100 bg-gray-50 dark:bg-gray-800/80 dark:hover:bg-white/5 w-full cursor-pointer"} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+                    <div className={"flex h-full items-center gap-x-2 border-t dark:border-gray-800  pr-9"}>
+                        <DragHandle/>
+                        <div className={`font-medium text-[16px] w-full text-sm text-left`}>{todo.name}</div>
+                    </div>
+                </div>
+                <EditSectionButton canShow={showSectionModal} updateModalState={toggleSectionModal} todoId={todo.id}/>
+            </>
+        )
+    }
+
 
     return (
-        <div className={"h-16 hover:bg-gray-100"} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
-            <div className={"flex h-full items-center gap-x-1 border-t pr-9"}>
-                <button className={"w-7 ml-2"}>
-                    <BiMenu className={`${isHovering?"visible":"hidden"} h-6 w-6`}/>
-                </button>
-                <button className={"rounded-full hover:bg-gray-200 p-1"} >
+
+        <div className={"hover:bg-gray-100 dark:hover:bg-white/5 w-full"}
+             onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}
+        >
+            <div className={"flex h-full items-center gap-x-1 border-t dark:border-t-gray-800 pr-9 "}>
+                <DragHandle/>
+                <button className={"rounded-full hover:bg-gray-200 p-1 dark:hover:bg-gray-700 "} onClick={toggleStatus}>
                     <BiCheckCircle className={`${todo.completed ? "text-indigo-500" : "text-gray-400"} w-6 h-6`}/>
                 </button>
-                {todo.order}
-                <button className={`${todo.completed ? "text-gray-400" : "text-gray-900"} w-full text-sm text-left`}>{todo.name}</button>
+                <button onClick={toggleModal} className={`py-5 ${todo.completed ? "text-gray-400 dark:text-gray-600" : "text-gray-900 dark:text-gray-300"} w-full text-sm text-left flex items-center`}>
+                    <span className={"flex-auto mr-2 "}>{todo.name}</span>
+                    <span className={"whitespace-nowrap ml-auto text-xs text-gray-400 "}>
+                        {moment(todo.due).isValid() ?
+                            <Moment calendar={taskMomentConfig(todo.due)}>{todo.due}</Moment> : null}
+                    </span>
+                    <span data-tip={todo.prio && todo.prio.charAt(0).toUpperCase() + todo.prio.slice(1)} className={"ml-2"}>
+                        {getPrio(todo.prio)}
+                    </span>
+                </button>
             </div>
+            <EditTodoButton canShow={showModal} updateModalState={toggleModal} todoId={todo.id}/>
         </div>
     )
 });
@@ -155,7 +164,7 @@ const SortableList = SortableContainer(({items}) => {
     return (
         <div>
             {items.map((todo, index) => (
-                <SortableItem key={`item-${todo.id}`} index={index} todo={todo} collection={todo.task_list_id}/>
+                <SortableItem key={`item-${todo.id}`} index={index} todo={todo}/>
             ))}
         </div>
     );

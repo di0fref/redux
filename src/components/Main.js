@@ -8,6 +8,7 @@ import TodoList from "./TodoList";
 import {setCurrentFolder} from "../features/currentFolderSlice";
 import {setCurrentNote} from "../features/currentNoteSlice";
 import {useParams} from "react-router-dom";
+import {fetchAllNotes} from "../features/noteSlice";
 
 export default function Main() {
     const sidebar = useSelector((state) => state.side.sidebar)
@@ -17,6 +18,7 @@ export default function Main() {
 
     useEffect(() => {
         ReactTooltip.rebuild()
+        dispatch(fetchAllNotes())
     }, [])
 
     useEffect(() => {
@@ -26,7 +28,7 @@ export default function Main() {
         else{
             dispatch(setCurrentFolder("docs"))
         }
-        dispatch(setCurrentNote(null))
+        // dispatch(setCurrentNote(null))
     }, [params.folder_id])
 
     return (
@@ -40,11 +42,7 @@ export default function Main() {
                 </div>
             </div>
             <div className={"flex-grow h-full bg-white dark:bg-gray-900 editor"}>
-                {/*{(currentFolder.id === "documents")*/}
-                {/*    ? */}
                 <Content/>
-                {/*    : <TodoList/>*/}
-                {/*}*/}
             </div>
         </div>
 

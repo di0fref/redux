@@ -1,11 +1,8 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {fetchTree} from "../features/treeSlice";
-import {setCurrentFolder} from "../features/currentFolderSlice";
 import {FaChevronDown, FaChevronRight, FaUser} from "react-icons/fa";
-import {setCurrentNote} from "../features/currentNoteSlice";
 import {Link} from "react-router-dom";
-import {useParams} from "react-router";
 import {BiFile, BiFolder} from "react-icons/bi";
 import Bookmarks from "./Bookmarks";
 import Usermenu from "./menus/Usermenu";
@@ -14,7 +11,6 @@ import Trash from "./Trash";
 import Shared from "./Shared";
 import NewFolderButton from "./NewFolderButton";
 import Todos from "./Todos";
-import NewTaskListButton from "./NewTaskListButton";
 
 function SidebarItem(props) {
 
@@ -85,27 +81,11 @@ export default function Sidebar() {
     const dispatch = useDispatch()
 
     const [allOpen, setAllOpen] = useState(false)
-
-    // useEffect(() => {
-    //     if(params.folder_id){
-    //         dispatch(setCurrentFolder(params.folder_id))
-    //     }
-    //     else{
-    //         dispatch(setCurrentFolder("documents"))
-    //     }
-    //     dispatch(setCurrentNote(null))
-    // }, [params.folder_id])
-
     useEffect(() => {
         dispatch(fetchTree())
         opelAll()
     }, [])
 
-    // const chevronClicked = (e) => {
-    //     e.preventDefault()
-    //     e.stopPropagation()
-    //     setOpen(!open)
-    // }
 
     const opelAll = () => {
         setAllOpen(true)
@@ -113,7 +93,7 @@ export default function Sidebar() {
     }
 
     return (
-        <>
+        <div className={"border-r dark:border-r-gray-800 h-screen"}>
             <div className={"flex items-center justify-between w-full h-14"}>
                 <div className={"ml-4"}>
                     <img className="w-auto h-7 mx-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow"/>
@@ -135,7 +115,7 @@ export default function Sidebar() {
             <div className={"p-2 text-sm"}>
                 <div className={"flex items-center justify-between ml-2 mt-4 mb-3"}>
                     <div className={"text-side-indigo font-'bold uppercase text-[12px] tracking-wide"}>Activities</div>
-                    <div className={""}><NewTaskListButton/></div>
+                    {/*<div className={""}><NewTaskListButton/></div>*/}
                 </div>
                 <div className={"mb-2"}><Todos/></div>
 
@@ -169,6 +149,6 @@ export default function Sidebar() {
                 <div className={"mt-12"}><Shared/></div>
                 <div className={"mt-3"}><Trash/></div>
             </div>
-        </>
+        </div>
     )
 }

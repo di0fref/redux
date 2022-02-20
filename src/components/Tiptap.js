@@ -30,6 +30,8 @@ export default function Tiptap() {
     const note = useSelector(selectNote);
     const dispatch = useDispatch();
 
+    console.log(note)
+
     const editor = useEditor({
         onUpdate({editor}) {
             debounced(editor)

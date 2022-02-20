@@ -44,6 +44,7 @@ function NoteCard(props) {
     const [windowSize, setWindowSize] = useState(window.innerWidth);
     useEffect(() => {
         if (params.note_id == props.note.id) {
+            console.log(props.note.id)
             dispatch(setCurrentNote(props.note.id))
         }
     }, [params.note_id])

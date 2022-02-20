@@ -30,7 +30,7 @@ export default function Content() {
         (notes) => Object.values(notes).find(note => note.id == currentNote)
     )
     const note = useSelector(selectNote);
-
+    console.log(currentNote)
     const bookMarkHandler = () => {
         dispatch(updateBookMark({
             bookmark: note.bookmark ? 0 : 1,

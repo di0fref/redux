@@ -55,8 +55,8 @@ export default function NewFolderButton(props) {
             </button>
 
             <Modal open={modalOpen} onClose={handleModalClose}>
-                <div style={modalstyleSmall} className={"block p-6 rounded shadow-lg bg-white max-w-sm dark:bg-gray-700"}>
-                    <div className={"bg-white dark:bg-gray-700 form-group mb-6"}>
+                <div style={modalstyleSmall} className={"block p-6 rounded rounded-2xl shadow-lg bg-white max-w-sm dark:bg-gray-800"}>
+                    <div className={"bg-white dark:bg-gray-800 form-group mb-6"}>
                         <label htmlFor="foldername" className="form-label inline-block mb-2 text-gray-700 dark:text-gray-200 font-medium">Create
                             new folder in "{currentFolder.name}"</label>
                         <input type="text" autoFocus={true} className="form-control
@@ -69,6 +69,7 @@ export default function NewFolderButton(props) {
                                 bg-white_ bg-clip-padding
                                 border border-solid border-gray-300
                                 rounded
+
                                 transition
                                 ease-in-out
                                 m-0
@@ -99,6 +100,7 @@ export default function NewFolderButton(props) {
                                       leading-tight
                                       uppercase
                                       rounded
+                                      rounded-2xl
                                       shadow-md
                                       hover:bg-indigo-600 hover:shadow-lg
                                       focus:bg-indigo-600 focus:shadow-lg focus:outline-none focus:ring-0

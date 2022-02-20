@@ -9,59 +9,48 @@ const initialState = []
 export const updateTodo = createAsyncThunk(
     'todo/updateTodo',
     async (todo, thunkAPI) => {
-        return await http.put(apiConfig.url + "/todos", {
-            text: todo.text,
-        }).then(response => response.data)
+        return await http.put(apiConfig.url + "/tasks/" + todo.id, todo).then(response => response.data)
     }
 )
 
+export const _createTodo = createAsyncThunk(
+    'todo/createTodo',
+    async (todo, thunkAPI) => {
+        return await http.post(apiConfig.url + "/tasks", {}).then(response => response.data)
+    }
+)
 
 export const addTodo = createAsyncThunk(
     'todo/addTodo',
     async (todo, thunkAPI) => {
         console.log(todo)
-        return await http.post(apiConfig.url + "/tasks", {
-            text: todo.text,
-            task_list_id: todo.task_list_id,
-            due: "2022-05-05"
-        }).then(response => response.data)
+        return await http.post(apiConfig.url + "/tasks", todo).then(response => response.data)
     }
 )
 export const deleteTodo = createAsyncThunk(
     'todo/deleteTodo',
-    async (folderId, thunkAPI) => {
-        // return await http.get(apiConfig.url + "/tree").then(response => response.data)
+    async (id, thunkAPI) => {
+        return await http.delete(apiConfig.url + "/tasks/" + id).then(response => response.data)
     }
 )
 
 export const getAll = createAsyncThunk(
     'todo/getAll',
     async () => {
-        const response = await http.get(apiConfig.url + "/tasks").then(response => response.data)
-        response.map((list) => {
-            list.remaining = list.todos.filter(todo => todo.completed == false).length
-        })
-        return response;
+        return await http.get(apiConfig.url + "/tasks").then(response => response.data)
     }
 )
 
 export const toggleTodoCompleted = createAsyncThunk(
     'todo/toggleTodoCompleted',
     async (todo, thunkAPI) => {
+        console.log(todo)
         return await http.put(apiConfig.url + "/tasks/" + todo.id, {
             completed: todo.completed ? 0 : 1
         }).then(response => response.data)
     }
 )
 
-export const addTaskList = createAsyncThunk(
-    'todo/addTaskList',
-    async (list, thunkAPI) => {
-        return await http.post(apiConfig.url + "/tasklists/", {
-            name: list.name
-        }).then(response => response.data)
-    }
-)
 
 export const todoSlice = createSlice({
     name: 'todo',
@@ -74,20 +63,22 @@ export const todoSlice = createSlice({
             const list = state.find(list => list.id == action.payload.id);
         },
         move(state, action) {
-            const list = state.find(list => list.id == action.payload.id);
-            list.todos = arrayMoveImmutable(list.todos, action.payload.oldIndex, action.payload.newIndex)
-            list.todos.map((todo, index) => {
-                todo.order = index
-                todo.task_list_id = action.payload.id
-            })
-            list.todos.map((todo, index) => {
-                http.put(apiConfig.url + "/tasks/" + todo.id,{
-                    order: index,
-                    task_list_id: action.payload.id
-                }).then((result) => {
 
-                })
+
+            const a = state[action.payload.oldIndex]
+            const b = state[action.payload.newIndex]
+
+            http.put(apiConfig.url + "/tasks/" + a.id, {
+                order: action.payload.newIndex,
+            }).then((result) => {
             })
+            http.put(apiConfig.url + "/tasks/" + b.id, {
+                order: action.payload.oldIndex,
+            }).then((result) => {
+            })
+
+            return arrayMoveImmutable(state, action.payload.oldIndex, action.payload.newIndex)
+
         }
     },
     extraReducers: (builder) => {
@@ -95,25 +86,25 @@ export const todoSlice = createSlice({
             return action.payload
         })
         builder.addCase(addTodo.fulfilled, (state, action) => {
-            const list = state.find(list => list.id == action.payload.task_list_id);
-            list.todos.push(action.payload)
-            list.remaining++
+            state.unshift(action.payload)
         })
+
         builder.addCase(toggleTodoCompleted.fulfilled, (state, action) => {
-            const todo = state.filter(lists => lists.todos.find(todo => todo.id == action.payload.id))[0].todos.find(todo => todo.id == action.payload.id)
+            const todo = Object.values(state).find(todo => todo.id == action.payload.id)
             todo.completed = action.payload.completed
-            const list = state.find(list => list.id == action.payload.task_list_id);
-            console.log(JSON.parse(JSON.stringify(list)))
-            list.remaining = list.todos.filter(todo => todo.completed == false).length
         })
-        builder.addCase(addTaskList.fulfilled, (state, action) => {
-            const list = {
-                ...action.payload,
-                remaining: 0,
-                todos: [],
-            }
-            state.unshift(list)
+        builder.addCase(updateTodo.fulfilled, (state, action) => {
+
+            const todo = Object.values(state).find(todo => todo.id == action.payload.id)
+            todo.name = action.payload.name
+            todo.text = action.payload.text
+            todo.due = action.payload.due
+            todo.prio = action.payload.prio
         })
+        builder.addCase(deleteTodo.fulfilled, (state, action) => {
+            return Object.values(state).filter(todo => todo.id !== action.meta.arg)
+        })
+
     },
 })
 export const {filterTodos, move} = todoSlice.actions
