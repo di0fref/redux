@@ -56,7 +56,7 @@ export default function AddSectionButton() {
     return (
         <div>
             <div className={"flex items-center"}>
-                <button className={"bg-black hover:bg-black rounded rounded-3xl px-5 py-2 flex items-center"} onClick={handleModalOpen}>
+                <button className={"bg-black hover:bg-black/70 dark:bg-gray-600 hover:bg-black rounded rounded-3xl px-5 py-2 flex items-center dark:hover:bg-gray-700"} onClick={handleModalOpen}>
                     <span><BiPlus className={"text-white font-bold h-5 w-5"}/></span>
                     <span className={"text-white text-sm font-medium"}>Add section</span>
                 </button>

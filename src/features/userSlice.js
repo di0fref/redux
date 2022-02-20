@@ -17,13 +17,15 @@ export const login = createAsyncThunk(
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        logout: function (state, action){}
+    },
     extraReducers: (builder) => {
         builder.addCase(login.fulfilled, (state, action) => {
             return action.payload
         })
     },
 })
-// export const {} = treeSlice.actions
+export const {logout} = userSlice.actions
 
 export default userSlice.reducer

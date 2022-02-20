@@ -1,18 +1,22 @@
 import {getAuth, signOut} from "firebase/auth";
 import {Menu} from '@headlessui/react'
 import {BiLogOut, BiUserCircle} from "react-icons/bi";
+import {logout} from "../../features/userSlice";
+import {useDispatch} from "react-redux";
 
 export default function Usermenu(){
 
     const auth = getAuth();
     const user = auth.currentUser
+    const dispatch = useDispatch();
 
     const signOutFirebase = () => {
         signOut(auth).then(() => {
-            console.log("Signed out Firebase");
+            dispatch(logout())
         }).catch((error) => {
             console.log("ERROR::Signed out Firebase");
         });
+
     }
 
     const data = [

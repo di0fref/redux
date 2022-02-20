@@ -38,7 +38,7 @@ export default function Todos() {
             <div className={"flex-grow bg-white dark:bg-gray-900"}>
                 <TodoList/>
             </div>
-            <div onClick={() => dispatch(setSidebarOpen(false))} className={`${sidebar ? "visible md:hidden" : "hidden"} fixed  inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full`} id="my-modal"/>
+            <div onClick={() => dispatch(setSidebarOpen(false))} className={`${sidebar ? "visible md:hidden" : "hidden"} fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full`} id="my-modal"/>
         </div>
 
     )

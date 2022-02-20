@@ -15,6 +15,7 @@ import {fetchAllNotes} from "./features/noteSlice";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {getAll} from "./features/todoSlice";
+import {fetchTree} from "./features/treeSlice";
 
 
 function App() {
@@ -33,14 +34,6 @@ function App() {
     });
     useEffect(() => {
         ReactTooltip.rebuild()
-    }, [])
-
-
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        // dispatch(fetchAllNotes())
-        // dispatch(getAll())
     }, [])
 
     return (

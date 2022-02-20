@@ -1,18 +1,15 @@
-import {BiCheckCircle, BiMenu, BiPlus} from "react-icons/bi";
+import {BiCheckCircle, BiMenu} from "react-icons/bi";
 import ThemeSwitcher from "./ThemeSwitcher";
 import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
-import {addTodo, move, toggleTodoCompleted} from "../features/todoSlice";
-import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import { move, toggleTodoCompleted} from "../features/todoSlice";
+import React, {useState} from "react";
 import {setSidebarOpen} from "../features/sideSlice";
 import {SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
 import AddTodoButton from "./todo/AddTodoButton";
 import EditTodoButton from "./todo/EditTodoButton";
 import Moment from "react-moment";
-import {getPrio, momentConfig, taskMomentConfig} from "../config/config";
-import {HiArrowDown, HiArrowUp, HiDotsHorizontal} from "react-icons/hi";
-import {MdHorizontalRule} from "react-icons/md";
+import {getPrio, taskMomentConfig} from "../config/config";
 import moment from "moment/moment";
 import AddSectionButton from "./todo/AddSectionButton";
 import EditSectionButton from "./todo/EditSectionButton";
@@ -23,7 +20,7 @@ export default function TodoList() {
     const dispatch = useDispatch();
     const [status, setStatus] = useState(null)
     const sidebar = useSelector((state) => state.side.sidebar)
-    const todos = useSelector(state => state.todos.filter(todo => status === null ? todo : todo.completed == status));
+    const todos = useSelector(state => state.todos.filter(todo => status == null ? todo : todo.completed == status));
 
     const selectTodosInListSortedByDue = createSelector(
         (state) => state,
@@ -71,7 +68,7 @@ export default function TodoList() {
 
                 <div className={"m-0 my-4 p-0 list-none w-full dark:text-gray-200 text-gray-700 border-b dark:border-b-gray-800"}>
 
-                    <div className={"flex flex-col md:flex-row md:items-center gap-x-4_ md:justify-between justify-start mb-4"}>
+                    <div className={"flex flex-col md:flex-row md:items-center md:justify-between justify-start mb-4"}>
                         <div className={"px-10"}>
                             <div className={"font-bold text-3xl"}>Tasks</div>
                             <div className={" text-sm text-gray-400 dark:text-gray-400"}>{remaining ? remaining + " remaining tasks" : "All task are completed"}</div>

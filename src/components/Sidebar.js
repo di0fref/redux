@@ -14,9 +14,9 @@ import Todos from "./Todos";
 
 function SidebarItem(props) {
 
-    // const dispatch = useDispatch();
     const currentFolder = useSelector((state) => state.currentFolder)
     const [open, setOpen] = useState(true)
+    const dispatch = useDispatch();
 
     const chevronClicked = (e) => {
         e.preventDefault()
@@ -25,8 +25,8 @@ function SidebarItem(props) {
     }
 
     useEffect(() => {
-        // setOpen(props.open)
-    }, [props.open])
+        dispatch(fetchTree())
+    }, [])
 
     return (
         <>
@@ -50,9 +50,6 @@ function SidebarItem(props) {
                 </div>
 
             </Link>
-
-
-
 
 
             {(props.item.items) ? (

@@ -23,7 +23,7 @@ export const getPrioColor = (prio) => {
         case "normal":
             return "bg-gray-100 dark:bg-gray-700"
         case "high":
-            return "bg-red-300 text-red-500"
+            return "bg-red-200 text-red-500"
         default:
             return "";
     }

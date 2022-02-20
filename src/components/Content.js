@@ -17,6 +17,7 @@ import {createSelector} from "reselect";
 import Tiptap from "./Tiptap";
 import {ErrorBoundary} from "react-error-boundary";
 import ErrorFallback from "./ErrorFallback";
+import Documents from "./Documents";
 
 export default function Content() {
 
@@ -30,7 +31,6 @@ export default function Content() {
         (notes) => Object.values(notes).find(note => note.id == currentNote)
     )
     const note = useSelector(selectNote);
-    console.log(currentNote)
     const bookMarkHandler = () => {
         dispatch(updateBookMark({
             bookmark: note.bookmark ? 0 : 1,
@@ -96,6 +96,7 @@ export default function Content() {
                         <>
                             <ErrorBoundary FallbackComponent={ErrorFallback}>
 
+                                {/*<Documents/>*/}
                                 <div className={"px-3 my-4"}>
                                     <div className={"flex"}>
                                         <div className={"text-sm text-gray-700 dark:text-gray-400"}>Updated: <Moment calendar={momentConfig}>{note && note.updated_at}</Moment>

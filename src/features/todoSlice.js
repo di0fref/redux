@@ -44,7 +44,6 @@ export const getAll = createAsyncThunk(
 export const toggleTodoCompleted = createAsyncThunk(
     'todo/toggleTodoCompleted',
     async (todo, thunkAPI) => {
-        console.log(todo)
         return await http.put(apiConfig.url + "/tasks/" + todo.id, {
             completed: todo.completed ? 0 : 1
         }).then(response => response.data)
