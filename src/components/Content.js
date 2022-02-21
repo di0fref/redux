@@ -92,32 +92,32 @@ export default function Content() {
 
             <div className={"flex justify-center p-4 overflow-y-auto editor-wrapper "}>
                 <div className={"max-w-[65ch] editor print:w-full print:text-black"}>
-                    {currentNote ?
+                    {/*{currentNote ?*/}
                         <>
                             <ErrorBoundary FallbackComponent={ErrorFallback}>
 
-                                {/*<Documents/>*/}
-                                <div className={"px-3 my-4"}>
-                                    <div className={"flex"}>
-                                        <div className={"text-sm text-gray-700 dark:text-gray-400"}>Updated: <Moment calendar={momentConfig}>{note && note.updated_at}</Moment>
-                                        </div>
-                                    </div>
-                                </div>
+                                <Documents/>
+                                {/*<div className={"px-3 my-4"}>*/}
+                                {/*    <div className={"flex"}>*/}
+                                {/*        <div className={"text-sm text-gray-700 dark:text-gray-400"}>Updated: <Moment calendar={momentConfig}>{note && note.updated_at}</Moment>*/}
+                                {/*        </div>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
 
-                                <TextareaAutosize
-                                    readOnly={note && note.locked || note && note.deleted ? true : false}
-                                    onBlur={titleChangeHandler}
-                                    maxLength="100"
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    placeholder={"Give me a title"}
-                                    value={title}
-                                    className={"resize-none font-extrabold tracking-tight text-gray-800 dark:text-gray-300  bg-transparent px-3 w-full text-4xl border-0 focus:outline-none focus:ring-0"}
-                                />
-                                <div key={"Tiptap"}><Tiptap/></div>
+                                {/*<TextareaAutosize*/}
+                                {/*    readOnly={note && note.locked || note && note.deleted ? true : false}*/}
+                                {/*    onBlur={titleChangeHandler}*/}
+                                {/*    maxLength="100"*/}
+                                {/*    onChange={(e) => setTitle(e.target.value)}*/}
+                                {/*    placeholder={"Give me a title"}*/}
+                                {/*    value={title}*/}
+                                {/*    className={"resize-none font-extrabold tracking-tight text-gray-800 dark:text-gray-300  bg-transparent px-3 w-full text-4xl border-0 focus:outline-none focus:ring-0"}*/}
+                                {/*/>*/}
+                                {/*<div key={"Tiptap"}><Tiptap/></div>*/}
                             </ErrorBoundary>
                         </>
 
-                        : <div className={"mt-60"}><NoDocumentOpen/></div>}
+                        {/*: <div className={"mt-60"}><NoDocumentOpen/></div>}*/}
 
                 </div>
             </div>

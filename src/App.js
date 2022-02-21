@@ -16,6 +16,8 @@ import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {getAll} from "./features/todoSlice";
 import {fetchTree} from "./features/treeSlice";
+import Documents from "./components/Documents";
+import Docs from "./components/Docs";
 
 
 function App() {
@@ -58,6 +60,10 @@ function App() {
 
                         <Route exact path={"/app/tasks"} element={<Todo/>}/>
                         <Route exact path={"/app/tasks/list/:list_id"} element={<Todo/>}/>
+
+                        <Route exact path={"/app/doc"} element={<Docs/>}/>
+                        <Route exact path={"/app/doc/folder/:folder_id"} element={<Docs/>}/>
+
 
                     </Route>
                     <Route exact path={"/login"} element={<Login/>}/>

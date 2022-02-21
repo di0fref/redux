@@ -62,7 +62,7 @@ export default function AddTodoButton() {
             <div className={"flex items-center"}>
                 <button className={"bg-indigo-500 hover:bg-indigo-700 rounded rounded-3xl px-5 py-2 flex items-center"} onClick={handleModalOpen}>
                     <span><BiPlus className={"text-white font-bold h-5 w-5"}/></span>
-                    <span className={"text-white text-sm font-medium"}>Add task</span>
+                    <span className={"text-white text-sm font-medium"}>Task</span>
                 </button>
             </div>
             <Modal open={modalOpen} onClose={handleModalClose}

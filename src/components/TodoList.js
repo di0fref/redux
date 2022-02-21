@@ -59,19 +59,19 @@ export default function TodoList() {
                     <ThemeSwitcher/>
                 </div>
             </div>
-            <div className={"m-auto w-full overflow-hidden mb-4"}>
+            <div className={"m-auto mb-4 overflow-y-auto editor-wrapper"}>
                 <div className={"flex items-center gap-x-8 border-b-2_ _border-gray-800 px-10 py-[1.27em] text-sm font-bold"}>
                     <button className={`px-4 py-1 rounded rounded-3xl ${status === null ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium`} onClick={() => setStatus(null)}>All</button>
                     <button className={`px-4 py-1 rounded rounded-3xl ${status === false ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium`} onClick={() => setStatus(false)}>Active</button>
                     <button className={`px-4 py-1 rounded rounded-3xl ${status ? "dark:bg-indigo-500 bg-indigo-500 text-white" : "dark:text-gray-200 text-gray-600"} hover:underline font-medium `} onClick={() => setStatus(true)}>Completed</button>
                 </div>
 
-                <div className={"m-0 my-4 p-0 list-none w-full dark:text-gray-200 text-gray-700 border-b dark:border-b-gray-800"}>
+                <div className={"m-0 my-4 p-0 list-none dark:text-gray-200 text-gray-700 border-b dark:border-b-gray-800"}>
 
                     <div className={"flex flex-col md:flex-row md:items-center md:justify-between justify-start mb-4"}>
                         <div className={"px-10"}>
                             <div className={"font-bold text-3xl"}>Tasks</div>
-                            <div className={" text-sm text-gray-400 dark:text-gray-400"}>{remaining ? remaining + " remaining tasks" : "All task are completed"}</div>
+                            <div className={"text-sm text-gray-400 dark:text-gray-400"}>{remaining ? remaining + " remaining tasks" : "All task are completed"}</div>
 
                         </div>
 
@@ -119,17 +119,16 @@ const SortableItem = SortableElement(({todo, index}) => {
     if (todo.type === "section") {
         return (
             <>
-                <div onClick={toggleSectionModal} className={"h-12 hover:bg-gray-100 bg-gray-50 dark:bg-gray-800/80 dark:hover:bg-white/5 w-full cursor-pointer"} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
-                    <div className={"flex h-full items-center gap-x-2 border-t dark:border-gray-800  pr-9"}>
+                <div onClick={toggleSectionModal} className={"h-14 hover:bg-gray-100 bg-gray-50 dark:bg-gray-800/80 dark:hover:bg-white/5 w-full cursor-pointer"} onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}>
+                    <div className={"flex h-full items-center gap-x-2 border-t dark:border-gray-800 pr-9"}>
                         <DragHandle/>
-                        <div className={`font-medium text-[16px] w-full text-sm text-left`}>{todo.name}</div>
+                        <div className={`font-semibold text-base w-full text-sm text-left`}>{todo.name}</div>
                     </div>
                 </div>
                 <EditSectionButton canShow={showSectionModal} updateModalState={toggleSectionModal} todoId={todo.id}/>
             </>
         )
     }
-
 
     return (
 
@@ -142,7 +141,7 @@ const SortableItem = SortableElement(({todo, index}) => {
                     <BiCheckCircle className={`${todo.completed ? "text-indigo-500" : "text-gray-400"} w-6 h-6`}/>
                 </button>
                 <button onClick={toggleModal} className={`py-5 ${todo.completed ? "text-gray-400 dark:text-gray-600" : "text-gray-900 dark:text-gray-300"} w-full text-sm text-left flex items-center`}>
-                    <span className={"flex-auto mr-2 "}>{todo.name}</span>
+                    <span className={"flex-auto mr-2"}>{todo.name}</span>
                     <span className={"whitespace-nowrap ml-auto text-xs text-gray-400 "}>
                         {moment(todo.due).isValid() ?
                             <Moment calendar={taskMomentConfig(todo.due)}>{todo.due}</Moment> : null}
