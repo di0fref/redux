@@ -127,7 +127,7 @@ export default function Sidebar() {
                 </div>
                 <div className={"mb-2"}><Bookmarks/></div>
 
-                <Link to={`/app/docs`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
+                <Link to={`/app/doc`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
                     <div className={""}>
                         <BiFile className={"h-6 w-6"}/>
                     </div>
@@ -136,11 +136,11 @@ export default function Sidebar() {
                     </div>
                 </Link>
                 <div className={`${open ? "block" : "hidden"} ml-4`}>
-                    {Object.entries(tree).map(([key, item]) => {
-                        return (
-                            <SidebarItem item={item} key={key} depth={0} open={allOpen}/>
-                        )
-                    })}
+                    {/*{Object.entries(tree).map(([key, item]) => {*/}
+                    {/*    return (*/}
+                    {/*        <SidebarItem item={item} key={key} depth={0} open={allOpen}/>*/}
+                    {/*    )*/}
+                    {/*})}*/}
                 </div>
 
                 <div className={"mt-12"}><Shared/></div>

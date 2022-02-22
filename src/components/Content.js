@@ -57,7 +57,7 @@ export default function Content() {
     }
 
     useEffect(() => {
-        setTitle(note && note.name || "")
+        setTitle(note && (note.name || ""))
         ReactTooltip.rebuild()
     }, [currentNote])
 
@@ -92,7 +92,7 @@ export default function Content() {
 
             <div className={"flex justify-center p-4 overflow-y-auto editor-wrapper "}>
                 <div className={"max-w-[65ch] editor print:w-full print:text-black"}>
-                    {/*{currentNote ?*/}
+                    {currentNote ?
                         <>
                             <ErrorBoundary FallbackComponent={ErrorFallback}>
 
@@ -116,7 +116,7 @@ export default function Content() {
                             </ErrorBoundary>
                         </>
 
-                        {/*: <div className={"mt-60"}><NoDocumentOpen/></div>}*/}
+                        : <div className={"mt-60"}><NoDocumentOpen/></div>}
 
                 </div>
             </div>
