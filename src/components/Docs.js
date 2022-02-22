@@ -36,7 +36,7 @@ export default function Docs() {
             <div className={`${sidebar ? "ml-0" : "-ml-72"} z-50  transition-all absolute md:relative w-72 h-screen overflow-y-auto md:h-full bg-gray-900 bg-gray-900 text-gray-300 flex-shrink-0 `}>
                 <Sidebar/>
             </div>
-            <div className={"flex-grow bg-white dark:bg-gray-900"}>
+            <div className={"flex-grow bg-gray-100 dark:bg-gray-900"}>
                 <Documents/>
             </div>
             <div onClick={() => dispatch(setSidebarOpen(false))} className={`${sidebar ? "visible md:hidden" : "hidden"} fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full`} id="my-modal"/>

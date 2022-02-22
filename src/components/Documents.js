@@ -13,7 +13,7 @@ import {FaArrowCircleLeft} from "react-icons/fa";
 
 function Folder({item}) {
     return (
-        <Link to={"/app/doc/folder/" + item.id} className={"h-32 w-32 flex flex-col bg-gray-50 shadow dark:bg-gray-800 items-center justify-center rounded rounded-2xl "}>
+        <Link to={"/app/doc/folder/" + item.id} className={"h-32 w-32 flex flex-col bg-white shadow dark:bg-gray-800 items-center justify-center rounded rounded-2xl "}>
             <FcFolder className={"h-12 w-12 text-yellow-400_"}/>
             <div className={"font-medium text-gray-600 dark:text-gray-200 text-sm"}>{item.name}</div>
             <div className={"text-xs"}>{item.documents && item.documents.length} files</div>
@@ -32,6 +32,10 @@ function Document({item}) {
     )
 }
 
+function Bread() {
+
+}
+
 export default function Documents() {
 
     const params = useParams()
@@ -48,18 +52,21 @@ export default function Documents() {
 
     const selectDocumentsInRootFolder = createSelector(
         (state) => state.tree,
-        (tree) => Object.values(tree).filter(folder => folder).map(folder => folder.documents)[0]
+        (tree) => tree.documents
     )
 
-    const selectFolder = createSelector(
+    const selectRootFolder = createSelector(
         (state) => state.tree,
         (tree) => Object.values(tree).filter(folder => folder)
     )
 
-    const rootFolder = useSelector(state => selectFolder(state))
+    const rootFolder = useSelector(state => selectRootFolder(state))
     const subFolder = useSelector(state => selectItemsInFolder(state))
+
     const docs = useSelector(state => selectDocumentsInFolder(state))
     const rootDocs = useSelector(state => selectDocumentsInRootFolder(state))
+
+    const [breadCrumb, setBredCrumb] = useState(["Documents"]);
 
     const [folder, setFolder] = useState(null)
     const [documents, setDocuments] = useState(null)
@@ -68,19 +75,76 @@ export default function Documents() {
     const dispatch = useDispatch();
     const sidebar = useSelector((state) => state.side.sidebar)
     const tree = useSelector(state => state.tree)
+    const object = {
+        id: "1",
+        name: "a",
+        items: [
+            {
+                id: "2",
+                name: "b",
+                items: [
+                    {
+                        id: "3",
+                        name: "c"
+                    },
+                    {
+                        id: "5",
+                        name: "c"
+                    }
+                ]
+            },
+            {
+                id: "4",
+                name: "d"
+            }
+        ]
+    };
+    const getPath = (obj, id, paths = []) => {
+        if (obj.id == id) return [{name: obj.name, id: obj.id}];
+        if (obj.items && obj.items.length) {
+            paths.push({name: obj.name, id: obj.id});
+            let found = false;
+            obj.items.forEach(child => {
+                const temPaths = getPath(child, id);
+                if (temPaths) {
+                    paths = paths.concat(temPaths);
+                    found = true;
+                }
+            });
+            !found && paths.pop();
+            return paths;
+        }
+        return null;
+    };
 
+    const bread = (item) => {
+        return <Link to={"#"}>{item.name}</Link>
+    }
+    // useEffect(() => {
+    //     setFolder(subFolder)
+    // }, [])
 
     useEffect(() => {
-        setFolder(subFolder)
-    }, [])
+        // console.log(breadCrumb)
+    }, [breadCrumb])
 
     useEffect(() => {
+
         if (params.folder_id) {
             setFolder(subFolder)
             setDocuments(docs)
+
+            setBredCrumb(getPath({
+                name: "Documents",
+                id: 0,
+                items: [...tree]
+            }, params.folder_id))
+
+            console.log(breadCrumb)
         } else {
             setFolder(rootFolder)
             setDocuments(rootDocs)
+            setBredCrumb(["Documents"])
         }
     }, [params.folder_id, tree])
 
@@ -97,18 +161,22 @@ export default function Documents() {
                     <ThemeSwitcher/>
                 </div>
             </div>
-            <div className={"flex justify-center p-4 overflow-y-auto editor-wrapper text-slate-500 dark:text-gray-200 "}>
-                <div className={"max-w-[65ch] w-full_ px-12 editor print:w-full print:text-black"}>
-                    <div className={"mb-6"}>
+            <div className={"flexjustify-center overflow-y-auto editor-wrapper text-slate-500 dark:text-gray-200 "}>
+                <div className={"w-full editor print:w-full print:text-black bg-white border-b border-gray-200 "}>
+                    <div className={"mb-4 px-12 pt-6"}>
                         <div className={"text-3xl font-bold text-gray-600 dark:text-white mb-1"}>Documents</div>
-                        <div className={"text-md text-gray-600 dark:text-white"}>6 folder, 56 files</div>
+                        <div className={"text-md text-gray-600 dark:text-white"}>
+                        </div>
                     </div>
-
-                    <button className={"gap-x-2 mb-4 flex items-center"} onClick={() => navigate(-1)}>
-                        <div><FaArrowCircleLeft/></div>
-                        <div>Back</div>
-                    </button>
-
+                    <div className={"text-sm px-12 pb-6"}>
+                        {breadCrumb.map(item => bread(item))}//.join(" / ")}
+                    </div>
+                    {/*<button className={"gap-x-2 px-12 flex items-center pb-4"} onClick={() => navigate(-1)}>*/}
+                    {/*    <div><FaArrowCircleLeft/></div>*/}
+                    {/*    <div>Back</div>*/}
+                    {/*</button>*/}
+                </div>
+                <div className={"px-12 mt-8"}>
                     <div className={"text-base font-medium mb-4 text-gray-600 dark:text-white"}>Folders</div>
                     <div className={"flex flex-wrap gap-4"}>
 
@@ -119,15 +187,18 @@ export default function Documents() {
                         })}
 
                     </div>
-                    <div className={"text-base font-medium mb-4 text-gray-600 dark:text-white mt-6"}>Documents</div>
-                    <div className={"flex flex-wrap gap-4"}>
 
-                        {documents && documents.map((item, index) => {
-                            return (
-                                <Document item={item} key={index}/>
-                            )
-                        })}
-                    </div>
+                    {documents && documents.length ?
+                        <>
+                            <div className={"text-base font-medium mb-4 text-gray-600 dark:text-white mt-6"}>Documents</div>
+                            <div className={"flex flex-wrap gap-4"}>
+                                {documents && documents.map((item, index) => {
+                                    return (
+                                        <Document item={item} key={index}/>
+                                    )
+                                })}
+                            </div>
+                        </> : null}
                 </div>
             </div>
         </>
