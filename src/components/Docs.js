@@ -17,8 +17,7 @@ export default function Docs() {
 
     useEffect(() => {
         ReactTooltip.rebuild()
-        dispatch(setCurrentFolder("tasks"))
-        dispatch(getAll())
+        dispatch(setCurrentFolder("documents"))
     }, [])
 
     useEffect(() => {

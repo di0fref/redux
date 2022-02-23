@@ -10,20 +10,17 @@ import ReactTooltip from "react-tooltip";
 import SharedFile from "./components/SharedFile"
 import SignUp from "./components/SignUp";
 import Todo from "./components/Todo";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {fetchAllNotes} from "./features/noteSlice";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
-import {getAll} from "./features/todoSlice";
-import {fetchTree} from "./features/treeSlice";
-import Documents from "./components/Documents";
 import Docs from "./components/Docs";
 
 
 function App() {
     const [user, setUser] = useState(null)
     const auth = getAuth();
-
+    const layout = useSelector(state => state.side.docView)
     onAuthStateChanged(auth, (user) => {
         if (user) {
             setUser(user)
@@ -61,8 +58,8 @@ function App() {
                         <Route exact path={"/app/tasks"} element={<Todo/>}/>
                         <Route exact path={"/app/tasks/list/:list_id"} element={<Todo/>}/>
 
-                        <Route exact path={"/app/doc"} element={<Docs/>}/>
-                        <Route exact path={"/app/doc/folder/:folder_id"} element={<Docs/>}/>
+                        <Route exact path={"/app/doc"} element={layout==="col"?<Docs/>:<Main/>}/>
+                        <Route exact path={"/app/doc/folder/:folder_id"} element={layout==="col"?<Docs/>:<Main/>}/>
 
 
                     </Route>

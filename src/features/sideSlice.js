@@ -1,7 +1,8 @@
 import {createSlice} from "@reduxjs/toolkit";
 const initialState = {
     sidebar: true,
-    notelist: true
+    notelist: true,
+    docView: "grid"
 }
 
 export const sideSlice = createSlice({
@@ -14,9 +15,12 @@ export const sideSlice = createSlice({
         setNotelistOpen: (state, action) => {
             state.notelist = action.payload
         },
+        setDocView: (state, action) => {
+            state.docView = action.payload
+        }
     },
 
 })
-export const {setSidebarOpen, setNotelistOpen} = sideSlice.actions
+export const {setSidebarOpen, setNotelistOpen, setDocView} = sideSlice.actions
 
 export default sideSlice.reducer

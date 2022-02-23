@@ -6,7 +6,7 @@ import {updateBookMark, updateLock, updateNoteTitle} from "../features/noteSlice
 import {TextareaAutosize} from "@mui/material";
 import NoDocumentOpen from "./NoDocumentOpen";
 import {BiLock, BiMenu} from "react-icons/bi";
-import {setSidebarOpen} from "../features/sideSlice";
+import {setDocView, setSidebarOpen} from "../features/sideSlice";
 import {FaRegStar, FaStar} from "react-icons/fa";
 import {momentConfig} from "../config/config";
 import Moment from "react-moment";
@@ -18,6 +18,7 @@ import Tiptap from "./Tiptap";
 import {ErrorBoundary} from "react-error-boundary";
 import ErrorFallback from "./ErrorFallback";
 import Documents from "./Documents";
+import {RiLayoutGridLine, RiLayoutLeftLine} from "react-icons/ri";
 
 export default function Content() {
 
@@ -68,6 +69,10 @@ export default function Content() {
                         onClick={() => dispatch(setSidebarOpen(!sidebar))}>
                     <BiMenu className={"h-6 w-6"}/>
                 </button>
+                       <div className={"flex items-center gap-x-2"}>
+                            <button onClick={() => dispatch(setDocView("grid"))} className={""} data-tip={"Column layout"}><RiLayoutLeftLine className={"h-6 w-6"}/></button>
+                            <button onClick={() => dispatch(setDocView("col"))} className={""} data-tip={"Grid layout"}><RiLayoutGridLine className={"h-6 w-6"}/></button>
+                        </div>
                 {currentNote ?
                     <div className={"px-3 my-4 w-full"}>
                         <div className={"flex justify-end"}>

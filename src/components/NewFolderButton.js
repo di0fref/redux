@@ -33,7 +33,7 @@ export default function NewFolderButton(props) {
             })).then((result) => {
                 dispatch(fetchTree())
                 props.opelAll()
-                navigate(`/app/docs/folder/${result.payload.id}`)
+                // navigate(`/app/docs/folder/${result.payload.id}`)
                 setFolderName("")
                 handleModalClose()
                 toast.success("Folder created")

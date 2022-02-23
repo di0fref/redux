@@ -40,7 +40,7 @@ function SidebarItem(props) {
                     <div className={"mr-2 flex items-center"}><BiFolder className={"h-5 w-5"}/></div>
                     <div className={"text-sm font-medium text-menu"}>{props.item.name}</div>
                     <button className={"text-gray-500 w-5 h-5 hover:bg-indigo-500 hover:text-white rounded flex items-center justify-center ml-auto"} onClick={chevronClicked}>
-                        {(Object.keys(props.item.items).length)
+                        {props.item.items&&(Object.keys(props.item.items).length)
                             ? open
                                 ? <div><FaChevronDown className={"w-3 h-3"}/></div>
                                 : <div><FaChevronRight className={"w-3 h-3"}/></div>
@@ -131,16 +131,16 @@ export default function Sidebar() {
                     <div className={""}>
                         <BiFile className={"h-6 w-6"}/>
                     </div>
-                    <div className={"ml-3 font-medium text-menu"}>All documents</div>
+                    <div className={"ml-3 font-medium text-menu"}>Documents</div>
                     <div className={"ml-auto"}>
                     </div>
                 </Link>
                 <div className={`${open ? "block" : "hidden"} ml-4`}>
-                    {/*{Object.entries(tree).map(([key, item]) => {*/}
-                    {/*    return (*/}
-                    {/*        <SidebarItem item={item} key={key} depth={0} open={allOpen}/>*/}
-                    {/*    )*/}
-                    {/*})}*/}
+                    {Object.entries(tree).map(([key, item]) => {
+                        return (
+                            <SidebarItem item={item} key={key} depth={0} open={allOpen}/>
+                        )
+                    })}
                 </div>
 
                 <div className={"mt-12"}><Shared/></div>
