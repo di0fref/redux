@@ -27,7 +27,8 @@ export default function Tiptap() {
         (state) => state.notes,
         (notes) => Object.values(notes).find(note => note.id == currentNote)
     )
-    const note = useSelector(selectNote);
+    const note = useSelector(state => selectNote(state));
+
     const dispatch = useDispatch();
 
     const editor = useEditor({
@@ -50,7 +51,7 @@ export default function Tiptap() {
                 class: 'prose focus:outline-none dark:prose-invert p-4 max-w-[65ch] print:text-black',
             },
         },
-        content: note.text?JSON.parse(note.text):"",
+        content: note && note.text && JSON.parse(note.text),
         // editable: note.locked,
     })
 
@@ -79,8 +80,8 @@ export default function Tiptap() {
 
 
                 <button data-tip={"Heading 1"}
-                    onClick={() => editor.chain().focus().toggleHeading({level: 1}).run()}
-                    className={editor.isActive('heading', {level: 1}) ? 'is-active' : ''}
+                        onClick={() => editor.chain().focus().toggleHeading({level: 1}).run()}
+                        className={editor.isActive('heading', {level: 1}) ? 'is-active' : ''}
                 >
                     <div className={"flex items-center"}>
                         <FaHeading/>

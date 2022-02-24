@@ -26,16 +26,20 @@ export default function Main() {
     }, [])
 
     useEffect(() => {
-        if(params.folder_id){
+        if (params.folder_id) {
             dispatch(setCurrentFolder(params.folder_id))
-        }
-        else{
+        } else {
             dispatch(setCurrentFolder("docs"))
         }
-        if(!params.note_id)
-        dispatch(setCurrentNote(null))
 
-    }, [params.folder_id])
+    }, [params.folder_id,])
+
+    // useEffect(() => {
+    //     console.log(params);
+    //     dispatch(setCurrentNote(params.note_id))
+    // }, [params.note_id])
+
+
     useEffect(() => {
         function handleResize() {
             setWindowSize(window.innerWidth)
@@ -43,33 +47,23 @@ export default function Main() {
                 (window.innerWidth >= 768)
             ))
         }
+
         window.addEventListener('resize', handleResize)
     })
     return (
         <div className={`flex h-screen bg-white dark:bg-gray-900_ `}>
-            <div className={`print:hidden flex ${sidebar ? "ml-0" : "-ml-72"} transition-all absolute md:relative z-10 w-full md:w-auto`}>
-                <div className={`${sidebar ? "ml-0" : "md:ml-0 -ml-72"} md:w-72 w-1/2 h-screen overflow-y-auto md:h-full bg-gray-900 bg-gray-900 text-gray-300 flex-shrink-0 `}>
+            {/*<div className={`print:hidden flex ${sidebar ? "ml-0" : "-ml-72"} transition-all absolute md:relative z-10 w-full md:w-auto`}>*/}
+                <div className={`${sidebar ? "block" : "hidden"} absolute md:relative z-10 md:w-72 w-1/2 h-screen overflow-y-auto md:h-full bg-gray-900 bg-gray-900 text-gray-300 flex-shrink-0 `}>
                     <Sidebar/>
                 </div>
-                {/*<div className={`${notelist ? "ml-0" : "md:ml-0 -ml-80"} md:w-80 w-1/2 h-screen md:h-full bg-white dark:bg-gray-800 flex-shrink-0 `}>*/}
-                {/*    <Notelist/>*/}
-                {/*</div>*/}
-            </div>
+                <div className={`${notelist ? "block" : "hidden"} absolute md:relative z-10 md:w-80 w-1/2 h-screen md:h-full bg-white dark:bg-gray-800 flex-shrink-0 `}>
+                    <Notelist/>
+                </div>
+            {/*</div>*/}
             <div className={"flex-grow h-full bg-white dark:bg-gray-900 editor"}>
                 <Content/>
             </div>
         </div>
-        // <div className={`flex h-screen bg-white dark:bg-gray-900_ `}>
-        //     <div className={`${sidebar ? "ml-0" : "-ml-72"} z-50  transition-all absolute md:relative w-72 h-screen overflow-y-auto md:h-full bg-gray-900 bg-gray-900 text-gray-300 flex-shrink-0 `}>
-        //         <Sidebar/>
-        //     </div>
-        //     <div
-        //         // style={{backgroundColor: "rgb(241 245 249)"}}
-        //         className={"flex-grow bg-gray-100 dark:bg-gray-900"}>
-        //         <Content/>
-        //     </div>
-        //     <div onClick={() => dispatch(setSidebarOpen(false))} className={`${sidebar ? "visible md:hidden" : "hidden"} fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full`} id="my-modal"/>
-        // </div>
 
     )
 }

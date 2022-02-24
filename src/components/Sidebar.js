@@ -2,8 +2,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {fetchTree} from "../features/treeSlice";
 import {FaChevronDown, FaChevronRight, FaUser} from "react-icons/fa";
-import {Link} from "react-router-dom";
-import {BiFile, BiFolder} from "react-icons/bi";
+import {Link, useNavigate} from "react-router-dom";
+import {BiFile, BiFolder, BiMenu} from "react-icons/bi";
 import Bookmarks from "./Bookmarks";
 import Usermenu from "./menus/Usermenu";
 import {getAuth} from "firebase/auth";
@@ -15,49 +15,39 @@ import Recent from "./Recent";
 import {CgFileDocument} from "react-icons/cg";
 import {setCurrentFolder} from "../features/currentFolderSlice";
 import {setCurrentNote} from "../features/currentNoteSlice";
+import {setSidebarOpen} from "../features/sideSlice";
 
 function SidebarItem(props) {
 
     const currentFolder = useSelector((state) => state.currentFolder)
     const [open, setOpen] = useState(true)
     const dispatch = useDispatch();
-
+    const navigator = useNavigate()
     const chevronClicked = (e) => {
         e.preventDefault()
         e.stopPropagation()
         setOpen(!open)
     }
 
-    const folderClickHandle = () => {
-        dispatch(setCurrentFolder(props.item.id))
-        dispatch(setCurrentNote(null))
-    }
 
     useEffect(() => {
         dispatch(fetchTree())
     }, [])
 
-    const link = props.item.type !== "note"?`/app/docs/folder/${props.item.id}`:`/app/docs/folder/${props.item.folder_id}/note/${props.item.id}`;
-
     return (
         <>
-            <Link to={link} className={"flex w-full my-1"}
-                  onClick={props.item.type === "note"
-                      ? () => dispatch(setCurrentNote(props.item.id))
-                      : () => folderClickHandle()
-                }
-            >
+            <Link to={`/app/docs/folder/${props.item.id}`} className={"flex w-full my-1"}>
                 <div className=
-                         {`sidebar-item ${currentFolder.id === props.item.id ? "bg-gray-800 dark:bg-gray-800 text-white " : ""} flex items-center rounded  py-2 w-full px-2`}
+                         {`cursor-pointer sidebar-item ${currentFolder.id === props.item.id ? "bg-gray-800 dark:bg-gray-800 text-white " : ""} flex items-center rounded  py-2 w-full px-2`}
                      style={{
-                         marginLeft: props.depth * 0.8
+                         marginLeft: props.depth * 1.6
                      }}>
 
                     <div className={"mr-2 flex items-center"}>
-                        {props.item.type !== "note" ? <BiFolder className={"h-5 w-5"}/> : <CgFileDocument/>}
+                        <BiFolder className={"h-5 w-5"}/>
                     </div>
 
-                    <div className={"text-sm font-medium text-menu"}>{props.item.name}</div>
+                    <div className={"text-sm font-medium text-menu"}>{props.item.name ?? "Untitled"}</div>
                     <button className={"text-gray-500 w-5 h-5 hover:bg-indigo-500 hover:text-white rounded flex items-center justify-center ml-auto"} onClick={chevronClicked}>
                         {props.item.items && (Object.keys(props.item.items).length)
                             ? open
@@ -99,6 +89,7 @@ export default function Sidebar() {
         dispatch(fetchTree())
         opelAll()
     }, [])
+    const sidebar = useSelector((state) => state.side.sidebar)
 
 
     const opelAll = () => {
@@ -115,6 +106,10 @@ export default function Sidebar() {
                 <div className={"mr-4"}>
                     <Usermenu/>
                 </div>
+                <button data-tip={"Toggle sidebar"} className={"z-50 ml-2 dark:text-gray-400 dark:hover:text-white text-gray-900 hover:text-gray-700 absolute left-60"}
+                        onClick={() => dispatch(setSidebarOpen(!sidebar))}>
+                    <BiMenu className={"h-6 w-6"}/>
+                </button>
             </div>
 
             <div className={"h-40 flex flex-col items-center justify-center mt-2_ mb-4"}>
@@ -145,7 +140,7 @@ export default function Sidebar() {
 
                 <div className={"mb-2"}><Bookmarks/></div>
 
-                <Link to={`/app/doc`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
+                <Link to={`/app/docs`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
                     <div className={""}>
                         <BiFile className={"h-6 w-6"}/>
                     </div>

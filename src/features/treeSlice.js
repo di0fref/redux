@@ -15,7 +15,7 @@ export const addFolder = createAsyncThunk(
     'tree/addFolder',
     async (data, thunkAPI) => {
         return await http.post(apiConfig.url + "/folders", {
-                parent_id: (typeof data.parent_id == "number") ? data.parent_id : 0,
+                parent_id: (typeof data.parent_id == "string") ? data.parent_id : 0,
                 name: data.name
             }).then(response => response.data)
     }

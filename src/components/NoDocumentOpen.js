@@ -3,6 +3,8 @@ import {BiFile} from "react-icons/bi";
 import {useDispatch, useSelector} from "react-redux";
 import {addNote} from "../features/noteSlice";
 import {useNavigate} from "react-router";
+import {setCurrentNote} from "../features/currentNoteSlice";
+import {fetchTree} from "../features/treeSlice";
 
 export default function NoDocumentOpen() {
     const currentFolder = useSelector((state) => state.currentFolder)
@@ -11,7 +13,9 @@ export default function NoDocumentOpen() {
 
     const newDocumentHandler = () => {
         dispatch(addNote(currentFolder.id)).then((result) => {
-           navigator(`/app/docs/folder/${currentFolder.id}/note/${result.payload.id}`)
+            dispatch(setCurrentNote(result.payload.id))
+            dispatch(fetchTree())
+            navigator(`/app/docs/folder/${currentFolder.id}/note/${result.payload.id}`)
         })
     }
 

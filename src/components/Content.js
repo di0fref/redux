@@ -6,8 +6,8 @@ import {updateBookMark, updateLock, updateNoteTitle} from "../features/noteSlice
 import {TextareaAutosize} from "@mui/material";
 import NoDocumentOpen from "./NoDocumentOpen";
 import {BiLock, BiMenu} from "react-icons/bi";
-import {setDocView, setSidebarOpen} from "../features/sideSlice";
-import {FaRegStar, FaStar} from "react-icons/fa";
+import {setDocView, setNotelistOpen, setSidebarOpen} from "../features/sideSlice";
+import {FaBars, FaRegStar, FaStar} from "react-icons/fa";
 import {momentConfig} from "../config/config";
 import Moment from "react-moment";
 import ThemeSwitcher from "./ThemeSwitcher";
@@ -21,6 +21,8 @@ import ErrorFallback from "./ErrorFallback";
 export default function Content() {
 
     const sidebar = useSelector((state) => state.side.sidebar)
+    const notelist = useSelector((state) => state.side.notelist)
+
     const currentNote = useSelector((state) => state.currentNote)
     const dispatch = useDispatch();
     const [title, setTitle] = useState("");
@@ -63,14 +65,6 @@ export default function Content() {
     return (
         <div className={"text-slate-500 flex flex-col "}>
             <div className={"print:hidden bg-gray-200 border-b-gray-300/50 dark:bg-gray-800 h-14 flex items-center justify-between border-b dark:border-gray-700/50"}>
-                <button data-tip={"Toggle sidebar"} className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"}
-                        onClick={() => dispatch(setSidebarOpen(!sidebar))}>
-                    <BiMenu className={"h-6 w-6"}/>
-                </button>
-                       {/*<div className={"flex items-center gap-x-2"}>*/}
-                       {/*     <button onClick={() => dispatch(setDocView("grid"))} className={""} data-tip={"Column layout"}><RiLayoutLeftLine className={"h-6 w-6"}/></button>*/}
-                       {/*     <button onClick={() => dispatch(setDocView("col"))} className={""} data-tip={"Grid layout"}><RiLayoutGridLine className={"h-6 w-6"}/></button>*/}
-                       {/* </div>*/}
                 {currentNote ?
                     <div className={"px-3 my-4 w-full"}>
                         <div className={"flex justify-end"}>
@@ -94,6 +88,7 @@ export default function Content() {
             </div>
 
             <div className={"flex justify-center p-4 overflow-y-auto editor-wrapper "}>
+                <button onClick={() => dispatch(setNotelistOpen(!notelist))}><FaBars/></button>
                 <div className={"max-w-[65ch] editor print:w-full print:text-black"}>
                     {currentNote ?
                         <>

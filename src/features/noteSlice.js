@@ -95,6 +95,9 @@ export const noteSlice = createSlice({
                 const existingNote = state.find(note => note.id === id)
                 existingNote.name = name;
                 existingNote.updated_at = updated_at;
+
+                console.log(JSON.parse(JSON.stringify(existingNote)));
+
             })
             .addCase(updateBookMark.fulfilled, (state, action) => {
                 const {id, bookmark, updated_at} = action.payload
