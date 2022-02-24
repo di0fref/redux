@@ -47,19 +47,21 @@ function App() {
                 <Routes>
                     <Route exact path={'/'} element={<PrivateRoute user={user}/>}>
                         <Route path={"/app/docs/folder/:folder_id/note/:note_id"} element={<Main/>}/>
-                        <Route exact path={"/app/docs/folder/:folder_id"} element={<Main/>}/>
+                        <Route exact path={"/app/docs/folder/:folder_id"} element={layout === "col" ? <Docs/> :
+                            <Main/>}/>
                         <Route exact path={"/app/docs/note/:note_id"} element={<Main/>}/>
-                        <Route exact path={"/app/docs/:folder_id"} element={<Main/>}/>
-                        <Route exact path={"/app/docs"} element={<Main/>}/>
+                        <Route exact path={"/app/docs/:folder_id"} element={layout === "col" ? <Docs/> : <Main/>}/>
+                        <Route exact path={"/app/docs"} element={layout === "col" ? <Docs/> : <Main/>}/>
 
                         {/*<Route exact path={"/bookmarks/note/:note_id"} element={<Main/>}/>*/}
-                        <Route exact path={"/"} element={<Main/>}/>
+                        <Route exact path={"/"} element={layout === "col" ? <Docs/> : <Main/>}/>
 
                         <Route exact path={"/app/tasks"} element={<Todo/>}/>
                         <Route exact path={"/app/tasks/list/:list_id"} element={<Todo/>}/>
 
-                        <Route exact path={"/app/doc"} element={layout==="col"?<Docs/>:<Main/>}/>
-                        <Route exact path={"/app/doc/folder/:folder_id"} element={layout==="col"?<Docs/>:<Main/>}/>
+                        <Route exact path={"/app/doc"} element={layout === "col" ? <Docs/> : <Main/>}/>
+                        <Route exact path={"/app/doc/folder/:folder_id"} element={layout === "col" ? <Docs/> :
+                            <Main/>}/>
 
 
                     </Route>

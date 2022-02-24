@@ -96,9 +96,9 @@ export default function EditTodoButton({canShow, updateModalState, todoId}) {
                                                     onClick={deleteTodoHandler}
                                                     className={`${
                                                         active ? 'dark:bg-slate-600 dark:text-gray-200 text-slate-800 bg-gray-200' : 'dark:text-gray-200 text-slate-800'
-                                                    } group flex items-center  w-full px-2 py-2 text-sm cursor-pointer`}>
-                                                    <span className={"mr-4 text-gray-600 dark:text-gray-200"}><BiTrash/></span>
-                                                    <span className={"m3-4"}>Delete task</span>
+                                                    } group flex items-center w-full px-2 py-2 text-sm cursor-pointer`}>
+                                                    <span className={"ml-3 mr-4 text-gray-600 dark:text-gray-200"}><BiTrash/></span>
+                                                    <span className={""}>Delete task</span>
 
                                                 </div>
                                             )}

@@ -63,8 +63,8 @@ export const taskMomentConfig = (date) => ({
 })
 
 export const apiConfig = {
-    // url: "http://localhost:8000/api",
-    url: "http://backend.loc/api",
+    url: "http://localhost:8000/api",
+    // url: "http://backend.loc/api",
 }
 
 export const UNTITLED = "Untitled"

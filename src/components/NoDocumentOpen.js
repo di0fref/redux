@@ -11,7 +11,7 @@ export default function NoDocumentOpen() {
 
     const newDocumentHandler = () => {
         dispatch(addNote(currentFolder.id)).then((result) => {
-           navigator(`/folder/${currentFolder.id}/note/${result.payload.id}`)
+           navigator(`/app/docs/folder/${currentFolder.id}/note/${result.payload.id}`)
         })
     }
 

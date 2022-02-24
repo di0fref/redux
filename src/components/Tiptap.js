@@ -50,7 +50,7 @@ export default function Tiptap() {
                 class: 'prose focus:outline-none dark:prose-invert p-4 max-w-[65ch] print:text-black',
             },
         },
-        content: JSON.parse(note.text),
+        content: note.text?JSON.parse(note.text):"",
         // editable: note.locked,
     })
 

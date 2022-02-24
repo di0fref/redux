@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Link, useHistory, useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useParams} from "react-router";
 import {createSelector} from "reselect";
-import {setDocView, setSidebarOpen} from "../features/sideSlice";
-import {BiFile, BiFolder, BiMenu} from "react-icons/bi";
+import {setSidebarOpen} from "../features/sideSlice";
+import {BiFile, BiMenu} from "react-icons/bi";
 import ThemeSwitcher from "./ThemeSwitcher";
 import {FcFolder} from "react-icons/fc";
 import {setCurrentNote} from "../features/currentNoteSlice";
 import {setCurrentFolder} from "../features/currentFolderSlice";
-import {RiLayoutGridLine, RiLayoutLeftLine} from "react-icons/ri";
+import Moment from "react-moment";
+import {momentConfig} from "../config/config";
 
 
 function Folder({item}) {
@@ -19,7 +20,7 @@ function Folder({item}) {
         <Link onClick={() => dispatch(setCurrentFolder(item.id))} to={"/app/doc/folder/" + item.id} className={"my-1 h-32 w-32 flex flex-col bg-white shadow dark:bg-gray-800 items-center justify-center rounded rounded-2xl "}>
             <FcFolder className={"h-12 w-12 text-yellow-400_"}/>
             <div className={"font-medium text-gray-600 dark:text-gray-200 text-sm"}>{item.name}</div>
-            <div className={"text-xs"}>{item.documents && item.documents.length} files</div>
+            <div className={"text-xs mt-1"}>{item.documents && item.documents.length} files</div>
         </Link>
     )
 }
@@ -28,9 +29,10 @@ function Document({item}) {
     const dispatch = useDispatch();
 
     return (
-        <Link onClick={() => dispatch(setCurrentNote(item.id))} to={"/app/docs/folder/" + item.folder_id + "/note/" + item.id} className={"my-1 h-32 w-32 flex flex-col bg-gray-50 shadow dark:bg-gray-800 items-center justify-center rounded rounded-2xl "}>
+        <Link data-tip={""} onClick={() => dispatch(setCurrentNote(item.id))} to={"/app/docs/folder/" + item.folder_id + "/note/" + item.id} className={"my-1 h-32 w-32 flex flex-col bg-gray-50 shadow dark:bg-gray-800 items-center justify-center rounded rounded-2xl "}>
             <BiFile className={"h-12 w-12 text-gray-400"}/>
             <div className={"font-medium text-gray-600 dark:text-gray-200 text-sm"}>{item.name}</div>
+            <div className={"text-xs mt-1"}><Moment calendar={momentConfig}>{item.updated_at}</Moment></div>
         </Link>
     )
 }
@@ -38,6 +40,7 @@ function Document({item}) {
 export default function Documents() {
 
     const params = useParams()
+    const currentFolder = useSelector((state) => state.currentFolder)
 
     const selectItemsInFolder = createSelector(
         (state) => state.tree,
@@ -96,7 +99,7 @@ export default function Documents() {
     const bread = (item) => {
         let link = (item.id === 0) ? "/app/doc" : "/app/doc/folder/" + item.id
 
-        return <Link to={link}>
+        return <Link to={link} onClick={() => dispatch(setCurrentFolder(item.id))}>
             <span className={"text-blue-500 hover:underline"}>{item.name}</span>
         </Link>
     }
@@ -108,15 +111,15 @@ export default function Documents() {
             setDocuments(docs)
 
             setBreadCrumb(getPath({
-                name: "Documents",
-                id: 0,
+                // name: "Documents",
+                // id: 0,
                 items: Object.values(tree)
             }, params.folder_id))
 
         } else {
             setFolder(rootFolder)
             setDocuments(rootDocs)
-            setBreadCrumb([{name: "Documents", id: 0}])
+            // setBreadCrumb([{name: "Documents", id: 0}])
         }
     }, [params.folder_id, tree])
 
@@ -133,47 +136,45 @@ export default function Documents() {
                     <ThemeSwitcher/>
                 </div>
             </div>
-            <div className={"flexjustify-center overflow-y-auto editor-wrapper text-slate-500 dark:text-gray-200 "}>
-
-
-                <div className={"w-full editor_ print:w-full print:text-black bg-white border-b border-gray-200"}>
-                    <div className={"mb-4 px-12 pt-6  flex justify-between"}>
+            <div className={"overflow-y-auto editor-wrapper dark:text-gray-200  "}>
+                <div className={"w-full print:w-full print:text-black bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800"}>
+                    <div className={"mb-4 px-12 pt-6 flex justify-between"}>
                         <div className={" text-gray-600 dark:text-white mb-1"}>
-                            <p className={"text-3xl font-bold mb-2"}>Documents</p>
-                            <p className={""}>{breadCrumb&&breadCrumb.map(item => bread(item)).reduce((prev, curr) => [prev, ' / ', curr])}</p>
-                        </div>
-                        <div className={"flex items-center gap-x-2"}>
-                            <button onClick={() => dispatch(setDocView("grid"))} className={""} data-tip={"Column layout"}><RiLayoutLeftLine className={"h-6 w-6"}/></button>
-                            <button onClick={() => dispatch(setDocView("col"))} className={""} data-tip={"Grid layout"}><RiLayoutGridLine className={"h-6 w-6"}/></button>
+                            <p className={"text-3xl font-bold mb-2"}>{currentFolder.name}</p>
+                            <p className={""}>{breadCrumb && breadCrumb.map(item => bread(item)).reduce((prev, curr) => [prev, ' / ', curr])}</p>
                         </div>
                     </div>
                 </div>
-                    <div className={"px-12 mt-8"}>
-                        {folder && folder.length ?
-                            <>
-                                <div className={"text-base font-medium mb-4 text-gray-600 dark:text-white"}>Folders</div>
-                                <div className={"flex flex-wrap gap-4"}>
-                                    {folder.map((item, index) => {
-                                        return (
-                                            !Array.isArray(item) && <Folder item={item} key={index}/>
-                                        )
-                                    })}
-                                </div>
-                            </> : null}
 
-                        {documents && documents.length ?
-                            <>
-                                <div className={"text-base font-medium mb-4 text-gray-600 dark:text-white mt-6"}>Documents</div>
-                                <div className={"flex flex-wrap gap-4"}>
-                                    {documents && documents.map((item, index) => {
-                                        return (
-                                            <Document item={item} key={index}/>
-                                        )
-                                    })}
-                                </div>
-                            </> : null}
-                    </div>
+                <div className={"px-12 mt-8"}>
+                    {folder && folder.length ?
+                        <>
+                            <div className={"text-base font-medium mb-4 text-gray-600 dark:text-white"}>Folders</div>
+                            <div className={"flex flex-wrap gap-4"}>
+                                {folder.map((item, index) => {
+                                    return (
+                                        !Array.isArray(item) && <Folder item={item} key={index}/>
+                                    )
+                                })}
+                            </div>
+                        </> : null}
+
+                    {documents && documents.length ?
+                        <>
+                            <div className={"text-base font-medium mb-4 text-gray-600 dark:text-white mt-6"}>Documents</div>
+                            <div className={"flex flex-wrap gap-4"}>
+                                {documents && documents.map((item, index) => {
+                                    return (
+                                        <Document item={item} key={index}/>
+                                    )
+                                })}
+                            </div>
+                        </> : null}
                 </div>
-            </>
-            )
-            }
+
+
+
+            </div>
+        </>
+    )
+}

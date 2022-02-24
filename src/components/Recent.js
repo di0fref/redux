@@ -8,7 +8,7 @@ export default function Recent() {
 
     const [open, setOpen] = useState(false)
     return (
-        <Link to={`/recent`} onClick={() => setOpen(!open)} className={`sidebar-item ${(currentFolder.id === "recent") ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
+        <Link to={`/app/docs/recent`} onClick={() => setOpen(!open)} className={`sidebar-item ${(currentFolder.id === "recent") ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
             <div><BiTime className={"h-6 w-6"}/></div>
             <div className={"ml-3"}>Recent</div>
         </Link>
