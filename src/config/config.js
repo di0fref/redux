@@ -31,7 +31,7 @@ export const getPrioColor = (prio) => {
 
 export const momentConfig = {
     lastDay: '[Yesterday at] HH:mm',
-    sameDay: ' HH:mm',
+    sameDay: 'HH:mm',
     nextDay: '[Tomorrow at] HH:mm',
     lastWeek: '[last] dddd [at] HH:mm',
     nextWeek: 'dddd [at] HH:mm',
@@ -53,7 +53,7 @@ export function conf() {
 
 export const taskMomentConfig = (date) => ({
     sameElse: (date) => {
-        return moment().year() === moment(date).year() ? "MMM DD" : "MMM DD, YYYY"
+        return moment().year() !== moment(date).year() ? "MMM DD" : "MMM DD, YYYY"
     },
     sameDay: '[Today]',
     nextDay: '[Tomorrow]',

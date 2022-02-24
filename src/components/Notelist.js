@@ -90,10 +90,11 @@ function NoteCard(props) {
             dispatch(setSidebarOpen(
                 (window.innerWidth >= 768)
             ))
-             dispatch(setNotelistOpen(
+            dispatch(setNotelistOpen(
                 (window.innerWidth >= 768)
             ))
         }
+
         window.addEventListener('resize', handleResize)
     })
     const clickHandle = () => {
@@ -118,7 +119,8 @@ function NoteCard(props) {
                     if (windowSize < 768) {
                         dispatch(setNotelistOpen(false))
                         dispatch(setSidebarOpen(false))
-                    };
+                    }
+                    ;
                 }}
                   className={`w-full text-left text-sm block px-6 py-6 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700 ${currentNote === note.id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}`}>
                 <div className={"flex justify-between items-center mb-1"}>
@@ -168,11 +170,11 @@ export default function Notelist() {
         (notes) => notes && Object.values(notes)
             .filter(note => (note.folder_id == currentFolder.id && note.deleted !== true))
             .sort(function (a, b) {
-            if (new Date(b.updated_at) > new Date(a.updated_at))
-                return 1;
-            else
-                return -1
-        })
+                if (new Date(b.updated_at) > new Date(a.updated_at))
+                    return 1;
+                else
+                    return -1
+            })
     )
 
 
@@ -280,9 +282,9 @@ export default function Notelist() {
             {/*    /!*    </span>*!/*/}
             {/*    /!*    <input value={term} onChange={(e) => setTerm(e.target.value)} type="search" name="q" className="w-full mr-2 py-2 text-sm dark:text-white text-gray-700 dark:bg-gray-700 rounded-lg pl-10 focus:outline-none focus:bg-white dark:focus:bg-gray-600 focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-500" placeholder="Search..." autoComplete="off"/>*!/*/}
             {/*    /!*</div>*!/*/}
-                <button data-tip={"New document"} className={"mx-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={newDocumentHandler}>
-                    <BiEdit className={"h-5 w-5"}/>
-                </button>
+            {/*    <button data-tip={"New document"} className={"mx-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={newDocumentHandler}>*/}
+            {/*        <BiEdit className={"h-5 w-5"}/>*/}
+            {/*    </button>*/}
             {/*    /!*<button data-tip={"Toggle sidebar"} className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"}*!/*/}
             {/*    /!*        onClick={() => dispatch(setSidebarOpen(!sidebar))}>*!/*/}
             {/*    /!*    <BiMenu className={"h-6 w-6"}/>*!/*/}
@@ -291,7 +293,14 @@ export default function Notelist() {
             {/*        <FaTimes className={"h-5 w-5 text-gray-400 hover:text-gray-200"}/>*/}
             {/*    </button>*/}
             {/*</div>*/}
-            <div className={"border-b dark:border-gray-700/40 dark:text-gray-100 py-8 h-10 text-2xl font-bold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>{currentFolder.name}</div>
+            <div className={"border-b dark:border-gray-700/40 dark:text-gray-100 py-8 h-10 text-2xl font-bold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>
+                <div>{currentFolder.name}</div>
+                <div>
+                    <button data-tip={"New document"} className={"flex items-center ml-3 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={newDocumentHandler}>
+                        <BiEdit className={"h-6 w-6 "}/>
+                    </button>
+                </div>
+            </div>
             <div className={"overflow-y-auto notes"}>
                 {getListType()}
             </div>

@@ -13,6 +13,7 @@ import NewFolderButton from "./NewFolderButton";
 import Todos from "./Todos";
 import Recent from "./Recent";
 import {setCurrentNote} from "../features/currentNoteSlice";
+import ReactTooltip from "react-tooltip";
 
 function SidebarItem(props) {
 
@@ -86,6 +87,9 @@ export default function Sidebar() {
         opelAll()
     }, [])
 
+    useEffect(()=>{
+        ReactTooltip.rebuild()
+    },[currentFolder])
 
     const opelAll = () => {
         setAllOpen(true)

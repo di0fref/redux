@@ -123,7 +123,7 @@ export default function Main() {
                     </div>
                     <div className={"flex-grow h-full_ bg-white dark:bg-gray-900 editor"}>
                         <div className={"w-full bg-indigo-500_ px-2 pt-4"}>
-                            <button  className={"dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={() => dispatch(setNotelistOpen(!notelist))}><BiMenu className={"h-6 w-6"}/>
+                            <button data-tip={"Toggle document list"}  className={"dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={() => dispatch(setNotelistOpen(!notelist))}><BiMenu className={"h-6 w-6"}/>
                             </button>
                         </div>
                         <Content/>
