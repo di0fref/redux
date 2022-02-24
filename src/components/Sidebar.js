@@ -12,28 +12,28 @@ import Shared from "./Shared";
 import NewFolderButton from "./NewFolderButton";
 import Todos from "./Todos";
 import Recent from "./Recent";
+import {setCurrentNote} from "../features/currentNoteSlice";
 
 function SidebarItem(props) {
 
     const currentFolder = useSelector((state) => state.currentFolder)
     const [open, setOpen] = useState(true)
     const dispatch = useDispatch();
-    const navigator = useNavigate()
-    
+
     const chevronClicked = (e) => {
         e.preventDefault()
         e.stopPropagation()
         setOpen(!open)
     }
-
-
     useEffect(() => {
         dispatch(fetchTree())
     }, [])
 
     return (
         <>
-            <Link to={`/app/docs/folder/${props.item.id}`} className={"flex w-full my-1"}>
+            <Link to={`/app/docs/folder/${props.item.id}`} className={"flex w-full my-1 cursor-pointer"} onClick={
+                () => dispatch(setCurrentNote(null))}
+            >
                 <div className=
                          {`cursor-pointer sidebar-item ${currentFolder.id === props.item.id ? "bg-gray-800 dark:bg-gray-800 text-white " : ""} flex items-center rounded  py-2 w-full px-2`}
                      style={{
@@ -131,7 +131,11 @@ export default function Sidebar() {
 
                 <div className={"mb-2"}><Bookmarks/></div>
 
-                <Link to={`/app/docs`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}>
+                <Link to={`/app/docs`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}
+                      onClick={
+                          () => dispatch(setCurrentNote(null))
+                }
+                >
                     <div className={""}>
                         <BiFile className={"h-6 w-6"}/>
                     </div>

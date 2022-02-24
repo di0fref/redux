@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {Link, useNavigate} from "react-router-dom";
 import {useParams} from "react-router";
 import {createSelector} from "reselect";
-import {setSidebarOpen} from "../features/sideSlice";
+import {setDocView, setSidebarOpen} from "../features/sideSlice";
 import {BiFile, BiMenu} from "react-icons/bi";
 import ThemeSwitcher from "./ThemeSwitcher";
 import {FcFolder} from "react-icons/fc";
@@ -11,6 +11,8 @@ import {setCurrentNote} from "../features/currentNoteSlice";
 import {setCurrentFolder} from "../features/currentFolderSlice";
 import Moment from "react-moment";
 import {momentConfig} from "../config/config";
+import {BsLayoutSidebar, BsLayoutThreeColumns} from "react-icons/bs";
+import LayoutButtons from "./LayoutButtons";
 
 
 function Folder({item}) {
@@ -100,7 +102,7 @@ export default function Documents() {
         let link = (item.id === 0) ? "/app/doc" : "/app/doc/folder/" + item.id
 
         return <Link to={link} onClick={() => dispatch(setCurrentFolder(item.id))}>
-            <span className={"text-blue-500 hover:underline"}>{item.name}</span>
+            <span className={"text-indigo-500 hover:underline"}>{item.name}</span>
         </Link>
     }
 
@@ -111,15 +113,15 @@ export default function Documents() {
             setDocuments(docs)
 
             setBreadCrumb(getPath({
-                // name: "Documents",
-                // id: 0,
+                name: "Home",
+                id: 0,
                 items: Object.values(tree)
             }, params.folder_id))
 
         } else {
             setFolder(rootFolder)
             setDocuments(rootDocs)
-            // setBreadCrumb([{name: "Documents", id: 0}])
+            setBreadCrumb([{name: "Home", id: 0}])
         }
     }, [params.folder_id, tree])
 
@@ -133,6 +135,7 @@ export default function Documents() {
                             }}>
                         <BiMenu className={"h-6 w-6"}/>
                     </button>
+                  <LayoutButtons/>
                     <ThemeSwitcher/>
                 </div>
             </div>
@@ -140,8 +143,8 @@ export default function Documents() {
                 <div className={"w-full print:w-full print:text-black bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800"}>
                     <div className={"mb-4 px-12 pt-6 flex justify-between"}>
                         <div className={" text-gray-600 dark:text-white mb-1"}>
-                            <p className={"text-3xl font-bold mb-2"}>{currentFolder.name}</p>
-                            <p className={""}>{breadCrumb && breadCrumb.map(item => bread(item)).reduce((prev, curr) => [prev, ' / ', curr])}</p>
+                            <p className={"text-3xl font-bold mb-1"}>Documents</p>
+                            <p className={"text-sm"}>{breadCrumb && breadCrumb.map(item => bread(item)).reduce((prev, curr) => [prev, ' / ', curr])}</p>
                         </div>
                     </div>
                 </div>

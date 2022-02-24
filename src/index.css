@@ -38,10 +38,12 @@ body {
     overflow-x: hidden;
 }
 
-.notelist {
+.notelist, .content-wrapper {
+    height: calc(100vh - 3.5rem);
+}
+.notes{
     height: calc(100vh - 8rem);
 }
-
 /*.ql-container.ql-snow {*/
 /*    border: none;*/
 /*    height: calc(100vh - 14rem);*/

@@ -2,24 +2,27 @@ import Sidebar from "./Sidebar";
 import Notelist from "./Notelist";
 import Content from "./Content";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import ReactTooltip from "react-tooltip";
 import TodoList from "./TodoList";
 import {setCurrentFolder} from "../features/currentFolderSlice";
 import {setCurrentNote} from "../features/currentNoteSlice";
 import {useParams} from "react-router-dom";
 import {fetchAllNotes, updateBookMark, updateLock} from "../features/noteSlice";
-import {setNotelistOpen, setSidebarOpen} from "../features/sideSlice";
+import {setDocView, setNotelistOpen, setSidebarOpen} from "../features/sideSlice";
 import {BiLock, BiMenu} from "react-icons/bi";
 import {FaBars, FaRegStar, FaStar} from "react-icons/fa";
 import ThemeSwitcher from "./ThemeSwitcher";
 import NoteMenu from "./menus/noteMenu";
 import {createSelector} from "reselect";
+import {BsLayoutSidebar, BsLayoutThreeColumns} from "react-icons/bs";
+import LayoutButtons from "./LayoutButtons";
 
 export default function Main() {
     const sidebar = useSelector((state) => state.side.sidebar)
     const notelist = useSelector((state) => state.side.notelist)
     const currentNote = useSelector((state) => state.currentNote)
+
     const selectNote = createSelector(
         (state) => state.notes,
         (notes) => Object.values(notes).find(note => note.id == currentNote)
@@ -57,6 +60,7 @@ export default function Main() {
                 (window.innerWidth >= 768)
             ))
         }
+
         window.addEventListener('resize', handleResize)
     })
 
@@ -78,14 +82,14 @@ export default function Main() {
         })
     }
     return (
-        <div className={`flex h-screen bg-white dark:bg-gray-900_ `}>
+        <div className={`flex _h-screen bg-white dark:bg-gray-900_ `}>
             <div className={`${sidebar ? "ml-0" : "-ml-72"} transition-all absolute md:relative z-20 md:w-72 w-1/2 h-screen overflow-y-auto md:h-full bg-gray-900 bg-gray-900 text-gray-300 flex-shrink-0 `}>
                 <Sidebar/>
             </div>
 
 
             <div className={"w-full"}>
-                <div className={"print:hidden bg-gray-200 border-b-gray-300/50 dark:bg-gray-800 h-14 flex items-center justify-between border-b dark:border-gray-700/50"}>
+                <div className={"text-slate-500 print:hidden bg-gray-200 border-b-gray-300/50 dark:bg-gray-800 h-14 flex items-center justify-between border-b dark:border-gray-700/50"}>
                     <button data-tip={"Toggle sidebar"} className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={() => dispatch(setSidebarOpen(!sidebar))}>
                         <BiMenu className={"h-6 w-6"}/>
                     </button>
@@ -107,16 +111,19 @@ export default function Main() {
                             </div>
                         </div>
                         : ""}
-                    {currentNote ? <div className={"ml-auto"}><NoteMenu/></div> : ""}
+                    {currentNote
+                        ? <div className={"ml-auto"}><NoteMenu/></div>
+                        : null
+                    }
                     <ThemeSwitcher/>
                 </div>
-                <div className={"flex flex-row"}>
-                    <div className={`${notelist ? "ml-0" : sidebar?"-ml-80":"-ml-80"} transition-all z-10 absolute md:relative w-80 _w-full h-screen md:h-full bg-white dark:bg-gray-800 flex-shrink-0 `}>
+                <div className={"flex flex-row content-wrapper"}>
+                    <div className={`${notelist ? "ml-0" : sidebar ? "-ml-80" : "-ml-80"} transition-all z-10 absolute md:relative w-80 _w-full _h-screen _md:h-full bg-white dark:bg-gray-800 flex-shrink-0 `}>
                         <Notelist/>
                     </div>
-                    <div className={"flex-grow h-full bg-white dark:bg-gray-900 editor"}>
+                    <div className={"flex-grow h-full_ bg-white dark:bg-gray-900 editor"}>
                         <div className={"w-full bg-indigo-500_ px-2 pt-4"}>
-                            <button onClick={() => dispatch(setNotelistOpen(!notelist))}><BiMenu className={"h-6 w-6"}/>
+                            <button  className={"dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={() => dispatch(setNotelistOpen(!notelist))}><BiMenu className={"h-6 w-6"}/>
                             </button>
                         </div>
                         <Content/>

@@ -96,7 +96,7 @@ export const noteSlice = createSlice({
                 existingNote.name = name;
                 existingNote.updated_at = updated_at;
 
-                console.log(JSON.parse(JSON.stringify(existingNote)));
+                // console.log(JSON.parse(JSON.stringify(existingNote)));
 
             })
             .addCase(updateBookMark.fulfilled, (state, action) => {

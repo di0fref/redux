@@ -163,6 +163,19 @@ export default function Notelist() {
         (state) => state.notes,
         (notes) => Object.values(notes).filter(note => (note.folder_id == currentFolder.id && note.deleted !== true))
     )
+    const selectNotesInFolderSorted = createSelector(
+        (state) => state.notes,
+        (notes) => notes && Object.values(notes)
+            .filter(note => (note.folder_id == currentFolder.id && note.deleted !== true))
+            .sort(function (a, b) {
+            if (new Date(b.updated_at) > new Date(a.updated_at))
+                return 1;
+            else
+                return -1
+        })
+    )
+
+
     const selectNotesInTrash = createSelector(
         (state) => state.notes,
         (notes) => Object.values(notes).filter(note => note.deleted === true)
@@ -176,15 +189,26 @@ export default function Notelist() {
         (state, term) => term,
         (notes) => Object.values(notes).filter(note => note.name.startsWith(term) && note.deleted !== true)
     )
-    const allNotes = createSelector(
+    const allNotesSorted = createSelector(
         (state) => state.notes,
-        (notes) => Object.values(notes).filter(note => note.deleted !== true)
+        (notes) => Object.values(notes).filter(note => note.deleted !== true).sort(function (a, b) {
+            if (new Date(b.updated_at) > new Date(a.updated_at))
+                return 1;
+            else
+                return -1
+        })
     )
 
     const bookmarks = useSelector(selectNotesInBookmarks)
     const notesInFolder = useSelector(selectNotesInFolder)
     const trash = useSelector(selectNotesInTrash);
-    const all = useSelector(allNotes);
+    const all = useSelector(allNotesSorted);
+
+    const sorted = useSelector(selectNotesInFolderSorted)
+
+    // useEffect(()=>{
+    //     console.log(sorted)
+    // },[currentFolder.id])
 
     useEffect(() => {
         if (term !== "") {
@@ -237,7 +261,7 @@ export default function Notelist() {
                     })
                     break;
                 default:
-                    notesInFolder.map((note, key) => {
+                    sorted.map((note, key) => {
                         data.push(<NoteCard note={note} key={key}/>)
                     })
                     break
@@ -246,7 +270,7 @@ export default function Notelist() {
         return data;
     }
     return (
-        <div className={"notelist"}>
+        <div className={"notelist border-r dark:border-gray-700/40"}>
             {/*<div className="flex items-center justify-between h-14 bg-gray-200 dark:bg-gray-800 bg-gray-200 border-b border-b-gray-300/50  border-b dark:border-gray-700/50">*/}
             {/*    /!*<div className="relative text-gray-400 focus-within:text-gray-400 ml-2 w-full">*!/*/}
             {/*    /!*    <span className="absolute inset-y-0 left-0 flex items-center pl-2">*!/*/}
@@ -256,9 +280,9 @@ export default function Notelist() {
             {/*    /!*    </span>*!/*/}
             {/*    /!*    <input value={term} onChange={(e) => setTerm(e.target.value)} type="search" name="q" className="w-full mr-2 py-2 text-sm dark:text-white text-gray-700 dark:bg-gray-700 rounded-lg pl-10 focus:outline-none focus:bg-white dark:focus:bg-gray-600 focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-500" placeholder="Search..." autoComplete="off"/>*!/*/}
             {/*    /!*</div>*!/*/}
-            {/*    /!*<button data-tip={"New document"} className={"mx-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={newDocumentHandler}>*!/*/}
-            {/*    /!*    <BiEdit className={"h-5 w-5"}/>*!/*/}
-            {/*    /!*</button>*!/*/}
+                <button data-tip={"New document"} className={"mx-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={newDocumentHandler}>
+                    <BiEdit className={"h-5 w-5"}/>
+                </button>
             {/*    /!*<button data-tip={"Toggle sidebar"} className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"}*!/*/}
             {/*    /!*        onClick={() => dispatch(setSidebarOpen(!sidebar))}>*!/*/}
             {/*    /!*    <BiMenu className={"h-6 w-6"}/>*!/*/}
@@ -267,8 +291,8 @@ export default function Notelist() {
             {/*        <FaTimes className={"h-5 w-5 text-gray-400 hover:text-gray-200"}/>*/}
             {/*    </button>*/}
             {/*</div>*/}
-            <div className={"dark:text-gray-100 py-8 border-r border-gray-200 dark:border-gray-700/40 h-10 text-2xl font-bold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>{currentFolder.name}</div>
-            <div className={"overflow-y-auto h-full border-r dark:border-gray-700/40"}>
+            <div className={"border-b dark:border-gray-700/40 dark:text-gray-100 py-8 h-10 text-2xl font-bold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>{currentFolder.name}</div>
+            <div className={"overflow-y-auto notes"}>
                 {getListType()}
             </div>
         </div>
