@@ -32,23 +32,23 @@ export default function Content() {
         (notes) => Object.values(notes).find(note => note.id == currentNote)
     )
     const note = useSelector(selectNote);
-    const bookMarkHandler = () => {
-        dispatch(updateBookMark({
-            bookmark: note.bookmark ? 0 : 1,
-            id: currentNote
-        })).then((r) => {
-            ReactTooltip.rebuild()
-        })
-    }
-
-    const lockHandler = () => {
-        dispatch(updateLock({
-            locked: note.locked ? 0 : 1,
-            id: currentNote
-        })).then((r) => {
-            ReactTooltip.rebuild()
-        })
-    }
+    // const bookMarkHandler = () => {
+    //     dispatch(updateBookMark({
+    //         bookmark: note.bookmark ? 0 : 1,
+    //         id: currentNote
+    //     })).then((r) => {
+    //         ReactTooltip.rebuild()
+    //     })
+    // }
+    //
+    // const lockHandler = () => {
+    //     dispatch(updateLock({
+    //         locked: note.locked ? 0 : 1,
+    //         id: currentNote
+    //     })).then((r) => {
+    //         ReactTooltip.rebuild()
+    //     })
+    // }
 
     const titleChangeHandler = (e) => {
         dispatch(updateNoteTitle({
@@ -64,31 +64,30 @@ export default function Content() {
 
     return (
         <div className={"text-slate-500 flex flex-col "}>
-            <div className={"print:hidden bg-gray-200 border-b-gray-300/50 dark:bg-gray-800 h-14 flex items-center justify-between border-b dark:border-gray-700/50"}>
-                {currentNote ?
-                    <div className={"px-3 my-4 w-full"}>
-                        <div className={"flex justify-end"}>
-                            <button data-tip={"Bookmark"} className={"flex items-center hover:text-indigo-500 mr-3"} onClick={bookMarkHandler}>
-                                {note && note.bookmark
-                                    ? <FaStar className={"text-yellow-400"}/>
-                                    : <FaRegStar/>
-                                }
-                            </button>
-                            <button data-tip={`${note && note.locked ? "Unlock" : "Lock"}`} className={"flex items-center hover:text-indigo-500"} onClick={lockHandler}>
-                                {note && note.locked
-                                    ? <BiLock className={"text-red-600"}/>
-                                    : <BiLock/>
-                                }
-                            </button>
-                        </div>
-                    </div>
-                    : ""}
-                {currentNote ? <div className={"ml-auto"}><NoteMenu/></div> : ""}
-                <ThemeSwitcher/>
-            </div>
+            {/*<div className={"print:hidden bg-gray-200 border-b-gray-300/50 dark:bg-gray-800 h-14 flex items-center justify-between border-b dark:border-gray-700/50"}>*/}
+            {/*    {currentNote ?*/}
+            {/*        <div className={"px-3 my-4 w-full"}>*/}
+            {/*            <div className={"flex justify-end"}>*/}
+            {/*                <button data-tip={"Bookmark"} className={"flex items-center hover:text-indigo-500 mr-3"} onClick={bookMarkHandler}>*/}
+            {/*                    {note && note.bookmark*/}
+            {/*                        ? <FaStar className={"text-yellow-400"}/>*/}
+            {/*                        : <FaRegStar/>*/}
+            {/*                    }*/}
+            {/*                </button>*/}
+            {/*                <button data-tip={`${note && note.locked ? "Unlock" : "Lock"}`} className={"flex items-center hover:text-indigo-500"} onClick={lockHandler}>*/}
+            {/*                    {note && note.locked*/}
+            {/*                        ? <BiLock className={"text-red-600"}/>*/}
+            {/*                        : <BiLock/>*/}
+            {/*                    }*/}
+            {/*                </button>*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*        : ""}*/}
+            {/*    {currentNote ? <div className={"ml-auto"}><NoteMenu/></div> : ""}*/}
+            {/*    <ThemeSwitcher/>*/}
+            {/*</div>*/}
 
             <div className={"flex justify-center p-4 overflow-y-auto editor-wrapper "}>
-                <button onClick={() => dispatch(setNotelistOpen(!notelist))}><FaBars/></button>
                 <div className={"max-w-[65ch] editor print:w-full print:text-black"}>
                     {currentNote ?
                         <>

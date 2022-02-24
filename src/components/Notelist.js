@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import Moment from "react-moment";
 import {useNavigate, useParams} from "react-router";
 import {BiEdit, BiLock, BiMenu, BiSearch, BiTrash} from "react-icons/bi";
-import {setSidebarOpen} from "../features/sideSlice";
+import {setNotelistOpen, setSidebarOpen} from "../features/sideSlice";
 import {FaSearch, FaStar, FaTimes} from "react-icons/fa";
 import {momentConfig, UNTITLED} from "../config/config";
 import {createSelector} from 'reselect'
@@ -44,7 +44,6 @@ function NoteCard(props) {
     const [windowSize, setWindowSize] = useState(window.innerWidth);
     useEffect(() => {
         if (params.note_id == props.note.id) {
-            console.log(props.note.id)
             dispatch(setCurrentNote(props.note.id))
         }
     }, [params.note_id])
@@ -88,13 +87,16 @@ function NoteCard(props) {
     useEffect(() => {
         function handleResize() {
             setWindowSize(window.innerWidth)
+            dispatch(setSidebarOpen(
+                (window.innerWidth >= 768)
+            ))
+             dispatch(setNotelistOpen(
+                (window.innerWidth >= 768)
+            ))
         }
-
         window.addEventListener('resize', handleResize)
     })
-
     const clickHandle = () => {
-        console.log(currentFolder.id)
         switch (currentFolder.id) {
             case "documents":
             case "bookmarks":
@@ -113,7 +115,10 @@ function NoteCard(props) {
         <>
             <Link to={`/app/docs/folder/${note.folder_id}/note/${note.id}`} onClick={
                 () => {
-                    if (windowSize < 768) dispatch(setSidebarOpen(false));
+                    if (windowSize < 768) {
+                        dispatch(setNotelistOpen(false))
+                        dispatch(setSidebarOpen(false))
+                    };
                 }}
                   className={`w-full text-left text-sm block px-6 py-6 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700 ${currentNote === note.id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}`}>
                 <div className={"flex justify-between items-center mb-1"}>
@@ -242,26 +247,26 @@ export default function Notelist() {
     }
     return (
         <div className={"notelist"}>
-            <div className="flex items-center justify-between h-14 bg-gray-200 dark:bg-gray-800 bg-gray-200 border-b border-b-gray-300/50  border-b dark:border-gray-700/50">
-                {/*<div className="relative text-gray-400 focus-within:text-gray-400 ml-2 w-full">*/}
-                {/*    <span className="absolute inset-y-0 left-0 flex items-center pl-2">*/}
-                {/*        <button type="submit" className="p-1 focus:outline-none focus:shadow-outline">*/}
-                {/*            <BiSearch/>*/}
-                {/*        </button>*/}
-                {/*    </span>*/}
-                {/*    <input value={term} onChange={(e) => setTerm(e.target.value)} type="search" name="q" className="w-full mr-2 py-2 text-sm dark:text-white text-gray-700 dark:bg-gray-700 rounded-lg pl-10 focus:outline-none focus:bg-white dark:focus:bg-gray-600 focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-500" placeholder="Search..." autoComplete="off"/>*/}
-                {/*</div>*/}
-                {/*<button data-tip={"New document"} className={"mx-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={newDocumentHandler}>*/}
-                {/*    <BiEdit className={"h-5 w-5"}/>*/}
-                {/*</button>*/}
-                {/*<button data-tip={"Toggle sidebar"} className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"}*/}
-                {/*        onClick={() => dispatch(setSidebarOpen(!sidebar))}>*/}
-                {/*    <BiMenu className={"h-6 w-6"}/>*/}
-                {/*</button>*/}
-                <button className={`mr-2 block md:hidden ${sidebar ? "block" : "hidden"}`} onClick={() => dispatch(setSidebarOpen(false))}>
-                    <FaTimes className={"h-5 w-5 text-gray-400 hover:text-gray-200"}/>
-                </button>
-            </div>
+            {/*<div className="flex items-center justify-between h-14 bg-gray-200 dark:bg-gray-800 bg-gray-200 border-b border-b-gray-300/50  border-b dark:border-gray-700/50">*/}
+            {/*    /!*<div className="relative text-gray-400 focus-within:text-gray-400 ml-2 w-full">*!/*/}
+            {/*    /!*    <span className="absolute inset-y-0 left-0 flex items-center pl-2">*!/*/}
+            {/*    /!*        <button type="submit" className="p-1 focus:outline-none focus:shadow-outline">*!/*/}
+            {/*    /!*            <BiSearch/>*!/*/}
+            {/*    /!*        </button>*!/*/}
+            {/*    /!*    </span>*!/*/}
+            {/*    /!*    <input value={term} onChange={(e) => setTerm(e.target.value)} type="search" name="q" className="w-full mr-2 py-2 text-sm dark:text-white text-gray-700 dark:bg-gray-700 rounded-lg pl-10 focus:outline-none focus:bg-white dark:focus:bg-gray-600 focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-500" placeholder="Search..." autoComplete="off"/>*!/*/}
+            {/*    /!*</div>*!/*/}
+            {/*    /!*<button data-tip={"New document"} className={"mx-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={newDocumentHandler}>*!/*/}
+            {/*    /!*    <BiEdit className={"h-5 w-5"}/>*!/*/}
+            {/*    /!*</button>*!/*/}
+            {/*    /!*<button data-tip={"Toggle sidebar"} className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"}*!/*/}
+            {/*    /!*        onClick={() => dispatch(setSidebarOpen(!sidebar))}>*!/*/}
+            {/*    /!*    <BiMenu className={"h-6 w-6"}/>*!/*/}
+            {/*    /!*</button>*!/*/}
+            {/*    <button className={`mr-2 block md:hidden ${sidebar ? "block" : "hidden"}`} onClick={() => dispatch(setSidebarOpen(false))}>*/}
+            {/*        <FaTimes className={"h-5 w-5 text-gray-400 hover:text-gray-200"}/>*/}
+            {/*    </button>*/}
+            {/*</div>*/}
             <div className={"dark:text-gray-100 py-8 border-r border-gray-200 dark:border-gray-700/40 h-10 text-2xl font-bold text-gray-700 dark:text-gray-400 flex items-center justify-center"}>{currentFolder.name}</div>
             <div className={"overflow-y-auto h-full border-r dark:border-gray-700/40"}>
                 {getListType()}

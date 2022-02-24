@@ -12,10 +12,6 @@ import Shared from "./Shared";
 import NewFolderButton from "./NewFolderButton";
 import Todos from "./Todos";
 import Recent from "./Recent";
-import {CgFileDocument} from "react-icons/cg";
-import {setCurrentFolder} from "../features/currentFolderSlice";
-import {setCurrentNote} from "../features/currentNoteSlice";
-import {setSidebarOpen} from "../features/sideSlice";
 
 function SidebarItem(props) {
 
@@ -23,6 +19,7 @@ function SidebarItem(props) {
     const [open, setOpen] = useState(true)
     const dispatch = useDispatch();
     const navigator = useNavigate()
+    
     const chevronClicked = (e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -76,9 +73,8 @@ export default function Sidebar() {
     const auth = getAuth();
     const user = auth.currentUser
 
-    // let params = useParams();
     const currentFolder = useSelector((state) => state.currentFolder)
-    // const sidebar = useSelector((state) => state.sidebar)
+    const sidebar = useSelector((state) => state.sidebar)
 
     const [open, setOpen] = useState(true)
     const tree = useSelector((state) => state.tree)
@@ -89,7 +85,6 @@ export default function Sidebar() {
         dispatch(fetchTree())
         opelAll()
     }, [])
-    const sidebar = useSelector((state) => state.side.sidebar)
 
 
     const opelAll = () => {
@@ -106,10 +101,6 @@ export default function Sidebar() {
                 <div className={"mr-4"}>
                     <Usermenu/>
                 </div>
-                <button data-tip={"Toggle sidebar"} className={"z-50 ml-2 dark:text-gray-400 dark:hover:text-white text-gray-900 hover:text-gray-700 absolute left-60"}
-                        onClick={() => dispatch(setSidebarOpen(!sidebar))}>
-                    <BiMenu className={"h-6 w-6"}/>
-                </button>
             </div>
 
             <div className={"h-40 flex flex-col items-center justify-center mt-2_ mb-4"}>

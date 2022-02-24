@@ -20,7 +20,8 @@ module.exports = {
                 "100": "30rem"
             },
             margin:{
-                "144": "38rem"
+                "144": "38rem",
+                "160": "40rem"
             },
             colors:{
                 "side-indigo": "rgb(130, 142, 241)"
