@@ -28,6 +28,7 @@ import Code from '@tiptap/extension-code'
 import {HorizontalRule} from "@tiptap/extension-horizontal-rule";
 import {TaskList} from "@tiptap/extension-task-list";
 import {TaskItem} from "@tiptap/extension-task-item";
+import MyCombobox from "./Combobox";
 
 String.prototype.trunc = function (n) {
     return this.substr(0, n - 1) + (this.length > n ? "..." : "");

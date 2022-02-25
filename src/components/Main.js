@@ -15,8 +15,8 @@ import {FaBars, FaRegStar, FaStar} from "react-icons/fa";
 import ThemeSwitcher from "./ThemeSwitcher";
 import NoteMenu from "./menus/noteMenu";
 import {createSelector} from "reselect";
-import {BsLayoutSidebar, BsLayoutThreeColumns} from "react-icons/bs";
-import LayoutButtons from "./LayoutButtons";
+import MyCombobox from "./Combobox";
+import MyDialog from "./MyDialog";
 
 export default function Main() {
     const sidebar = useSelector((state) => state.side.sidebar)
@@ -83,6 +83,7 @@ export default function Main() {
     }
     return (
         <div className={`flex _h-screen bg-white dark:bg-gray-900_ `}>
+            <MyDialog><MyCombobox/></MyDialog>
             <div className={`${sidebar ? "ml-0" : "-ml-72"} transition-all absolute md:relative z-20 md:w-72 w-1/2 h-screen overflow-y-auto md:h-full bg-gray-900 bg-gray-900 text-gray-300 flex-shrink-0 `}>
                 <Sidebar/>
             </div>
@@ -93,6 +94,7 @@ export default function Main() {
                     <button data-tip={"Toggle sidebar"} className={"ml-2 dark:text-gray-400 dark:hover:text-white text-gray-500 hover:text-gray-700"} onClick={() => dispatch(setSidebarOpen(!sidebar))}>
                         <BiMenu className={"h-6 w-6"}/>
                     </button>
+                    
                     {currentNote ?
                         <div className={"px-3 my-4 w-full"}>
                             <div className={"flex justify-end"}>
@@ -130,7 +132,6 @@ export default function Main() {
                     </div>
                 </div>
             </div>
-
         </div>
 
 
