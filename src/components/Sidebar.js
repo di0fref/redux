@@ -26,34 +26,41 @@ function SidebarItem(props) {
         e.stopPropagation()
         setOpen(!open)
     }
+    const [isHovering, setIsHovering] = useState(false)
+
     useEffect(() => {
         dispatch(fetchTree())
     }, [])
 
+    const link = props.item.type === "note" ? `/app/docs/folder/${props.item.folder_id}/note/${props.item.id}` : `/app/docs/folder/${props.item.id}`
+
     return (
         <>
-            <Link to={`/app/docs/folder/${props.item.id}`} className={"flex w-full my-1 cursor-pointer"} onClick={
-                () => dispatch(setCurrentNote(null))}
+            <Link to={link} className={"flex w-full my-1 cursor-pointer"}
+                  onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)}
             >
-                <div className=
-                         {`cursor-pointer sidebar-item ${currentFolder.id === props.item.id ? "bg-gray-800 dark:bg-gray-800 text-white " : ""} flex items-center rounded  py-2 w-full px-2`}
+                <div className={`cursor-pointer sidebar-item ${currentFolder.id === props.item.id ? "bg-gray-800 dark:bg-gray-800 text-white " : ""} flex items-center rounded  py-2 w-full px-2`}
                      style={{
                          marginLeft: props.depth * 1.6
                      }}>
 
                     <div className={"mr-2 flex items-center"}>
-                        <BiFolder className={"h-5 w-5"}/>
+                        {props.item.type !== "note" ? <BiFolder className={"h-4 w-4"}/> :
+                            <BiFile className={"h-4 w-4"}/>}
                     </div>
 
-                    <div className={"text-sm font-medium text-menu"}>{props.item.name ?? "Untitled"}</div>
-                    <button className={"text-gray-500 w-5 h-5 hover:bg-indigo-500 hover:text-white rounded flex items-center justify-center ml-auto"} onClick={chevronClicked}>
-                        {props.item.items && (Object.keys(props.item.items).length)
-                            ? open
-                                ? <div><FaChevronDown className={"w-3 h-3"}/></div>
-                                : <div><FaChevronRight className={"w-3 h-3"}/></div>
-                            : ""
-                        }
-                    </button>
+                    <div className={"text-sm font-medium text-menu"}>{props.item.name ? props.item.name : "Untitled"}</div>
+
+                    {props.item.items && Object.keys(props.item.items).length ? (
+                        <button className={` w-5 h-5 hover:bg-indigo-500 ${isHovering?"bg-indigo-500/40 ":"text-gray-500"} hover:text-white rounded flex items-center justify-center ml-auto`} onClick={chevronClicked}>
+                            {Object.keys(props.item.items).length
+                                ? open
+                                    ? <div><FaChevronDown className={"w-3 h-3"}/></div>
+                                    : <div><FaChevronRight className={"w-3 h-3"}/></div>
+                                : ""
+                            }
+                        </button>
+                    ) : null}
                 </div>
             </Link>
 
@@ -87,9 +94,9 @@ export default function Sidebar() {
         opelAll()
     }, [])
 
-    useEffect(()=>{
+    useEffect(() => {
         ReactTooltip.rebuild()
-    },[currentFolder])
+    }, [currentFolder])
 
     const opelAll = () => {
         setAllOpen(true)
@@ -107,15 +114,15 @@ export default function Sidebar() {
                 </div>
             </div>
 
-            <div className={"h-40 flex flex-col items-center justify-center mt-2_ mb-4"}>
-                <div className={""}>
-                    {user.photoURL
-                        ? <img src={user.photoURL} alt={"Avatar"} className={"rounded rounded-full h-20 w-20"}/>
-                        : <FaUser className={"h-16 w-16 bg-gray-400 rounded p-2"}/>}
-                </div>
-                <div className={"text-sm mt-2"}>{user.displayName}</div>
-                <div className={"text-gray-400 text-xs mt-1"}>{user.email}</div>
-            </div>
+            {/*<div className={"h-40 flex flex-col items-center justify-center mt-2_ mb-4"}>*/}
+            {/*    <div className={""}>*/}
+            {/*        {user.photoURL*/}
+            {/*            ? <img src={user.photoURL} alt={"Avatar"} className={"rounded rounded-full h-20 w-20"}/>*/}
+            {/*            : <FaUser className={"h-16 w-16 bg-gray-400 rounded p-2"}/>}*/}
+            {/*    </div>*/}
+            {/*    <div className={"text-sm mt-2"}>{user.displayName}</div>*/}
+            {/*    <div className={"text-gray-400 text-xs mt-1"}>{user.email}</div>*/}
+            {/*</div>*/}
             <div className={"p-2 text-sm"}>
                 <div className={"flex items-center justify-between ml-2 mt-4 mb-3"}>
                     <div className={"text-side-indigo font-'bold uppercase text-[12px] tracking-wide"}>Activities</div>
@@ -128,7 +135,7 @@ export default function Sidebar() {
                 {/*<div className={"mb-2"}><Tags/></div>*/}
 
                 <div className={"flex items-center justify-between ml-2 mt-4 mb-3"}>
-                    <div className={"text-side-indigo font-'bold uppercase text-[12px] tracking-wide"}>Documents</div>
+                    <div className={"text-side-indigo font-'bold uppercase text-[12px] tracking-wide"}>Notes</div>
                     <div className={""}><NewFolderButton opelAll={opelAll}/></div>
                 </div>
                 <div className={"mb-2"}><Recent/></div>
@@ -138,12 +145,12 @@ export default function Sidebar() {
                 <Link to={`/app/docs`} className={`sidebar-item ${(currentFolder.id === 0) ? "bg-gray-800 text-white" : ""} flex items-center rounded py-2 w-full px-2`}
                       onClick={
                           () => dispatch(setCurrentNote(null))
-                }
+                      }
                 >
                     <div className={""}>
                         <BiFile className={"h-6 w-6"}/>
                     </div>
-                    <div className={"ml-3 font-medium text-menu"}>Documents</div>
+                    <div className={"ml-3 font-medium text-menu"}>Notes</div>
                     <div className={"ml-auto"}>
                     </div>
                 </Link>

@@ -17,6 +17,8 @@ import {createSelector} from "reselect";
 import Tiptap from "./Tiptap";
 import {ErrorBoundary} from "react-error-boundary";
 import ErrorFallback from "./ErrorFallback";
+import Editor from "./Editor";
+import {fetchTree} from "../features/treeSlice";
 
 export default function Content() {
 
@@ -54,13 +56,15 @@ export default function Content() {
         dispatch(updateNoteTitle({
             name: title,
             id: currentNote
-        }))
+        })).then(()=> {
+            dispatch(fetchTree())
+        })
     }
 
     useEffect(() => {
-        setTitle(note && (note.name || ""))
+        setTitle(note && (note.name||""))
         ReactTooltip.rebuild()
-    }, [currentNote])
+    }, [note&&note.id])
 
     return (
         <div className={"text-slate-500 flex flex-col "}>
@@ -110,6 +114,7 @@ export default function Content() {
                                     className={"resize-none font-extrabold tracking-tight text-gray-800 dark:text-gray-300  bg-transparent px-3 w-full text-4xl border-0 focus:outline-none focus:ring-0"}
                                 />
                                 <div key={"Tiptap"}><Tiptap/></div>
+                                {/*<div><Editor/></div>*/}
                             </ErrorBoundary>
                         </>
 

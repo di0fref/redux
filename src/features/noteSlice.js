@@ -15,7 +15,7 @@ export const addNote = createAsyncThunk(
     'notes/addNote',
     async (folderId = 0, thunkAPI) => {
         return await http.post(apiConfig.url + "/notes", {
-            folder_id: folderId
+            folder_id: folderId,
         }).then(response => response.data)
     }
 )
@@ -85,7 +85,7 @@ export const noteSlice = createSlice({
                 state.unshift(action.payload)
             })
             .addCase(updateNoteBody.fulfilled, (state, action) => {
-                const {id, text, updated_at} = action.payload
+                const {id, text, updated_at, name} = action.payload
                 const existingNote = state.find(note => note.id === id)
                 existingNote.text = JSON.stringify(text);
                 existingNote.updated_at = updated_at;
@@ -93,6 +93,7 @@ export const noteSlice = createSlice({
             .addCase(updateNoteTitle.fulfilled, (state, action) => {
                 const {id, name, updated_at} = action.payload
                 const existingNote = state.find(note => note.id === id)
+                console.log(JSON.parse(JSON.stringify(existingNote)))
                 existingNote.name = name;
                 existingNote.updated_at = updated_at;
 

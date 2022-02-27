@@ -57,7 +57,7 @@ function App() {
                         <Route exact path={"/"} element={layout === "col" ? <Docs/> : <Main/>}/>
 
                         <Route exact path={"/app/tasks"} element={<Todo/>}/>
-                        <Route exact path={"/app/tasks/list/:list_id"} element={<Todo/>}/>
+                        <Route exact path={"/app/tasks/:todo_id"} element={<Todo/>}/>
 
                         <Route exact path={"/app/doc"} element={layout === "col" ? <Docs/> : <Main/>}/>
                         <Route exact path={"/app/doc/folder/:folder_id"} element={layout === "col" ? <Docs/> :

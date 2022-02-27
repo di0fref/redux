@@ -17,7 +17,6 @@ export default function Todos() {
     useEffect(() => {
         ReactTooltip.rebuild()
         dispatch(setCurrentFolder("tasks"))
-        dispatch(getAll())
     }, [])
 
     useEffect(() => {

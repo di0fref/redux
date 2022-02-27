@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import {getPrio, getPrioColor} from "../../config/config";
 import SimpleDialog from "../SimpleDialog";
+import {useParams} from "react-router-dom";
 
 export default function EditTodoButton({canShow, updateModalState, todoId}) {
 
@@ -21,7 +22,6 @@ export default function EditTodoButton({canShow, updateModalState, todoId}) {
     const [taskDue, setTaskDue] = useState(null)
     const [taskPriority, setTaskPriority] = useState("")
     const [openDialog, setOpenDialog] = useState(false)
-
     useEffect(() => {
         setTaskDue(todo.due ? new Date(todo.due) : null)
         setTaskName(todo.name)
@@ -81,7 +81,7 @@ export default function EditTodoButton({canShow, updateModalState, todoId}) {
                         <div className={"bg-white h-screen dark:bg-gray-900 dark:text-gray-300"}>
                             <div className={"flex items-center justify-between px-4 py-2"}>
                                 <button onClick={() => dispatch(toggleTodoCompleted(todo))} className={"flex items-center gap-x-2 bg-indigo-500_ rounded-3xl py-2 px-3 hover:bg-gray-200 dark:hover:bg-gray-800"}>
-                                    <BiCheckCircle className={`${todo.completed?"text-indigo-500":"text-gray-500"} h-6 w-6 `}/>
+                                    <BiCheckCircle className={`${todo.completed ? "text-indigo-500" : "text-gray-500"} h-6 w-6 `}/>
                                     <span className={"whitespace-nowrap uppercase text-sm font-semibold text-gray-600 tracking-tighter dark:text-gray-400"}>Mark as complete</span>
                                 </button>
 

@@ -2,23 +2,30 @@ import {Fragment, useState} from 'react'
 import {Combobox, Transition} from '@headlessui/react'
 import {CheckIcon, SelectorIcon} from '@heroicons/react/solid'
 import {useSelector} from "react-redux";
+import {FaRegStar, FaSearch, FaStar} from "react-icons/fa";
+import {useNavigate} from "react-router-dom";
 
-const people = [
-    {id: 1, name: 'Wade Cooper'},
-    {id: 2, name: 'Arlene Mccoy'},
-    {id: 3, name: 'Devon Webb'},
-    {id: 4, name: 'Tom Cook'},
-    {id: 5, name: 'Tanya Fox'},
-    {id: 6, name: 'Hellen Schmidt'},
-]
+function Item({note}) {
 
+    const navigator = useNavigate()
+    const clickHandler = () => {
+        navigator(`/app/docs/folder/${note.folder_id}/note/${note.id}`)
+    }
+    return (
+        <button className={"flex items-center justify-between w-full"} onClick={clickHandler}>
+            <div>{note.name}</div>
+            <div>{note.bookmark ? <FaStar className={"text-yellow-400"}/> :
+                <FaRegStar className={"text-gray-400"}/>}</div>
+        </button>
+    )
+}
 
 export default function MyCombobox() {
     const [selected, setSelected] = useState()
     const [query, setQuery] = useState('')
     const notes = useSelector(state => state.notes)
 
-    const filteredPeople =
+    const filteredNotes =
         query === ''
             ? notes
             : notes.filter((note) =>
@@ -32,19 +39,28 @@ export default function MyCombobox() {
         <div className="w-full z-50">
             <Combobox value={selected} onChange={setSelected}>
                 <div className="relative mt-1">
-                    <div className="relative w-full text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-teal-300 focus-visible:ring-offset-2 sm:text-sm overflow-hidden">
-                        <Combobox.Input
-                            className="w-full border-none focus:ring-0 py-2 pl-3 pr-10 text-sm leading-5 text-gray-900"
-                            displayValue={(note) => note.name}
-                            onChange={(event) => setQuery(event.target.value)}
-                            placeHolder={"Type to search..."}
-                        />
-                        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-                            {/*<SelectorIcon*/}
-                            {/*    className="w-5 h-5 text-gray-400"*/}
-                            {/*    aria-hidden="true"*/}
-                            {/*/>*/}
-                        </Combobox.Button>
+                    <div className="relative w-full text-left border-b dark:border-gray-700 cursor-default sm:text-sm overflow-hidden">
+                        <div className={"flex items-center"}>
+                            <div className={"ml-4"}><FaSearch className={"h-5 w-5 dark:text-gray-500 text-gray-200"}/></div>
+                            <Combobox.Input
+                                className="block
+                            text-gray-700
+                            dark:text-gray-300
+                                w-full
+                                px-4
+                                py-4
+                                text-base
+                                font-normal
+                                rounded
+                                transition
+                                ease-in-out
+                                m-0
+                                focus:text-gray-700 dark:focus:text-gray-200 focus:bg-white focus:outline-none dark:bg-gray-800"
+                                displayValue={(note) => note.name}
+                                onChange={(event) => setQuery(event.target.value)}
+                                placeholder={"Type to search..."}
+                            />
+                        </div>
                     </div>
                     <Transition
                         as={Fragment}
@@ -53,39 +69,35 @@ export default function MyCombobox() {
                         leaveTo="opacity-0"
                         afterLeave={() => setQuery('')}
                     >
-                        <Combobox.Options className=" w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                            {filteredPeople.length === 0 && query !== '' ? (
+                        <Combobox.Options className=" w-full py-1 mt-1 overflow-auto text-base rounded-md max-h-96 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            {filteredNotes.length === 0 && query !== '' ? (
                                 <div className="cursor-default select-none relative py-2 px-4 text-gray-700">
                                     Nothing found.
                                 </div>
                             ) : (
-                                filteredPeople.map((person) => (
+                                filteredNotes.map((note) => (
                                     <Combobox.Option
-                                        key={person.id}
+                                        key={note.id}
                                         className={({active}) =>
-                                            `cursor-default select-none relative py-2 pl-10 pr-4 ${
-                                                active ? 'text-white bg-teal-600' : 'text-gray-900'
+                                            `text-gray-500 dark:text-gray-400 cursor-pointer select-none relative py-4 pl-5 pr-4 border-b border-gray-100 dark:border-gray-700/60 ${
+                                                active ? 'bg-gray-100 dark:bg-gray-700/30' : ''
                                             }`
                                         }
-                                        value={person}
-                                    >
+                                        value={note}>
                                         {({selected, active}) => (
                                             <>
-                        <span
-                            className={`block truncate ${
-                                selected ? 'font-medium' : 'font-normal'
-                            }`}
-                        >
-                          {person.name}
-                        </span>
+                                                <span
+                                                    className={`block truncate ${
+                                                        selected ? 'font-medium' : 'font-normal'
+                                                    }`}><Item note={note}/>
+                                                </span>
                                                 {selected ? (
                                                     <span
                                                         className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
                                                             active ? 'text-white' : 'text-teal-600'
-                                                        }`}
-                                                    >
-                            <CheckIcon className="w-5 h-5" aria-hidden="true"/>
-                          </span>
+                                                        }`}>
+                                                        <CheckIcon className="w-5 h-5" aria-hidden="true"/>
+                                                    </span>
                                                 ) : null}
                                             </>
                                         )}

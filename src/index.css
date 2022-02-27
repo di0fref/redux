@@ -87,15 +87,16 @@ body {
 
 .bubble-menu {
     display: flex;
-    @apply bg-black dark:bg-gray-600;
+    @apply bg-gray-100 dark:bg-gray-800;
     padding: 0.2rem;
-    border-radius: 0.5rem;
+    border-radius: 0.2rem;
 }
 
 .bubble-menu button {
     border: none;
     background: none;
-    color: #fff;
+    /*color: #fff;*/
+    @apply text-gray-900 dark:text-gray-200;
     font-size: 1rem;
     font-weight: 500;
     padding: 0 0.5rem;
@@ -143,4 +144,28 @@ ul[data-type="taskList"] li > div {
 
 .sidebar-item {
     @apply hover:bg-gray-800
+}
+
+.ce-block--selected .ce-block__content, .ce-inline-toolbar,
+.codex-editor--narrow .ce-toolbox,
+.ce-conversion-toolbar, .ce-settings, .ce-settings__button,
+.ce-toolbar__settings-btn, .cdx-button {
+    @apply dark:bg-gray-800;
+    color: inherit;
+}
+
+.ce-inline-tool, .ce-conversion-toolbar__label, .ce-toolbox__button, .cdx-settings-button, .ce-toolbar__plus {
+    color: inherit;
+}
+
+::selection {
+    @apply dark:bg-gray-600
+}
+.ce-settings, .ce-inline-toolbar,*{
+    @apply dark:border-gray-600
+}
+.cdx-settings-button:hover, .ce-settings__button:hover, .ce-toolbox__button--active, .ce-toolbox__button:hover,
+.cdx-button:hover, .ce-inline-toolbar__dropdown:hover, .ce-inline-tool:hover, .ce-conversion-tool:hover, .ce-toolbar__plus:hover {
+    @apply dark:bg-gray-600;
+    color: inherit;
 }

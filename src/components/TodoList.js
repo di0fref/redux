@@ -2,8 +2,8 @@ import {BiCheckCircle, BiMenu} from "react-icons/bi";
 import ThemeSwitcher from "./ThemeSwitcher";
 import {useDispatch, useSelector} from "react-redux";
 import {createSelector} from "reselect";
-import { move, toggleTodoCompleted} from "../features/todoSlice";
-import React, {useState} from "react";
+import {move, toggleTodoCompleted} from "../features/todoSlice";
+import React, {useEffect, useState} from "react";
 import {setSidebarOpen} from "../features/sideSlice";
 import {SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
 import AddTodoButton from "./todo/AddTodoButton";
@@ -13,6 +13,7 @@ import {getPrio, taskMomentConfig} from "../config/config";
 import moment from "moment/moment";
 import AddSectionButton from "./todo/AddSectionButton";
 import EditSectionButton from "./todo/EditSectionButton";
+import {useNavigate, useParams} from "react-router-dom";
 
 
 export default function TodoList() {
@@ -100,7 +101,17 @@ const SortableItem = SortableElement(({todo, index}) => {
     const [showSectionModal, updateSectionShowModal] = useState(false);
 
     const toggleModal = () => updateShowModal(!showModal);
+
+    const modalShow = () => updateShowModal(true);
+    const modalHide = () => {
+        console.log("hide")
+        updateShowModal(false)
+        navigator("/app/tasks")
+    };
+
     const toggleSectionModal = () => updateSectionShowModal(!showSectionModal);
+    const params = useParams()
+    const navigator = useNavigate()
 
 
     const DragHandle = SortableHandle(() => {
@@ -115,6 +126,15 @@ const SortableItem = SortableElement(({todo, index}) => {
         dispatch(toggleTodoCompleted(todo))
     }
 
+    const clickHandle = () => {
+        navigator("/app/tasks/" + todo.id)
+    }
+
+    useEffect(() => {
+        if (params.todo_id && params.todo_id === todo.id) {
+            modalShow()
+        }
+    }, [params.todo_id])
 
     if (todo.type === "section") {
         return (
@@ -140,7 +160,7 @@ const SortableItem = SortableElement(({todo, index}) => {
                 <button className={"rounded-full hover:bg-gray-200 p-1 dark:hover:bg-gray-700 "} onClick={toggleStatus}>
                     <BiCheckCircle className={`${todo.completed ? "text-indigo-500" : "text-gray-400"} w-6 h-6`}/>
                 </button>
-                <button onClick={toggleModal} className={`py-5 ${todo.completed ? "text-gray-400 dark:text-gray-600" : "text-gray-900 dark:text-gray-300"} w-full text-sm text-left flex items-center`}>
+                <button onClick={clickHandle} className={`py-5 ${todo.completed ? "text-gray-400 dark:text-gray-600" : "text-gray-900 dark:text-gray-300"} w-full text-sm text-left flex items-center`}>
                     <span className={"flex-auto mr-2"}>{todo.name}</span>
                     <span className={"whitespace-nowrap ml-auto text-xs text-gray-400 "}>
                         {moment(todo.due).isValid() ?
@@ -151,7 +171,7 @@ const SortableItem = SortableElement(({todo, index}) => {
                     </span>
                 </button>
             </div>
-            <EditTodoButton canShow={showModal} updateModalState={toggleModal} todoId={todo.id}/>
+            <EditTodoButton key={index} canShow={showModal} updateModalState={modalHide} todoId={todo.id}/>
         </div>
     )
 });

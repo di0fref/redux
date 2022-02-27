@@ -28,7 +28,6 @@ import Code from '@tiptap/extension-code'
 import {HorizontalRule} from "@tiptap/extension-horizontal-rule";
 import {TaskList} from "@tiptap/extension-task-list";
 import {TaskItem} from "@tiptap/extension-task-item";
-import MyCombobox from "./Combobox";
 
 String.prototype.trunc = function (n) {
     return this.substr(0, n - 1) + (this.length > n ? "..." : "");
@@ -121,7 +120,6 @@ function NoteCard(props) {
                         dispatch(setNotelistOpen(false))
                         dispatch(setSidebarOpen(false))
                     }
-                    ;
                 }}
                   className={`w-full text-left text-sm block px-6 py-6 border-b dark:border-gray-700/40 hover:bg-gray-50 dark:hover:bg-gray-700 ${currentNote === note.id ? "bg-blue-50 dark:bg-gray-700" : "bg-white dark:bg-gray-800"}`}>
                 <div className={"flex justify-between items-center mb-1"}>
@@ -209,19 +207,10 @@ export default function Notelist() {
 
     const sorted = useSelector(selectNotesInFolderSorted)
 
-    // useEffect(()=>{
-    //     console.log(sorted)
-    // },[currentFolder.id])
+    useEffect(()=>{
+        // console.log(currentFolder)
+    },[currentFolder.id])
 
-    useEffect(() => {
-        if (term !== "") {
-            // setSearchResults(selectItemsWhoseNamesIncludes(notes, term))
-        } else {
-            clearResults();
-        }
-    }, [term]);
-
-    const clearResults = () => setSearchResults([]);
 
     const newDocumentHandler = () => {
         dispatch(addNote(currentFolder.id)).then((result) => {

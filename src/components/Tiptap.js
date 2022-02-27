@@ -53,7 +53,7 @@ export default function Tiptap() {
         },
         content: note && note.text && JSON.parse(note.text),
         // editable: note.locked,
-    })
+    },[currentNote])
 
     const debounced = useCallback(debounce((editor) => {
         dispatch(updateNoteBody({

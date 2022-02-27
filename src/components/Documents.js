@@ -143,7 +143,7 @@ export default function Documents() {
                 <div className={"w-full print:w-full print:text-black bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800"}>
                     <div className={"mb-4 px-12 pt-6 flex justify-between"}>
                         <div className={" text-gray-600 dark:text-white mb-1"}>
-                            <p className={"text-3xl font-bold mb-1"}>Documents</p>
+                            <p className={"text-3xl font-bold mb-1"}>Notes</p>
                             <p className={"text-sm"}>{breadCrumb && breadCrumb.map(item => bread(item)).reduce((prev, curr) => [prev, ' / ', curr])}</p>
                         </div>
                     </div>
